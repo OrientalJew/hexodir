@@ -21,7 +21,7 @@ sudo apt-get install git
 $ git config --global user.name "Your Name"
 $ git config --global user.email "email@example.com"
 ```
-
+<!--more--> 
 #### 创建Git空仓库
 
 cd到特定目录下：
@@ -104,8 +104,8 @@ git reflog | more
 
 默认情况下，git会为我们创建一个master分支，所以内容默认情况下会被提交到此。
 
-![image](https://cdn.liaoxuefeng.com/cdn/files/attachments/001384907720458e56751df1c474485b697575073c40ae9000/0)
-![image](https://cdn.liaoxuefeng.com/cdn/files/attachments/0013849077337835a877df2d26742b88dd7f56a6ace3ecf000/0)
+![image](/images/git/1.jpeg)
+![image](/images/git/2.jpeg)
 
 _注意：修改的内容只有通过 git add 添加到暂存区，才能在git commit时被添加到仓库中。_
 
@@ -187,18 +187,18 @@ HEAD指针则是指向当前我们正在编辑的分支的指针，比如如果�
 创建新分支实际上就是创建一个新的指针，并让HEAD指针指向当前的新指针：
 
 1、创建dev分支，此时当前分支改为了dev分支，HEAD指针也会指向dev指针；
-![image](https://cdn.liaoxuefeng.com/cdn/files/attachments/001384908811773187a597e2d844eefb11f5cf5d56135ca000/0)
+![image](/images/git/3.png)
 
 2、接下来的修改都是针对当前dev分支的：
 
-![image](https://cdn.liaoxuefeng.com/cdn/files/attachments/0013849088235627813efe7649b4f008900e5365bb72323000/0)
+![image](/images/git/4.png)
 
 3、合并master分支实际上就是让master指针指向当前dev分支的最新版本：
-![image](https://cdn.liaoxuefeng.com/cdn/files/attachments/00138490883510324231a837e5d4aee844d3e4692ba50f5000/0)
+![image](/images/git/5.png)
 
 4、删除分支实际就是把指针删除掉：
 
-![image](https://cdn.liaoxuefeng.com/cdn/files/attachments/001384908867187c83ca970bf0f46efa19badad99c40235000/0)
+![image](/images/git/6.png)
 
 #### 分支管理2
 
