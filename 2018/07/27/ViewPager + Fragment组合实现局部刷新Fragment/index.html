@@ -115,25 +115,25 @@
 
 
 
-  <meta name="description" content="用Glide这么久了，我一直有个疑问，Glide该如何获取到指定的缓存图片？ 原生Glide是没有提供任何Api用来获取缓存图片的，至少我是没找到。 翻看Glide源码（3.7），发现其中一个叫：EngineKey的类，Glide通过该类来查找对应的缓存文件。该类构造方法参数多达10个，并且不是开放出来的，也就是说，通过自己构造EngineKey这条路是走不通的。">
-<meta name="keywords" content="Glide">
+  <meta name="description" content="在开发过程中，经常会用到ViewPager与Fragment实现多页面切换效果，有时，我们想要局部刷新某些Fragment，而其他Fragment保持状态不变，该如何做到呢？">
+<meta name="keywords" content="Fragment">
 <meta property="og:type" content="article">
-<meta property="og:title" content="获取Glide缓存图片">
-<meta property="og:url" content="http://yoursite.com/2018/07/27/Glide获取指定图片的缓存/index.html">
+<meta property="og:title" content="ViewPager局部刷新">
+<meta property="og:url" content="http://yoursite.com/2018/07/27/ViewPager + Fragment组合实现局部刷新Fragment/index.html">
 <meta property="og:site_name" content="HSH&#39;s Blogs">
-<meta property="og:description" content="用Glide这么久了，我一直有个疑问，Glide该如何获取到指定的缓存图片？ 原生Glide是没有提供任何Api用来获取缓存图片的，至少我是没找到。 翻看Glide源码（3.7），发现其中一个叫：EngineKey的类，Glide通过该类来查找对应的缓存文件。该类构造方法参数多达10个，并且不是开放出来的，也就是说，通过自己构造EngineKey这条路是走不通的。">
+<meta property="og:description" content="在开发过程中，经常会用到ViewPager与Fragment实现多页面切换效果，有时，我们想要局部刷新某些Fragment，而其他Fragment保持状态不变，该如何做到呢？">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-07-27T10:02:06.122Z">
+<meta property="og:updated_time" content="2018-07-27T10:10:58.376Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="获取Glide缓存图片">
-<meta name="twitter:description" content="用Glide这么久了，我一直有个疑问，Glide该如何获取到指定的缓存图片？ 原生Glide是没有提供任何Api用来获取缓存图片的，至少我是没找到。 翻看Glide源码（3.7），发现其中一个叫：EngineKey的类，Glide通过该类来查找对应的缓存文件。该类构造方法参数多达10个，并且不是开放出来的，也就是说，通过自己构造EngineKey这条路是走不通的。">
+<meta name="twitter:title" content="ViewPager局部刷新">
+<meta name="twitter:description" content="在开发过程中，经常会用到ViewPager与Fragment实现多页面切换效果，有时，我们想要局部刷新某些Fragment，而其他Fragment保持状态不变，该如何做到呢？">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/07/27/Glide获取指定图片的缓存/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/07/27/ViewPager + Fragment组合实现局部刷新Fragment/"/>
 
 
 
@@ -143,7 +143,7 @@
   };
 </script>
 
-  <title>获取Glide缓存图片 | HSH's Blogs</title>
+  <title>ViewPager局部刷新 | HSH's Blogs</title>
   
 
 
@@ -299,7 +299,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/27/Glide获取指定图片的缓存/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/27/ViewPager + Fragment组合实现局部刷新Fragment/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄声焕">
@@ -316,7 +316,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">获取Glide缓存图片
+          <h1 class="post-title" itemprop="name headline">ViewPager局部刷新
               
             
           </h1>
@@ -341,7 +341,7 @@
                 
               
 
-              <time title="Created: 2018-07-27 00:00:00 / Modified: 18:02:06" itemprop="dateCreated datePublished" datetime="2018-07-27T00:00:00+08:00">2018-07-27</time>
+              <time title="Created: 2018-07-27 00:00:00 / Modified: 18:10:58" itemprop="dateCreated datePublished" datetime="2018-07-27T00:00:00+08:00">2018-07-27</time>
             
 
             
@@ -406,253 +406,246 @@
 
       
         <!-- toc -->
-<p>用Glide这么久了，我一直有个疑问，Glide该如何获取到指定的缓存图片？</p>
-<p>原生Glide是没有提供任何Api用来获取缓存图片的，至少我是没找到。</p>
-<p>翻看Glide源码（3.7），发现其中一个叫：EngineKey的类，Glide通过该类来查找对应的缓存文件。<br>该类构造方法参数多达10个，并且不是开放出来的，也就是说，通过自己构造EngineKey这条路是走不通的。<br><a id="more"></a><br>难道就没有办法了吗？仔细翻看EngineKey这个类，其中有一个叫getOriginalKey的方法：</p>
-<pre><code>public Key getOriginalKey() {
-    if (originalKey == null) {
-        originalKey = new OriginalKey(id, signature);
-    }
-    return originalKey;
-}
-</code></pre><p>对应OriginalKey只需要两个参数，并且类的内容也很简单：</p>
-<pre><code>class OriginalKey implements Key {
+<blockquote>
+<p>在开发过程中，经常会用到ViewPager与Fragment实现多页面切换效果，有时，我们想要局部刷新某些Fragment，而其他Fragment保持状态不变，该如何做到呢？<br><a id="more"></a><br><strong>先上代码！</strong></p>
+</blockquote>
+<pre><code>/**
+ * Created by HSH .
+ */
+public abstract class BaseFragmentPagerAdapter extends FragmentPagerAdapter {
 
-    private final String id;
-    private final Key signature;
+    private FragmentManager mFragmentManager;
 
-    public OriginalKey(String id, Key signature) {
-        this.id = id;
-        this.signature = signature;
+    //保存每个Fragment的Tag，刷新页面的依据
+    protected SparseArray&lt;String&gt; tags = new SparseArray&lt;&gt;();
+
+    public BaseFragmentPagerAdapter(FragmentManager fm) {
+        super(fm);
+        mFragmentManager = fm;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+    public Object instantiateItem(ViewGroup container, int position) {
+        //得到缓存的fragment
+        Fragment fragment = (Fragment) super.instantiateItem(container, position); 
+        String tag = fragment.getTag();
+        //保存每个Fragment的Tag
+        tags.put(position, tag);
+        return fragment;
+    }
 
-        OriginalKey that = (OriginalKey) o;
+    //拿到指定位置的Fragment
+    public Fragment getFragmentByPosition(int position) {
+        return mFragmentManager.findFragmentByTag(tags.get(position));
+    }
 
-        if (!id.equals(that.id)) {
-            return false;
-        }
-        if (!signature.equals(that.signature)) {
-            return false;
-        }
+    public List&lt;Fragment&gt; getFragments(){
+        return mFragmentManager.getFragments();
+    }
 
-        return true;
+    //刷新指定位置的Fragment
+    public void notifyFragmentByPosition(int position) {
+        tags.removeAt(position);
+        notifyDataSetChanged();
     }
 
     @Override
-    public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + signature.hashCode();
-        return result;
+    public int getItemPosition(Object object) {
+        Fragment fragment = (Fragment) object;
+        //如果Item对应的Tag存在，则不进行刷新
+        if (tags.indexOfValue(fragment.getTag()) &gt; -1) {
+            return super.getItemPosition(object);
+        }
+        return POSITION_NONE;
+    }
+}
+</code></pre><p>该类是本人最近在项目中使用的，只需继承该类即可。</p>
+<pre><code>/**
+ * Created by HSH .
+ */
+public class CustomLrcPagerAdapter extends BaseFragmentPagerAdapter {
+    private List&lt;String&gt; lrcs = new ArrayList&lt;&gt;();
+    private MusicInfo info;
+
+    public CustomLrcPagerAdapter(FragmentManager fm, MusicInfo info) {
+        super(fm);
+        this.info = info;
+    }
+
+    public void addDatas(List&lt;String&gt; lrcs) {
+        this.lrcs.addAll(lrcs);
+        notifyDataSetChanged();
     }
 
     @Override
-    public void updateDiskCacheKey(MessageDigest messageDigest) throws UnsupportedEncodingException {
-        messageDigest.update(id.getBytes(STRING_CHARSET_NAME));
-        signature.updateDiskCacheKey(messageDigest);
-    }
-}
-</code></pre><p>再查看getOriginalKey()方法的调用者，发现被一个DecodeJob的两个方法调用到了：</p>
-<pre><code>private Resource&lt;T&gt; cacheAndDecodeSourceData(A data) throws IOException {
-    long startTime = LogTime.getLogTime();
-    SourceWriter&lt;A&gt; writer = new SourceWriter&lt;A&gt;(loadProvider.getSourceEncoder(), data);
-    diskCacheProvider.getDiskCache().put(resultKey.getOriginalKey(), writer);
-    if (Log.isLoggable(TAG, Log.VERBOSE)) {
-        logWithTimeAndKey(&quot;Wrote source to cache&quot;, startTime);
+    public Fragment getItem(int position) {
+        return CustomLrcFragment.newInstance(info, lrcs.get(position), position);
     }
 
-    startTime = LogTime.getLogTime();
-    Resource&lt;T&gt; result = loadFromCache(resultKey.getOriginalKey());
-    if (Log.isLoggable(TAG, Log.VERBOSE) &amp;&amp; result != null) {
-        logWithTimeAndKey(&quot;Decoded source from cache&quot;, startTime);
-    }
-    return result;
-}
-
-public Resource&lt;Z&gt; decodeSourceFromCache() throws Exception {
-    if (!diskCacheStrategy.cacheSource()) {
-        return null;
+    //除了给定位置，其他位置的Fragment进行刷新
+    public void notifyChangeWithoutPosition(int position) {
+        String valueP = tags.valueAt(position);
+        tags.clear();
+        tags.put(position, valueP);
+        notifyDataSetChanged();
     }
 
-    long startTime = LogTime.getLogTime();
-    Resource&lt;T&gt; decoded = loadFromCache(resultKey.getOriginalKey());
-    if (Log.isLoggable(TAG, Log.VERBOSE)) {
-        logWithTimeAndKey(&quot;Decoded source from cache&quot;, startTime);
-    }
-    return transformEncodeAndTranscode(decoded);
-}
-</code></pre><p>了解过Glide源码的人应该知道，这两个方法是在diskCacheStrategy设置为Source时，Glide缓存到本地和从本地取缓存的方法。</p>
-<p>查看loadFromCache方法：</p>
-<pre><code>private Resource&lt;T&gt; loadFromCache(Key key) throws IOException {
-    File cacheFile = diskCacheProvider.getDiskCache().get(key);
-    if (cacheFile == null) {
-        return null;
-    }
 
-    Resource&lt;T&gt; result = null;
-    try {
-        result = loadProvider.getCacheDecoder().decode(cacheFile, width, height);
-    } finally {
-        if (result == null) {
-            diskCacheProvider.getDiskCache().delete(key);
-        }
+    @Override
+    public int getCount() {
+        return lrcs.size();
     }
-    return result;
 }
-</code></pre><p>get方法点进去，发现有两个实现：DiskCacheAdapter和DiskLruCacheWrapper，DiskCacheAdapter只是个空壳，那么只有DiskLruCacheWrapper了。</p>
-<p>其中获取缓存文件的方法：</p>
+</code></pre><p>刷新的核心原理很简单，相信看过源码的都会，在PagerAdapter中提供了一个方法：</p>
+<pre><code>/**
+ * Called when the host view is attempting to determine if an item&apos;s position
+ * has changed. Returns {@link #POSITION_UNCHANGED} if the position of the given
+ * item has not changed or {@link #POSITION_NONE} if the item is no longer present
+ * in the adapter.
+ *
+ * &lt;p&gt;The default implementation assumes that items will never
+ * change position and always returns {@link #POSITION_UNCHANGED}.
+ *
+ * @param object Object representing an item, previously returned by a call to
+ *               {@link #instantiateItem(View, int)}.
+ * @return object&apos;s new position index from [0, {@link #getCount()}),
+ *         {@link #POSITION_UNCHANGED} if the object&apos;s position has not changed,
+ *         or {@link #POSITION_NONE} if the item is no longer present.
+ */
+public int getItemPosition(Object object) {
+    return POSITION_UNCHANGED;
+}
+</code></pre><p>注释中已经说明了，当我们返回了POSITION_UNCHANGED，则表示页面数据不变，不进行更新；<br>返回POSITION_NONE，则表示页面不存在，需要进行更新。</p>
+<p>因此，我重写了该方法：</p>
 <pre><code>@Override
-public File get(Key key) {
-    String safeKey = safeKeyGenerator.getSafeKey(key);
-    File result = null;
-    try {
-        //It is possible that the there will be a put in between these two gets. If so that shouldn&apos;t be a problem
-        //because we will always put the same value at the same key so our input streams will still represent
-        //the same data
-        final DiskLruCache.Value value = getDiskCache().get(safeKey);
-        if (value != null) {
-            result = value.getFile(0);
-        }
-    } catch (IOException e) {
-        if (Log.isLoggable(TAG, Log.WARN)) {
-            Log.w(TAG, &quot;Unable to get from disk cache&quot;, e);
-        }
+public int getItemPosition(Object object) {
+    Fragment fragment = (Fragment) object;
+    //如果Item对应的Tag存在，则不进行刷新
+    if (tags.indexOfValue(fragment.getTag()) &gt; -1) {
+        return super.getItemPosition(object);
     }
-    return result;
+    return POSITION_NONE;
 }
-
-private synchronized DiskLruCache getDiskCache() throws IOException {
-    if (diskLruCache == null) {
-        diskLruCache = DiskLruCache.open(directory, APP_VERSION, VALUE_COUNT, maxSize);
-    }
-    return diskLruCache;
-}
-</code></pre><p>那就好办了！我们只需将diskCacheStrategy设置为Source，然后自己构造OriginalKey和DiskLruCache即可。</p>
-<p>说干就干！</p>
-<p>将Glide下的SafeKeyGenerator和OriginalKey类拷到自己的包下，这两个类也很简单：</p>
+</code></pre><p>hihi，是不是很简单！</p>
+<p>在接触公司项目的过程中（本人新来的），发现公司项目中ViewPager+Fragment组合的使用方式存在问题，估计很多人也这么用过，就是定义一个集合用来缓存放到ViewPager中的Fragment，类似我们公司项目的这种做法：</p>
 <pre><code>/**
- * A class that generates and caches safe and unique string file names from {@link com.bumptech.glide.load.Key}s.
+ * Created by Administrator on 2016/11/30.
  */
-class SafeKeyGenerator {
-    private final LruCache&lt;Key, String&gt; loadIdToSafeHash = new LruCache&lt;Key, String&gt;(1000);
+public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
-    public String getSafeKey(Key key) {
-        String safeKey;
-        synchronized (loadIdToSafeHash) {
-            safeKey = loadIdToSafeHash.get(key);
+    private List&lt;Fragment&gt; mList_Fragment = new ArrayList&lt;&gt;();
+    private HashMap&lt;Integer, Boolean&gt; mList_Need_Update = new HashMap&lt;&gt;();
+    private FragmentManager mFragmentManager;
+
+    public ViewPagerAdapter(FragmentManager fm, List&lt;Fragment&gt; fragments) {
+        super(fm);
+        mFragmentManager = fm;
+        mList_Need_Update.clear();
+        mList_Fragment.clear();
+        if (fragments != null) {
+            mList_Fragment.addAll(fragments);
         }
-        if (safeKey == null) {
-            try {
-                MessageDigest messageDigest = MessageDigest.getInstance(&quot;SHA-256&quot;);
-                key.updateDiskCacheKey(messageDigest);
-                safeKey = Util.sha256BytesToHex(messageDigest.digest());
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            synchronized (loadIdToSafeHash) {
-                loadIdToSafeHash.put(key, safeKey);
-            }
-        }
-        return safeKey;
-    }
-}
-
-//OriginalKey 在上面！
-</code></pre><p>然后就可以缓存文件获取了，如果你没有自己构造Signature和修改磁盘缓存位置，那用下面这个方法即可：</p>
-<pre><code>//3.7
-public File getCacheFile(String url) {
-    OriginalKey originalKey = new OriginalKey(url, EmptySignature.obtain());
-    SafeKeyGenerator safeKeyGenerator = new SafeKeyGenerator();
-    String safeKey = safeKeyGenerator.getSafeKey(originalKey);
-    try {
-        DiskLruCache diskLruCache = DiskLruCache.open(new File(getCacheDir(), DiskCache.Factory.DEFAULT_DISK_CACHE_DIR), 1, 1, DiskCache.Factory.DEFAULT_DISK_CACHE_SIZE);
-        DiskLruCache.Value value = diskLruCache.get(safeKey);
-        if (value != null) {
-            return value.getFile(0);
-        }
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-    return null;
-}
-</code></pre><p>效果：</p>
-<p>当然，如果不是Glide3.7，而是4.x呢？额，亲测在4.0上只需要改一个类即可，将OriginalKey换为DataCacheKey即可：</p>
-<pre><code>/**
- * A cache key for original source data + any requested signature.
- */
-public class DataCacheKey implements Key  {
-
-    private final Key sourceKey;
-    private final Key signature;
-
-    public DataCacheKey(Key sourceKey, Key signature) {
-        this.sourceKey = sourceKey;
-        this.signature = signature;
     }
 
-    public Key getSourceKey() {
-        return sourceKey;
+//    @Override
+//    public Object instantiateItem(ViewGroup container, int position) {
+//        Fragment fragment = (Fragment) super.instantiateItem(container, position); //得到缓存的fragment
+//
+//        Boolean update = mList_Need_Update.get(position);
+//        if (update != null &amp;&amp; update) {
+//            String fragmentTag = fragment.getTag(); //得到tag，这点很重要
+//            FragmentTransaction ft = mFragmentManager.beginTransaction();
+//            ft.remove(fragment); //移除旧的fragment
+//            fragment = getItem(position); //换成新的fragment
+//            ft.add(container.getId(), fragment, fragmentTag); //添加新fragment时必须用前面获得的tag，这点很重要
+//            ft.attach(fragment);
+//            ft.commit();
+//            mList_Need_Update.put(position, false); //清除更新标记（只有重新启动的时候需要去创建新的fragment对象），防止正常情况下频繁创建对象
+//        }
+//
+//        return fragment;
+//    }
+
+    public List&lt;Fragment&gt; getListFragment(){
+        return mList_Fragment;
+    }
+
+    public void setListFragment(List&lt;Fragment&gt; list_Fragment) {
+//        if(list_Fragment != null){
+//            FragmentTransaction ft = mFragmentManager.beginTransaction();
+//            for (int i = 0; i &lt; mList_Fragment.size(); i++) {
+//                Fragment fragment = (Fragment) mList_Fragment.get(i);
+//                ft.remove(fragment);
+//            }
+//            ft.commit();
+//            ft = null;
+//            mFragmentManager.executePendingTransactions();
+//        }
+        mList_Need_Update.clear();
+        this.mList_Fragment.clear();
+        if (list_Fragment != null) {
+            this.mList_Fragment.addAll(list_Fragment);
+        }
+        notifyDataSetChanged();
+    }
+
+    public void setListNeedUpdate(List&lt;Fragment&gt; fragments) {
+        mList_Fragment.clear();
+        if (fragments != null) {
+            mList_Fragment.addAll(fragments);
+        }
+        mList_Need_Update.clear();
+        for (int i = 0; i &lt; mList_Fragment.size(); i++) {
+            mList_Need_Update.put(i, true);
+        }
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (o instanceof DataCacheKey) {
-            DataCacheKey other = (DataCacheKey) o;
-            return sourceKey.equals(other.sourceKey) &amp;&amp; signature.equals(other.signature);
+    public Fragment getItem(int position) {
+        if(mList_Fragment.size() &lt; position){
+            return null;
         }
-        return false;
+        return mList_Fragment.get(position);
+    }
+
+
+    @Override
+    public int getCount() {
+        return mList_Fragment.size();
     }
 
     @Override
-    public int hashCode() {
-        int result = sourceKey.hashCode();
-        result = 31 * result + signature.hashCode();
-        return result;
+    public int getItemPosition(Object object) {
+        return PagerAdapter.POSITION_NONE;
     }
 
     @Override
-    public String toString() {
-        return &quot;DataCacheKey{&quot;
-                + &quot;sourceKey=&quot; + sourceKey
-                + &quot;, signature=&quot; + signature
-                + &apos;}&apos;;
-    }
+    public void restoreState(Parcelable state, ClassLoader loader) {
+        try {
+            super.restoreState(state, loader);
+        } catch (Exception e) {
 
-    @Override
-    public void updateDiskCacheKey(MessageDigest messageDigest) {
-        sourceKey.updateDiskCacheKey(messageDigest);
-        signature.updateDiskCacheKey(messageDigest);
+        }
+
     }
 }
-</code></pre><p>对应的方法：</p>
-<pre><code>//4.0
-public File getCacheFile2(String url) {
-    DataCacheKey dataCacheKey = new DataCacheKey(new GlideUrl(url), EmptySignature.obtain());
-    SafeKeyGenerator safeKeyGenerator = new SafeKeyGenerator();
-    String safeKey = safeKeyGenerator.getSafeKey(dataCacheKey);
-    try {
-        int cacheSize = 100 * 1000 * 1000;
-        DiskLruCache diskLruCache = DiskLruCache.open(new File(getCacheDir(), DiskCache.Factory.DEFAULT_DISK_CACHE_DIR), 1, 1, cacheSize);
-        DiskLruCache.Value value = diskLruCache.get(safeKey);
-        if (value != null) {
-            return value.getFile(0);
-        }
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-    return null;
+</code></pre><blockquote>
+<p>这种做法看似方便我们操作ViewPager中的Fragment，但是存在一个很致命的问题。</p>
+</blockquote>
+<p>某些情况下，我们在从其他页面回退到ViewPager，在进行Fragment数据更新时，会发现居然没有效果（或者效果很诡异，例如会出现多次调用的情况）。</p>
+<p>这种情况其实就是Fragment进行了热启动。（我的说法不知是否准确，指的就是内存不足时，页面被销毁了并调用了onSaveInstanceState方法，在重新回到页面时，我们可以从Bundle savedInstanceState中拿到之前缓存的数据。）</p>
+<p>由于FragmentPagerAdapter中的FragmentManager已经帮我们缓存了所有Fragment，并且在数据恢复时，也自动帮我们进行恢复处理。<br>所以，个人猜测 <strong>（未经源码验证的！）</strong> ，在FragmentManager进行数据恢复时，如果我们本地通过集合缓存了一份Fragment，则这份Fragment与FragmentManager进行数据恢复后的Fragment是不同的！</p>
+<p>我个人的做法是，每次需要操作ViewPager中的Fragment时，都从FragmentManager中拿：</p>
+<pre><code>//拿到指定位置的Fragment
+public Fragment getFragmentByPosition(int position) {
+    return mFragmentManager.findFragmentByTag(tags.get(position));
 }
-</code></pre><p>写了一个非常简单的Demo ：  <a href="https://github.com/HuangShengHuan/GlideCache" target="_blank" rel="noopener">https://github.com/HuangShengHuan/GlideCache</a>  </p>
+
+public List&lt;Fragment&gt; getFragments(){
+    return mFragmentManager.getFragments();
+}
+</code></pre><p>东西很简单，但相信对新手还是有点用处的，至少本人当初在这个问题上是被整得欲仙欲死  /(ㄒoㄒ)/~~</p>
+<p><em>说明一下，以上只是个人猜测，本人懒，没去看源码，如果有哪位看官知道原理的，或者本人理解存在错误的，还请在评论中进行指正！谢谢！</em></p>
 
       
     </div>
@@ -673,7 +666,7 @@ public File getCacheFile2(String url) {
       
         <div class="post-tags">
           
-            <a href="/tags/Glide/" rel="tag"># Glide</a>
+            <a href="/tags/Fragment/" rel="tag"># Fragment</a>
           
         </div>
       
@@ -686,18 +679,14 @@ public File getCacheFile2(String url) {
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/07/27/ViewPager + Fragment组合实现局部刷新Fragment/" rel="next" title="ViewPager局部刷新">
-                <i class="fa fa-chevron-left"></i> ViewPager局部刷新
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/07/27/python正则：re/" rel="prev" title="Python正则使用">
-                Python正则使用 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/07/27/Glide获取指定图片的缓存/" rel="prev" title="获取Glide缓存图片">
+                获取Glide缓存图片 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
