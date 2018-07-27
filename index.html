@@ -14,7 +14,7 @@
   
 
 
-<html class="theme-next pisces use-motion" lang="">
+<html class="theme-next gemini use-motion" lang="">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -91,7 +91,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Pisces',
+    scheme: 'Gemini',
     version: '6.3.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: false,
@@ -341,7 +341,7 @@
                 
               
 
-              <time title="Created: 2018-07-27 14:24:10 / Modified: 17:07:00" itemprop="dateCreated datePublished" datetime="2018-07-27T14:24:10+08:00">2018-07-27</time>
+              <time title="Created: 2018-07-27 14:24:10 / Modified: 17:39:27" itemprop="dateCreated datePublished" datetime="2018-07-27T14:24:10+08:00">2018-07-27</time>
             
 
             
@@ -398,226 +398,16 @@
 
       
         
-          
-            <!-- toc -->
+          <!-- toc -->
 <h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install git</span><br></pre></td></tr></table></figure>
 <h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name &quot;Your Name&quot;</span><br><span class="line">$ git config --global user.email &quot;email@example.com&quot;</span><br></pre></td></tr></table></figure>
-<h4 id="创建Git空仓库"><a href="#创建Git空仓库" class="headerlink" title="创建Git空仓库"></a>创建Git空仓库</h4><p>cd到特定目录下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git init</span><br></pre></td></tr></table></figure>
-<h4 id="提交文件"><a href="#提交文件" class="headerlink" title="提交文件"></a>提交文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ git add readme1.txt</span><br><span class="line">$ git add readme2.txt</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"># -m 后面跟提交的信息说明</span><br><span class="line">$ git commit -m &quot;第一次条readme文件&quot;</span><br></pre></td></tr></table></figure>
-<h4 id="查看当前仓库的修改信息"><a href="#查看当前仓库的修改信息" class="headerlink" title="查看当前仓库的修改信息"></a>查看当前仓库的修改信息</h4><p>git status能够告诉我们当前<strong>本地仓库</strong>所处的状态，哪些文件被添加、删除、修改等。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git status</span><br></pre></td></tr></table></figure></p>
-<p>如果需要查看详细的修改信息可以通过：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git diff readme.txt</span><br></pre></td></tr></table></figure></p>
-<h4 id="提交日志"><a href="#提交日志" class="headerlink" title="提交日志"></a>提交日志</h4><p>查看提交日志：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git log | more</span><br><span class="line"></span><br><span class="line"># 查看精简形式的日志</span><br><span class="line">$ git log --pretty==oneline</span><br></pre></td></tr></table></figure></p>
-<h4 id="回退版本"><a href="#回退版本" class="headerlink" title="回退版本"></a>回退版本</h4><p>HEAD表示当前本地仓库的版本；</p>
-<p>HEAD^ 表示本地仓库的上一个版本；</p>
-<p>HEAD^^ 表示本地仓库的上上个版本；</p>
-<p>HEAD~num 表示本地仓库的上num个版本；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git reset --hard HEAD^</span><br></pre></td></tr></table></figure></p>
-<p><em>注意：增删改并不意味这进入新的版本，也就是说，在当前版本进行了增删改操作后，使用上面的方式进行版本回退并不是回退到增删改之前的版本(这个是当前版本)，而是回退到上次从仓库更新时的版本(比仓库落后一个版本)，<strong>如果想要内容回退到最后一次更新时的版本内容，应通过撤销本地修改记录来实现</strong>；</em></p>
-<p>回退到指定ID的版本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git reset --hard commitID</span><br></pre></td></tr></table></figure></p>
-<p>查看每次回退操作记录(便于查找ID)：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git reflog | more</span><br></pre></td></tr></table></figure></p>
-<h4 id="工作目录-Working-Directory-和版本库-Repository"><a href="#工作目录-Working-Directory-和版本库-Repository" class="headerlink" title="工作目录(Working Directory)和版本库(Repository)"></a>工作目录(Working Directory)和版本库(Repository)</h4><blockquote>
-<p>工作目录即我们创建仓库的目录。</p>
-</blockquote>
-<blockquote>
-<p>版板库即工作目录下的.git目录。</p>
-</blockquote>
-<h4 id="git提交更改内容的步骤"><a href="#git提交更改内容的步骤" class="headerlink" title="git提交更改内容的步骤"></a>git提交更改内容的步骤</h4><p>把文件往Git版本库里添加的时候，是分两步执行的：</p>
-<p>第一步是用git add把文件添加进去，实际上就是把文件修改添加到暂存区；</p>
-<p>第二步是用git commit提交更改，实际上就是把暂存区的所有内容提交到当前分支;</p>
-<p>默认情况下，git会为我们创建一个master分支，所以内容默认情况下会被提交到此。</p>
-<p><img src="/images/git/1.jpeg" alt="image"><br><img src="/images/git/2.jpeg" alt="image"></p>
-<p><em>注意：修改的内容只有通过 git add 添加到暂存区，才能在git commit时被添加到仓库中。</em></p>
-<h4 id="撤销修改"><a href="#撤销修改" class="headerlink" title="撤销修改"></a>撤销修改</h4><ul>
-<li>撤销工作区的修改</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 分为两种情况：</span><br><span class="line"># 一种是readme.txt自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；</span><br><span class="line"># 一种是readme.txt已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态；</span><br><span class="line">$ git checkout -- readme.txt</span><br></pre></td></tr></table></figure>
-<p><em>注意，只有在文件通过git add添加进过暂存区，文件才能被git进行跟踪管理，此时才能对其进行撤销操作，也就是说，对于工作区中新建的文件，上面的撤销命令是无效的。</em></p>
-<ul>
-<li>将修改从暂存区撤销回工作区</li>
-</ul>
-<p>对于还没有提交的修改，可以通过以下命令，将内容从暂存区撤销会缓存区：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git reset HEAD readme.txt</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>对于已经commit的内容，可以通过<strong>回退版本</strong>来实现内容回退到上个版本的内容(当前无论是否做过修改，都是属于最新的版本，<strong>通过更新是无法使内容回退到最近更新时的状态的，只能通过上面两种情况来撤销修改，或者先回退到上一个版本，再更新为最新版本；</strong>)；</li>
-</ul>
-<h4 id="删除文件"><a href="#删除文件" class="headerlink" title="删除文件"></a>删除文件</h4><p>对于已经git add或git commit到仓库中的文件，已经被版本库跟踪变化，此时如果删除了文件：</p>
-<p>1、如果要撤销删除，通过<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout --  readme.txt</span><br></pre></td></tr></table></figure></p>
-<p>2、如果是确实想删除文件，不想git再跟踪，则可以通过：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git rm readme.txt</span><br></pre></td></tr></table></figure></p>
-<h3 id="远程仓库"><a href="#远程仓库" class="headerlink" title="远程仓库"></a>远程仓库</h3><ul>
-<li>创建SSH Key</li>
-</ul>
-<p>进入用户家目录：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-keygen -t rsa -C &quot;youremail@example.com&quot;</span><br></pre></td></tr></table></figure></p>
-<p>之后会在家目录下生成.ssh文件夹，里面有id_rsa和id_rsa.pub两个文件，id_rsa是私钥，不能泄露出去，id_rsa.pub是公钥，用于远程仓库识别用。</p>
-<p>可以将id_rsa.pub内容复制给github的ssh key 管理，这样就能够与Github仓库建立连接。</p>
-<ul>
-<li>与远程GitHub仓库关联</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1、首先，创建一个github远程仓库，选择SSH类型的地址；</span><br><span class="line"></span><br><span class="line">2、 根据github下面的提示，在本地仓库目录下进行链接：</span><br><span class="line">$ git remote add origin git@github.com:OrientalJew/gitdir.git</span><br><span class="line"></span><br><span class="line">3、将本地内容推送到远程仓库(第一次推送需要加上-u参数，用于关联本地和远程仓库)：</span><br><span class="line">$ git push -u origin master</span><br></pre></td></tr></table></figure>
-<p>origin为远程仓库的名字，master表示远程仓库的分支，表示推送到远程仓库的master。由于远程库是空的，我们第一次推送master分支时，加上了-u参数，Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令。</p>
-<p>以后推送只需要输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git push origin master</span><br></pre></td></tr></table></figure></p>
-<h4 id="分支管理1"><a href="#分支管理1" class="headerlink" title="分支管理1"></a>分支管理1</h4><p>每一个分支实际上代表着一个指针，每个分支的指针指向当前分支的最新版本。比如主分支master，其实际也是一个指针，指向当前master分支的最新版本。</p>
-<p>HEAD指针则是指向当前我们正在编辑的分支的指针，比如如果当前分支是master，则HEAD指针指向的是master指针。</p>
-<p>创建新分支实际上就是创建一个新的指针，并让HEAD指针指向当前的新指针：</p>
-<p>1、创建dev分支，此时当前分支改为了dev分支，HEAD指针也会指向dev指针；<br><img src="/images/git/3.png" alt="image"></p>
-<p>2、接下来的修改都是针对当前dev分支的：</p>
-<p><img src="/images/git/4.png" alt="image"></p>
-<p>3、合并master分支实际上就是让master指针指向当前dev分支的最新版本：<br><img src="/images/git/5.png" alt="image"></p>
-<p>4、删除分支实际就是把指针删除掉：</p>
-<p><img src="/images/git/6.png" alt="image"></p>
-<h4 id="分支管理2"><a href="#分支管理2" class="headerlink" title="分支管理2"></a>分支管理2</h4><ul>
-<li>创建分支并切换分支<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout -b dev</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>等价于：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git branch dev</span><br><span class="line">$ git checkout dev</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li><p>查看分支</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git branch</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>切换分支</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout master</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>合并指定分支内容到当前分支</p>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git merge dev</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>删除分支</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git branch -d dev</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>未合并导致删除分支失败</p>
-</li>
-</ul>
-<p>如果在当前分支要删除一个没有合并内容到当前分支的分支，此时git将会报删除失败：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">error: 分支 &apos;temp&apos; 没有完全合并。</span><br><span class="line">如果您确认要删除它，执行 &apos;git branch -D temp&apos;。</span><br></pre></td></tr></table></figure></p>
-<p>此时我们可以：</p>
-<p>1、切换到有合并删除分支内容的分支上，再尝试删除分支；</p>
-<p>2、合并删除分支内容，再执行删除分支操作；</p>
-<p>3、强制执行删除分支操作：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git branch -D temp</span><br></pre></td></tr></table></figure></p>
-<h4 id="解决分支冲突"><a href="#解决分支冲突" class="headerlink" title="解决分支冲突"></a>解决分支冲突</h4><p>当我们在两个分支同时修改了同一个文件时，在合并分支时就会出现冲突，此时需要我们手动修改分支的冲突；</p>
-<p>输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git status</span><br></pre></td></tr></table></figure></p>
-<p>可以查看发生冲突的文件。</p>
-<p>直接用编辑器打开冲突的文件，可以看到git已经为我们标记了冲突的内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Git tracks changes of files.</span><br><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span><br><span class="line">Creating a new branch is quick &amp; simple.</span><br><span class="line">=======</span><br><span class="line">Creating a new branch is quick AND simple.</span><br><span class="line">&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature1</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD ：表示当前分支存在冲突的内容。</p>
-</blockquote>
-<blockquote>
-<p>=======：用来隔开不同分支。</p>
-</blockquote>
-<blockquote>
-<p>‘&gt;&gt;&gt;&gt;&gt;&gt;&gt;’ feature1：表示合并分支与当前分支冲突的内容。</p>
-</blockquote>
-<p>直接修改冲突文件，并提交即可解决冲突：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git add readme.txt </span><br><span class="line">$ git commit -m &quot;conflict fixed&quot;</span><br><span class="line">[master cf810e4] conflict fixed</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看分支合并情况：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git log --graph</span><br><span class="line">或</span><br><span class="line">$ git log --graph --pretty=oneline --abbrev-commit</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h4 id="提交带合并分支历史的记录"><a href="#提交带合并分支历史的记录" class="headerlink" title="提交带合并分支历史的记录"></a>提交带合并分支历史的记录</h4><p>合并分支时，git默认会采用Fast forward模式，这种模式下，分支历史会被删除掉，不会展现在Log中；</p>
-<p>如果想要在合并时，把分支的合并历史也添加进来，可以通过添加–no-ff参数来禁用Fast forward模式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git merge --no-ff -m &quot;merge with no-ff&quot; dev</span><br></pre></td></tr></table></figure></p>
-<p>此时再查看log，可以看到合并历史也被添加进来：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">git log --graph --pretty=oneline --abbrev-commit | more</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">*   08f8563 merge with no-ff</span><br><span class="line">|\  </span><br><span class="line">| * 9a8f00f 再次修改readme</span><br><span class="line">|/  </span><br><span class="line">* 00b7418 modify readme</span><br><span class="line">* dd98a26 第三次修改</span><br><span class="line">* 41eab06 修改了readme</span><br><span class="line">* c919600 第一次条readme文件</span><br></pre></td></tr></table></figure></p>
-<h4 id="暂存某个分支的修改内容"><a href="#暂存某个分支的修改内容" class="headerlink" title="暂存某个分支的修改内容"></a>暂存某个分支的修改内容</h4><p>有时，我们在某个分支上修改内容，此时任务还没有完成，又来了一个优先级更高的任务需要处理，我们只能先放下手头上的内容，先去处理该问题。<br>此时，我们需要把当前分支的内容进行保存，来到出问题的分支上开一个子分支处理问题。</p>
-<ul>
-<li>保存当前分支内容<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git stash</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>输入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git status</span><br></pre></td></tr></table></figure></p>
-<p>可以看到当前分支已经变得干净了，然后我们可以切换到问题分支上，假设问题分支是master分支：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gti checkout master</span><br></pre></td></tr></table></figure>
-<p>创建一个处理问题的子分支：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout -b issue-1</span><br></pre></td></tr></table></figure></p>
-<p>处理完后提交，合并到主分支：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout master</span><br><span class="line"></span><br><span class="line">$ git merge --no-ff -m &quot;merge issue-1&quot; issue-1</span><br><span class="line"></span><br><span class="line">$ git branch -d issue-1</span><br></pre></td></tr></table></figure></p>
-<p>此时，问题已经处理完成,可以切换回dev分支继续刚才的任务。</p>
-<ul>
-<li>恢复分支原来的内容</li>
-</ul>
-<p>输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git stash list</span><br></pre></td></tr></table></figure></p>
-<p>可以查看到git为我们保存的分支内容。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 恢复分支内容</span><br><span class="line">$ git stash apply</span><br><span class="line"></span><br><span class="line"># 删除stash内容</span><br><span class="line">$ git stash drop</span><br></pre></td></tr></table></figure>
-<p>或者直接通过：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 恢复并删除stash</span><br><span class="line">$ git stash pop</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>恢复指定的stash</li>
-</ul>
-<p>如果存在多个stash，则需要根据名字来恢复对应的stash：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 查看stash列表</span><br><span class="line">$ git stash list</span><br><span class="line"></span><br><span class="line"># 恢复指定的stash</span><br><span class="line">$ git stash apply stash@&#123;0&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="远程分支多人协作"><a href="#远程分支多人协作" class="headerlink" title="远程分支多人协作"></a>远程分支多人协作</h4><ul>
-<li><p>查看当前仓库对应的远程分支</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git remote</span><br><span class="line"></span><br><span class="line"># 显示详细的推送和抓取分支信息地址</span><br><span class="line">$ git remote -v</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>推送分支内容到对应的远程仓库上</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 推送主分支</span><br><span class="line">$ git push origin master</span><br><span class="line"></span><br><span class="line"># 推送开发者分支</span><br><span class="line">$ git push origin dev</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>抓取分支到本地</p>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git clone git@github.com:michaelliao/gitlearn.git [/workdir]</span><br></pre></td></tr></table></figure>
-<p>默认情况下，clone下来的内容只包含了主分支，如果需要其他分支的内容，需要自己手动创建同名的分支，并关联到远程的其他分支上：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout -b dev origin/dev</span><br></pre></td></tr></table></figure>
-<p>之后在该分支修改的内容就可以直接commit，并且push到远程了：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ git add env.txt</span><br><span class="line"></span><br><span class="line">$ git commit -m &quot;添加env文件&quot;</span><br><span class="line"></span><br><span class="line">$ git push origin dev</span><br></pre></td></tr></table></figure>
-<ul>
-<li>推送到远程分支之前需要先进行git pull</li>
-</ul>
-<p>在多人协作开发远程仓库时，提交分支前一定要先进行git pull 操作，拉取远程仓库内容同步本地，解决可能的冲突后，再进行push。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git pull</span><br></pre></td></tr></table></figure>
-<p>如果本地分支没有与远程分支建立连接，git pull 失败，则通过：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git branch --set-upstream-to=origin/dev dev</span><br></pre></td></tr></table></figure>
-<p>建立连接，然后可以正常的git pull，之后才可以进行commit和push操作。</p>
-<h4 id="Rebase"><a href="#Rebase" class="headerlink" title="Rebase"></a>Rebase</h4><p>当前远程仓库存在其他人提交记录时，我们进行pull操作之后，本地穿插入了远程的新记录内容，此时进行提交push操作，远程插入的记录会被记录到我们的提交记录中，如果不想这样，让我们每次提交都是基于远程仓库最新状态的基础上进行提交的，可以通过：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git rebase</span><br></pre></td></tr></table></figure>
-<p>进行整理。这样分叉的提交历史会被整理为一条记录。</p>
-<h4 id="创建标签"><a href="#创建标签" class="headerlink" title="创建标签"></a>创建标签</h4><p>我们可以为某个commit记录打上标签，以便后面回顾这个commit提交记录的相关信息。</p>
-<ul>
-<li>创建标签<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git tag v1.0</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>还可以对应具体的commit id打tag。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git tag v0.9 f52c633</span><br><span class="line"></span><br><span class="line"># 带说明信息</span><br><span class="line">$ git tag -a v0.1 -m &quot;version 0.1 released&quot; 1094adb</span><br></pre></td></tr></table></figure>
-<p>注意，标签是打在当前分支最新的commit上，与分支是无关的，只与某个commit id挂钩，在任何分支都能查到所有的tag。</p>
-<ul>
-<li><p>查找所有的tag</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git tag</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>显示具体的tag信息</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git show v0.1</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>删除标签</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git tag -d v0.1</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h4 id="操作远程标签"><a href="#操作远程标签" class="headerlink" title="操作远程标签"></a>操作远程标签</h4><ul>
-<li><p>推送指定标签到远程仓库</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git push origin v1.0</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>推送所有标签到远程仓库</p>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git push origin --tags</span><br></pre></td></tr></table></figure>
-<ul>
-<li>删除远程标签</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git tag -d v0.9</span><br><span class="line"></span><br><span class="line">$ git push origin :refs/tags/v0.9</span><br></pre></td></tr></table></figure>
-<h4 id="定义忽略文件"><a href="#定义忽略文件" class="headerlink" title="定义忽略文件"></a>定义忽略文件</h4><p>git可以定义仓库下不被识别提交的文件，这些文件在git status是不会被识别的。</p>
-<p>只需要在仓库下创建一个.gitignore的隐藏文件，在其中可以定义忽略文件的文件名规则。</p>
-<ul>
-<li>Android下的部分忽略规则：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># Built application files</span><br><span class="line">*.apk</span><br><span class="line">*.ap_</span><br><span class="line"></span><br><span class="line"># Files for the ART/Dalvik VM</span><br><span class="line">*.dex</span><br><span class="line"></span><br><span class="line"># Java class files</span><br><span class="line">*.class</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>具体的各种忽略规则可参考：<a href="https://github.com/github/gitignore" target="_blank" rel="noopener">https://github.com/github/gitignore</a></p>
-<ul>
-<li>提交.gitignore中存在的忽略文件</li>
-</ul>
-<p>对于.gitignore中定义的忽略文件，也是可以强制提交的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git add -f App.class</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>查看.gitignore文件中相对当前文件定义的忽略规则</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git check-ignore -v App.class</span><br></pre></td></tr></table></figure>
-<h4 id="设置git命令别名"><a href="#设置git命令别名" class="headerlink" title="设置git命令别名"></a>设置git命令别名</h4><p>git支持对命令定义别名。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 定义status命令别名</span><br><span class="line">$ git config --global alias.st status</span><br><span class="line"></span><br><span class="line">$ git st</span><br><span class="line"></span><br><span class="line"># 定义checkout命令别名</span><br><span class="line">$ git config --global alias.co checkout</span><br><span class="line"></span><br><span class="line">$ git co</span><br></pre></td></tr></table></figure>
-<p>如果命令的别名需要带参考，则需要使用字符串的形式进行定义：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 定义git log 带参数的别名</span><br><span class="line">$ git config --global alias.lg &quot;log --graph --pretty=oneline --abbrev-commit&quot;</span><br><span class="line"></span><br><span class="line">$ git lg</span><br></pre></td></tr></table></figure>
-<h4 id="git配置文件"><a href="#git配置文件" class="headerlink" title="git配置文件"></a>git配置文件</h4><p>通过git config对git仓库进行配置时，如果带上–global则是对所有仓库进行配置。</p>
-<p>每个仓库都有自己的配置，放在仓库下的.git/config文件中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[core]</span><br><span class="line">	repositoryformatversion = 0</span><br><span class="line">	filemode = true</span><br><span class="line">	bare = false</span><br><span class="line">	logallrefupdates = true</span><br><span class="line">[remote &quot;origin&quot;]</span><br><span class="line">	url = git@github.com:OrientalJew/gitlearn.git</span><br><span class="line">	fetch = +refs/heads/*:refs/remotes/origin/*</span><br><span class="line">[branch &quot;master&quot;]</span><br><span class="line">	remote = origin</span><br><span class="line">	merge = refs/heads/master</span><br></pre></td></tr></table></figure></p>
-<p>如果不带有–global，则只是针对当前仓库起作用。</p>
-<h4 id="搭建git服务器"><a href="#搭建git服务器" class="headerlink" title="搭建git服务器"></a>搭建git服务器</h4><p><a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/00137583770360579bc4b458f044ce7afed3df579123eca000" target="_blank" rel="noopener">https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/00137583770360579bc4b458f044ce7afed3df579123eca000</a></p>
-<h4 id="git怎么查看两个版本具体的不同信息呢？"><a href="#git怎么查看两个版本具体的不同信息呢？" class="headerlink" title="git怎么查看两个版本具体的不同信息呢？"></a>git怎么查看两个版本具体的不同信息呢？</h4><p>通过git diff只能查看当前修改与最新版本的不同信息；</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/07/27/git笔记/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -715,7 +505,7 @@
                 
               
 
-              <time title="Created: 2018-07-27 00:00:00 / Modified: 17:25:36" itemprop="dateCreated datePublished" datetime="2018-07-27T00:00:00+08:00">2018-07-27</time>
+              <time title="Created: 2018-07-27 00:00:00 / Modified: 17:40:26" itemprop="dateCreated datePublished" datetime="2018-07-27T00:00:00+08:00">2018-07-27</time>
             
 
             
@@ -772,258 +562,17 @@
 
       
         
-          
-            <!-- toc -->
+          <!-- toc -->
 <p>用Glide这么久了，我一直有个疑问，Glide该如何获取到指定的缓存图片？</p>
 <p>原生Glide是没有提供任何Api用来获取缓存图片的，至少我是没找到。</p>
-<p>翻看Glide源码（3.7），发现其中一个叫：EngineKey的类，Glide通过该类来查找对应的缓存文件。<br>该类构造方法参数多达10个，并且不是开放出来的，也就是说，通过自己构造EngineKey这条路是走不通的。</p>
-<p>难道就没有办法了吗？仔细翻看EngineKey这个类，其中有一个叫getOriginalKey的方法：</p>
-<pre><code>public Key getOriginalKey() {
-    if (originalKey == null) {
-        originalKey = new OriginalKey(id, signature);
-    }
-    return originalKey;
-}
-</code></pre><p>对应OriginalKey只需要两个参数，并且类的内容也很简单：</p>
-<pre><code>class OriginalKey implements Key {
-
-    private final String id;
-    private final Key signature;
-
-    public OriginalKey(String id, Key signature) {
-        this.id = id;
-        this.signature = signature;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        OriginalKey that = (OriginalKey) o;
-
-        if (!id.equals(that.id)) {
-            return false;
-        }
-        if (!signature.equals(that.signature)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + signature.hashCode();
-        return result;
-    }
-
-    @Override
-    public void updateDiskCacheKey(MessageDigest messageDigest) throws UnsupportedEncodingException {
-        messageDigest.update(id.getBytes(STRING_CHARSET_NAME));
-        signature.updateDiskCacheKey(messageDigest);
-    }
-}
-</code></pre><p>再查看getOriginalKey()方法的调用者，发现被一个DecodeJob的两个方法调用到了：</p>
-<pre><code>private Resource&lt;T&gt; cacheAndDecodeSourceData(A data) throws IOException {
-    long startTime = LogTime.getLogTime();
-    SourceWriter&lt;A&gt; writer = new SourceWriter&lt;A&gt;(loadProvider.getSourceEncoder(), data);
-    diskCacheProvider.getDiskCache().put(resultKey.getOriginalKey(), writer);
-    if (Log.isLoggable(TAG, Log.VERBOSE)) {
-        logWithTimeAndKey(&quot;Wrote source to cache&quot;, startTime);
-    }
-
-    startTime = LogTime.getLogTime();
-    Resource&lt;T&gt; result = loadFromCache(resultKey.getOriginalKey());
-    if (Log.isLoggable(TAG, Log.VERBOSE) &amp;&amp; result != null) {
-        logWithTimeAndKey(&quot;Decoded source from cache&quot;, startTime);
-    }
-    return result;
-}
-
-public Resource&lt;Z&gt; decodeSourceFromCache() throws Exception {
-    if (!diskCacheStrategy.cacheSource()) {
-        return null;
-    }
-
-    long startTime = LogTime.getLogTime();
-    Resource&lt;T&gt; decoded = loadFromCache(resultKey.getOriginalKey());
-    if (Log.isLoggable(TAG, Log.VERBOSE)) {
-        logWithTimeAndKey(&quot;Decoded source from cache&quot;, startTime);
-    }
-    return transformEncodeAndTranscode(decoded);
-}
-</code></pre><p>了解过Glide源码的人应该知道，这两个方法是在diskCacheStrategy设置为Source时，Glide缓存到本地和从本地取缓存的方法。</p>
-<p>查看loadFromCache方法：</p>
-<pre><code>private Resource&lt;T&gt; loadFromCache(Key key) throws IOException {
-    File cacheFile = diskCacheProvider.getDiskCache().get(key);
-    if (cacheFile == null) {
-        return null;
-    }
-
-    Resource&lt;T&gt; result = null;
-    try {
-        result = loadProvider.getCacheDecoder().decode(cacheFile, width, height);
-    } finally {
-        if (result == null) {
-            diskCacheProvider.getDiskCache().delete(key);
-        }
-    }
-    return result;
-}
-</code></pre><p>get方法点进去，发现有两个实现：DiskCacheAdapter和DiskLruCacheWrapper，DiskCacheAdapter只是个空壳，那么只有DiskLruCacheWrapper了。</p>
-<p>其中获取缓存文件的方法：</p>
-<pre><code>@Override
-public File get(Key key) {
-    String safeKey = safeKeyGenerator.getSafeKey(key);
-    File result = null;
-    try {
-        //It is possible that the there will be a put in between these two gets. If so that shouldn&apos;t be a problem
-        //because we will always put the same value at the same key so our input streams will still represent
-        //the same data
-        final DiskLruCache.Value value = getDiskCache().get(safeKey);
-        if (value != null) {
-            result = value.getFile(0);
-        }
-    } catch (IOException e) {
-        if (Log.isLoggable(TAG, Log.WARN)) {
-            Log.w(TAG, &quot;Unable to get from disk cache&quot;, e);
-        }
-    }
-    return result;
-}
-
-private synchronized DiskLruCache getDiskCache() throws IOException {
-    if (diskLruCache == null) {
-        diskLruCache = DiskLruCache.open(directory, APP_VERSION, VALUE_COUNT, maxSize);
-    }
-    return diskLruCache;
-}
-</code></pre><p>那就好办了！我们只需将diskCacheStrategy设置为Source，然后自己构造OriginalKey和DiskLruCache即可。</p>
-<p>说干就干！</p>
-<p>将Glide下的SafeKeyGenerator和OriginalKey类拷到自己的包下，这两个类也很简单：</p>
-<pre><code>/**
- * A class that generates and caches safe and unique string file names from {@link com.bumptech.glide.load.Key}s.
- */
-class SafeKeyGenerator {
-    private final LruCache&lt;Key, String&gt; loadIdToSafeHash = new LruCache&lt;Key, String&gt;(1000);
-
-    public String getSafeKey(Key key) {
-        String safeKey;
-        synchronized (loadIdToSafeHash) {
-            safeKey = loadIdToSafeHash.get(key);
-        }
-        if (safeKey == null) {
-            try {
-                MessageDigest messageDigest = MessageDigest.getInstance(&quot;SHA-256&quot;);
-                key.updateDiskCacheKey(messageDigest);
-                safeKey = Util.sha256BytesToHex(messageDigest.digest());
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            synchronized (loadIdToSafeHash) {
-                loadIdToSafeHash.put(key, safeKey);
-            }
-        }
-        return safeKey;
-    }
-}
-
-//OriginalKey 在上面！
-</code></pre><p>然后就可以缓存文件获取了，如果你没有自己构造Signature和修改磁盘缓存位置，那用下面这个方法即可：</p>
-<pre><code>//3.7
-public File getCacheFile(String url) {
-    OriginalKey originalKey = new OriginalKey(url, EmptySignature.obtain());
-    SafeKeyGenerator safeKeyGenerator = new SafeKeyGenerator();
-    String safeKey = safeKeyGenerator.getSafeKey(originalKey);
-    try {
-        DiskLruCache diskLruCache = DiskLruCache.open(new File(getCacheDir(), DiskCache.Factory.DEFAULT_DISK_CACHE_DIR), 1, 1, DiskCache.Factory.DEFAULT_DISK_CACHE_SIZE);
-        DiskLruCache.Value value = diskLruCache.get(safeKey);
-        if (value != null) {
-            return value.getFile(0);
-        }
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-    return null;
-}
-</code></pre><p>效果：</p>
-<p>当然，如果不是Glide3.7，而是4.x呢？额，亲测在4.0上只需要改一个类即可，将OriginalKey换为DataCacheKey即可：</p>
-<pre><code>/**
- * A cache key for original source data + any requested signature.
- */
-public class DataCacheKey implements Key  {
-
-    private final Key sourceKey;
-    private final Key signature;
-
-    public DataCacheKey(Key sourceKey, Key signature) {
-        this.sourceKey = sourceKey;
-        this.signature = signature;
-    }
-
-    public Key getSourceKey() {
-        return sourceKey;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o instanceof DataCacheKey) {
-            DataCacheKey other = (DataCacheKey) o;
-            return sourceKey.equals(other.sourceKey) &amp;&amp; signature.equals(other.signature);
-        }
-        return false;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = sourceKey.hashCode();
-        result = 31 * result + signature.hashCode();
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return &quot;DataCacheKey{&quot;
-                + &quot;sourceKey=&quot; + sourceKey
-                + &quot;, signature=&quot; + signature
-                + &apos;}&apos;;
-    }
-
-    @Override
-    public void updateDiskCacheKey(MessageDigest messageDigest) {
-        sourceKey.updateDiskCacheKey(messageDigest);
-        signature.updateDiskCacheKey(messageDigest);
-    }
-}
-</code></pre><p>对应的方法：</p>
-<pre><code>//4.0
-public File getCacheFile2(String url) {
-    DataCacheKey dataCacheKey = new DataCacheKey(new GlideUrl(url), EmptySignature.obtain());
-    SafeKeyGenerator safeKeyGenerator = new SafeKeyGenerator();
-    String safeKey = safeKeyGenerator.getSafeKey(dataCacheKey);
-    try {
-        int cacheSize = 100 * 1000 * 1000;
-        DiskLruCache diskLruCache = DiskLruCache.open(new File(getCacheDir(), DiskCache.Factory.DEFAULT_DISK_CACHE_DIR), 1, 1, cacheSize);
-        DiskLruCache.Value value = diskLruCache.get(safeKey);
-        if (value != null) {
-            return value.getFile(0);
-        }
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-    return null;
-}
-</code></pre><p>写了一个非常简单的Demo ：  <a href="https://github.com/HuangShengHuan/GlideCache" target="_blank" rel="noopener">https://github.com/HuangShengHuan/GlideCache</a>  </p>
-
-          
+<p>翻看Glide源码（3.7），发现其中一个叫：EngineKey的类，Glide通过该类来查找对应的缓存文件。<br>该类构造方法参数多达10个，并且不是开放出来的，也就是说，通过自己构造EngineKey这条路是走不通的。<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/07/27/Glide获取指定图片的缓存/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1199,7 +748,7 @@ public File getCacheFile2(String url) {
 
 
 
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.3.0</div>
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Gemini</a> v6.3.0</div>
 
 
 

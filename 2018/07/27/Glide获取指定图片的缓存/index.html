@@ -14,7 +14,7 @@
   
 
 
-<html class="theme-next pisces use-motion" lang="">
+<html class="theme-next gemini use-motion" lang="">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -91,7 +91,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Pisces',
+    scheme: 'Gemini',
     version: '6.3.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: false,
@@ -115,18 +115,18 @@
 
 
 
-  <meta name="description" content="用Glide这么久了，我一直有个疑问，Glide该如何获取到指定的缓存图片？ 原生Glide是没有提供任何Api用来获取缓存图片的，至少我是没找到。 翻看Glide源码（3.7），发现其中一个叫：EngineKey的类，Glide通过该类来查找对应的缓存文件。该类构造方法参数多达10个，并且不是开放出来的，也就是说，通过自己构造EngineKey这条路是走不通的。 难道就没有办法了吗？仔细翻看E">
+  <meta name="description" content="用Glide这么久了，我一直有个疑问，Glide该如何获取到指定的缓存图片？ 原生Glide是没有提供任何Api用来获取缓存图片的，至少我是没找到。 翻看Glide源码（3.7），发现其中一个叫：EngineKey的类，Glide通过该类来查找对应的缓存文件。该类构造方法参数多达10个，并且不是开放出来的，也就是说，通过自己构造EngineKey这条路是走不通的。">
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="获取Glide缓存图片">
 <meta property="og:url" content="http://yoursite.com/2018/07/27/Glide获取指定图片的缓存/index.html">
 <meta property="og:site_name" content="HSH&#39;s Blogs">
-<meta property="og:description" content="用Glide这么久了，我一直有个疑问，Glide该如何获取到指定的缓存图片？ 原生Glide是没有提供任何Api用来获取缓存图片的，至少我是没找到。 翻看Glide源码（3.7），发现其中一个叫：EngineKey的类，Glide通过该类来查找对应的缓存文件。该类构造方法参数多达10个，并且不是开放出来的，也就是说，通过自己构造EngineKey这条路是走不通的。 难道就没有办法了吗？仔细翻看E">
+<meta property="og:description" content="用Glide这么久了，我一直有个疑问，Glide该如何获取到指定的缓存图片？ 原生Glide是没有提供任何Api用来获取缓存图片的，至少我是没找到。 翻看Glide源码（3.7），发现其中一个叫：EngineKey的类，Glide通过该类来查找对应的缓存文件。该类构造方法参数多达10个，并且不是开放出来的，也就是说，通过自己构造EngineKey这条路是走不通的。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-07-27T09:25:36.191Z">
+<meta property="og:updated_time" content="2018-07-27T09:40:26.949Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="获取Glide缓存图片">
-<meta name="twitter:description" content="用Glide这么久了，我一直有个疑问，Glide该如何获取到指定的缓存图片？ 原生Glide是没有提供任何Api用来获取缓存图片的，至少我是没找到。 翻看Glide源码（3.7），发现其中一个叫：EngineKey的类，Glide通过该类来查找对应的缓存文件。该类构造方法参数多达10个，并且不是开放出来的，也就是说，通过自己构造EngineKey这条路是走不通的。 难道就没有办法了吗？仔细翻看E">
+<meta name="twitter:description" content="用Glide这么久了，我一直有个疑问，Glide该如何获取到指定的缓存图片？ 原生Glide是没有提供任何Api用来获取缓存图片的，至少我是没找到。 翻看Glide源码（3.7），发现其中一个叫：EngineKey的类，Glide通过该类来查找对应的缓存文件。该类构造方法参数多达10个，并且不是开放出来的，也就是说，通过自己构造EngineKey这条路是走不通的。">
 
 
 
@@ -341,7 +341,7 @@
                 
               
 
-              <time title="Created: 2018-07-27 00:00:00 / Modified: 17:25:36" itemprop="dateCreated datePublished" datetime="2018-07-27T00:00:00+08:00">2018-07-27</time>
+              <time title="Created: 2018-07-27 00:00:00 / Modified: 17:40:26" itemprop="dateCreated datePublished" datetime="2018-07-27T00:00:00+08:00">2018-07-27</time>
             
 
             
@@ -408,8 +408,7 @@
         <!-- toc -->
 <p>用Glide这么久了，我一直有个疑问，Glide该如何获取到指定的缓存图片？</p>
 <p>原生Glide是没有提供任何Api用来获取缓存图片的，至少我是没找到。</p>
-<p>翻看Glide源码（3.7），发现其中一个叫：EngineKey的类，Glide通过该类来查找对应的缓存文件。<br>该类构造方法参数多达10个，并且不是开放出来的，也就是说，通过自己构造EngineKey这条路是走不通的。</p>
-<p>难道就没有办法了吗？仔细翻看EngineKey这个类，其中有一个叫getOriginalKey的方法：</p>
+<p>翻看Glide源码（3.7），发现其中一个叫：EngineKey的类，Glide通过该类来查找对应的缓存文件。<br>该类构造方法参数多达10个，并且不是开放出来的，也就是说，通过自己构造EngineKey这条路是走不通的。<br><a id="more"></a><br>难道就没有办法了吗？仔细翻看EngineKey这个类，其中有一个叫getOriginalKey的方法：</p>
 <pre><code>public Key getOriginalKey() {
     if (originalKey == null) {
         originalKey = new OriginalKey(id, signature);
@@ -856,7 +855,7 @@ public File getCacheFile2(String url) {
 
 
 
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.3.0</div>
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Gemini</a> v6.3.0</div>
 
 
 
