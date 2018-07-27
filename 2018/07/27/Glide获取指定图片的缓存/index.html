@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-center-simple.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="用Glide这么久了，我一直有个疑问，Glide该如何获取到指定的缓存图片？ 原生Glide是没有提供任何Api用来获取缓存图片的，至少我是没找到。 翻看Glide源码（3.7），发现其中一个叫：EngineKey的类，Glide通过该类来查找对应的缓存文件。该类构造方法参数多达10个，并且不是开放出来的，也就是说，通过自己构造EngineKey这条路是走不通的。 难道就没有办法了吗？仔细翻看E">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="获取Glide缓存图片">
+<meta property="og:url" content="http://yoursite.com/2018/07/27/Glide获取指定图片的缓存/index.html">
+<meta property="og:site_name" content="HSH&#39;s Blogs">
+<meta property="og:description" content="用Glide这么久了，我一直有个疑问，Glide该如何获取到指定的缓存图片？ 原生Glide是没有提供任何Api用来获取缓存图片的，至少我是没找到。 翻看Glide源码（3.7），发现其中一个叫：EngineKey的类，Glide通过该类来查找对应的缓存文件。该类构造方法参数多达10个，并且不是开放出来的，也就是说，通过自己构造EngineKey这条路是走不通的。 难道就没有办法了吗？仔细翻看E">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-07-27T09:25:36.191Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="获取Glide缓存图片">
+<meta name="twitter:description" content="用Glide这么久了，我一直有个疑问，Glide该如何获取到指定的缓存图片？ 原生Glide是没有提供任何Api用来获取缓存图片的，至少我是没找到。 翻看Glide源码（3.7），发现其中一个叫：EngineKey的类，Glide通过该类来查找对应的缓存文件。该类构造方法参数多达10个，并且不是开放出来的，也就是说，通过自己构造EngineKey这条路是走不通的。 难道就没有办法了吗？仔细翻看E">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/07/27/Glide获取指定图片的缓存/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>获取Glide缓存图片 | HSH's Blogs</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">HSH's Blogs</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/HuangShengHuan" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/27/Glide获取指定图片的缓存/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄声焕">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HSH's Blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">获取Glide缓存图片
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-07-27 00:00:00 / Modified: 17:25:36" itemprop="dateCreated datePublished" datetime="2018-07-27T00:00:00+08:00">2018-07-27</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Glide/" itemprop="url" rel="index"><span itemprop="name">Glide</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             Views:  
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <!-- toc -->
+<p>用Glide这么久了，我一直有个疑问，Glide该如何获取到指定的缓存图片？</p>
+<p>原生Glide是没有提供任何Api用来获取缓存图片的，至少我是没找到。</p>
+<p>翻看Glide源码（3.7），发现其中一个叫：EngineKey的类，Glide通过该类来查找对应的缓存文件。<br>该类构造方法参数多达10个，并且不是开放出来的，也就是说，通过自己构造EngineKey这条路是走不通的。</p>
+<p>难道就没有办法了吗？仔细翻看EngineKey这个类，其中有一个叫getOriginalKey的方法：</p>
+<pre><code>public Key getOriginalKey() {
+    if (originalKey == null) {
+        originalKey = new OriginalKey(id, signature);
+    }
+    return originalKey;
+}
+</code></pre><p>对应OriginalKey只需要两个参数，并且类的内容也很简单：</p>
+<pre><code>class OriginalKey implements Key {
+
+    private final String id;
+    private final Key signature;
+
+    public OriginalKey(String id, Key signature) {
+        this.id = id;
+        this.signature = signature;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        OriginalKey that = (OriginalKey) o;
+
+        if (!id.equals(that.id)) {
+            return false;
+        }
+        if (!signature.equals(that.signature)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + signature.hashCode();
+        return result;
+    }
+
+    @Override
+    public void updateDiskCacheKey(MessageDigest messageDigest) throws UnsupportedEncodingException {
+        messageDigest.update(id.getBytes(STRING_CHARSET_NAME));
+        signature.updateDiskCacheKey(messageDigest);
+    }
+}
+</code></pre><p>再查看getOriginalKey()方法的调用者，发现被一个DecodeJob的两个方法调用到了：</p>
+<pre><code>private Resource&lt;T&gt; cacheAndDecodeSourceData(A data) throws IOException {
+    long startTime = LogTime.getLogTime();
+    SourceWriter&lt;A&gt; writer = new SourceWriter&lt;A&gt;(loadProvider.getSourceEncoder(), data);
+    diskCacheProvider.getDiskCache().put(resultKey.getOriginalKey(), writer);
+    if (Log.isLoggable(TAG, Log.VERBOSE)) {
+        logWithTimeAndKey(&quot;Wrote source to cache&quot;, startTime);
+    }
+
+    startTime = LogTime.getLogTime();
+    Resource&lt;T&gt; result = loadFromCache(resultKey.getOriginalKey());
+    if (Log.isLoggable(TAG, Log.VERBOSE) &amp;&amp; result != null) {
+        logWithTimeAndKey(&quot;Decoded source from cache&quot;, startTime);
+    }
+    return result;
+}
+
+public Resource&lt;Z&gt; decodeSourceFromCache() throws Exception {
+    if (!diskCacheStrategy.cacheSource()) {
+        return null;
+    }
+
+    long startTime = LogTime.getLogTime();
+    Resource&lt;T&gt; decoded = loadFromCache(resultKey.getOriginalKey());
+    if (Log.isLoggable(TAG, Log.VERBOSE)) {
+        logWithTimeAndKey(&quot;Decoded source from cache&quot;, startTime);
+    }
+    return transformEncodeAndTranscode(decoded);
+}
+</code></pre><p>了解过Glide源码的人应该知道，这两个方法是在diskCacheStrategy设置为Source时，Glide缓存到本地和从本地取缓存的方法。</p>
+<p>查看loadFromCache方法：</p>
+<pre><code>private Resource&lt;T&gt; loadFromCache(Key key) throws IOException {
+    File cacheFile = diskCacheProvider.getDiskCache().get(key);
+    if (cacheFile == null) {
+        return null;
+    }
+
+    Resource&lt;T&gt; result = null;
+    try {
+        result = loadProvider.getCacheDecoder().decode(cacheFile, width, height);
+    } finally {
+        if (result == null) {
+            diskCacheProvider.getDiskCache().delete(key);
+        }
+    }
+    return result;
+}
+</code></pre><p>get方法点进去，发现有两个实现：DiskCacheAdapter和DiskLruCacheWrapper，DiskCacheAdapter只是个空壳，那么只有DiskLruCacheWrapper了。</p>
+<p>其中获取缓存文件的方法：</p>
+<pre><code>@Override
+public File get(Key key) {
+    String safeKey = safeKeyGenerator.getSafeKey(key);
+    File result = null;
+    try {
+        //It is possible that the there will be a put in between these two gets. If so that shouldn&apos;t be a problem
+        //because we will always put the same value at the same key so our input streams will still represent
+        //the same data
+        final DiskLruCache.Value value = getDiskCache().get(safeKey);
+        if (value != null) {
+            result = value.getFile(0);
+        }
+    } catch (IOException e) {
+        if (Log.isLoggable(TAG, Log.WARN)) {
+            Log.w(TAG, &quot;Unable to get from disk cache&quot;, e);
+        }
+    }
+    return result;
+}
+
+private synchronized DiskLruCache getDiskCache() throws IOException {
+    if (diskLruCache == null) {
+        diskLruCache = DiskLruCache.open(directory, APP_VERSION, VALUE_COUNT, maxSize);
+    }
+    return diskLruCache;
+}
+</code></pre><p>那就好办了！我们只需将diskCacheStrategy设置为Source，然后自己构造OriginalKey和DiskLruCache即可。</p>
+<p>说干就干！</p>
+<p>将Glide下的SafeKeyGenerator和OriginalKey类拷到自己的包下，这两个类也很简单：</p>
+<pre><code>/**
+ * A class that generates and caches safe and unique string file names from {@link com.bumptech.glide.load.Key}s.
+ */
+class SafeKeyGenerator {
+    private final LruCache&lt;Key, String&gt; loadIdToSafeHash = new LruCache&lt;Key, String&gt;(1000);
+
+    public String getSafeKey(Key key) {
+        String safeKey;
+        synchronized (loadIdToSafeHash) {
+            safeKey = loadIdToSafeHash.get(key);
+        }
+        if (safeKey == null) {
+            try {
+                MessageDigest messageDigest = MessageDigest.getInstance(&quot;SHA-256&quot;);
+                key.updateDiskCacheKey(messageDigest);
+                safeKey = Util.sha256BytesToHex(messageDigest.digest());
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            synchronized (loadIdToSafeHash) {
+                loadIdToSafeHash.put(key, safeKey);
+            }
+        }
+        return safeKey;
+    }
+}
+
+//OriginalKey 在上面！
+</code></pre><p>然后就可以缓存文件获取了，如果你没有自己构造Signature和修改磁盘缓存位置，那用下面这个方法即可：</p>
+<pre><code>//3.7
+public File getCacheFile(String url) {
+    OriginalKey originalKey = new OriginalKey(url, EmptySignature.obtain());
+    SafeKeyGenerator safeKeyGenerator = new SafeKeyGenerator();
+    String safeKey = safeKeyGenerator.getSafeKey(originalKey);
+    try {
+        DiskLruCache diskLruCache = DiskLruCache.open(new File(getCacheDir(), DiskCache.Factory.DEFAULT_DISK_CACHE_DIR), 1, 1, DiskCache.Factory.DEFAULT_DISK_CACHE_SIZE);
+        DiskLruCache.Value value = diskLruCache.get(safeKey);
+        if (value != null) {
+            return value.getFile(0);
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    return null;
+}
+</code></pre><p>效果：</p>
+<p>当然，如果不是Glide3.7，而是4.x呢？额，亲测在4.0上只需要改一个类即可，将OriginalKey换为DataCacheKey即可：</p>
+<pre><code>/**
+ * A cache key for original source data + any requested signature.
+ */
+public class DataCacheKey implements Key  {
+
+    private final Key sourceKey;
+    private final Key signature;
+
+    public DataCacheKey(Key sourceKey, Key signature) {
+        this.sourceKey = sourceKey;
+        this.signature = signature;
+    }
+
+    public Key getSourceKey() {
+        return sourceKey;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof DataCacheKey) {
+            DataCacheKey other = (DataCacheKey) o;
+            return sourceKey.equals(other.sourceKey) &amp;&amp; signature.equals(other.signature);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = sourceKey.hashCode();
+        result = 31 * result + signature.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return &quot;DataCacheKey{&quot;
+                + &quot;sourceKey=&quot; + sourceKey
+                + &quot;, signature=&quot; + signature
+                + &apos;}&apos;;
+    }
+
+    @Override
+    public void updateDiskCacheKey(MessageDigest messageDigest) {
+        sourceKey.updateDiskCacheKey(messageDigest);
+        signature.updateDiskCacheKey(messageDigest);
+    }
+}
+</code></pre><p>对应的方法：</p>
+<pre><code>//4.0
+public File getCacheFile2(String url) {
+    DataCacheKey dataCacheKey = new DataCacheKey(new GlideUrl(url), EmptySignature.obtain());
+    SafeKeyGenerator safeKeyGenerator = new SafeKeyGenerator();
+    String safeKey = safeKeyGenerator.getSafeKey(dataCacheKey);
+    try {
+        int cacheSize = 100 * 1000 * 1000;
+        DiskLruCache diskLruCache = DiskLruCache.open(new File(getCacheDir(), DiskCache.Factory.DEFAULT_DISK_CACHE_DIR), 1, 1, cacheSize);
+        DiskLruCache.Value value = diskLruCache.get(safeKey);
+        if (value != null) {
+            return value.getFile(0);
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    return null;
+}
+</code></pre><p>写了一个非常简单的Demo ：  <a href="https://github.com/HuangShengHuan/GlideCache" target="_blank" rel="noopener">https://github.com/HuangShengHuan/GlideCache</a>  </p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/27/git笔记/" rel="prev" title="git笔记">
+                git笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">黄声焕</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">categories</span>
+                  
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄声焕</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Gemini</a> v6.3.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="Total Visitors">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="Total Views">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
