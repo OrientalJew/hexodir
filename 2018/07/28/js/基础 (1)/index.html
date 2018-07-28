@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-center-simple.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="比较运算符JavaScript中存在两种比较运算符，分别是== 和 === 两种: 第一种是’==’比较，它会自动转换数据类型再比较，很多时候，会得到非常诡异的结果； 第二种是’===’比较，它不会自动转换数据类型，如果数据类型不一致，返回false，如果一致，再比较。 由于JavaScript这个设计缺陷，不要使用 == 比较，始终坚持使用 === 比较。">
+<meta name="keywords" content="JavaScript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基础">
+<meta property="og:url" content="http://yoursite.com/2018/07/28/js/基础 (1)/index.html">
+<meta property="og:site_name" content="HSH&#39;s Blogs">
+<meta property="og:description" content="比较运算符JavaScript中存在两种比较运算符，分别是== 和 === 两种: 第一种是’==’比较，它会自动转换数据类型再比较，很多时候，会得到非常诡异的结果； 第二种是’===’比较，它不会自动转换数据类型，如果数据类型不一致，返回false，如果一致，再比较。 由于JavaScript这个设计缺陷，不要使用 == 比较，始终坚持使用 === 比较。">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-07-28T10:16:28.151Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基础">
+<meta name="twitter:description" content="比较运算符JavaScript中存在两种比较运算符，分别是== 和 === 两种: 第一种是’==’比较，它会自动转换数据类型再比较，很多时候，会得到非常诡异的结果； 第二种是’===’比较，它不会自动转换数据类型，如果数据类型不一致，返回false，如果一致，再比较。 由于JavaScript这个设计缺陷，不要使用 == 比较，始终坚持使用 === 比较。">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/07/28/js/基础 (1)/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>基础 | HSH's Blogs</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">HSH's Blogs</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/OrientalJew" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/28/js/基础 (1)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄声焕">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HSH's Blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">基础
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-07-28 00:00:00 / Modified: 18:16:28" itemprop="dateCreated datePublished" datetime="2018-07-28T00:00:00+08:00">2018-07-28</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             Views:  
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <!-- toc -->
+<h4 id="比较运算符"><a href="#比较运算符" class="headerlink" title="比较运算符"></a>比较运算符</h4><p>JavaScript中存在两种比较运算符，分别是== 和 === 两种:</p>
+<p>第一种是’==’比较，它会自动转换数据类型再比较，很多时候，会得到非常诡异的结果；</p>
+<p>第二种是’===’比较，它不会自动转换数据类型，如果数据类型不一致，返回false，如果一致，再比较。</p>
+<p>由于JavaScript这个设计缺陷，不要使用 == 比较，始终坚持使用 === 比较。<br><a id="more"></a></p>
+<h4 id="NaN"><a href="#NaN" class="headerlink" title="NaN"></a>NaN</h4><p>另一个例外是NaN这个特殊的Number与所有其他值都不相等，包括它自己：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NaN === NaN; // false</span><br></pre></td></tr></table></figure></p>
+<p>唯一能判断NaN的方法是通过isNaN()函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">isNaN(NaN); // true</span><br></pre></td></tr></table></figure>
+<h4 id="null、undefined"><a href="#null、undefined" class="headerlink" title="null、undefined"></a>null、undefined</h4><ul>
+<li>null</li>
+</ul>
+<p>null表示一个空值，是一种广义上的“空”，是类型无关的；</p>
+<p>和null比较，0表示的是一个数值；空字符’ ‘表示的长度为0的字符串；</p>
+<ul>
+<li>undefined</li>
+</ul>
+<p>表示未定义，也有“空”的意思，大多数情况用来表示一个函数的参数没有被传递过来；</p>
+<h4 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h4><blockquote>
+<p>JavaScript中的数组起着类似于其他语言中集合的作用，其提供了许多操作结合的函数；</p>
+</blockquote>
+<p>JavaScript中的数组是类型无关的，其中可以包含任意的数据类型。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[1, 2, 3.14, &apos;Hello&apos;, null, true];</span><br></pre></td></tr></table></figure>
+<p>另一种定义数组的方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">new Array(1, 2, 3); // 创建了数组[1, 2, 3]</span><br></pre></td></tr></table></figure></p>
+<p>array.length可以用来获取数组的长度，同时，还可以通过给array.length赋值来改变数组的长度：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">var arr = [1, 2, 3];</span><br><span class="line">arr.length; // 3</span><br><span class="line">arr.length = 6;</span><br><span class="line">arr; // arr变为[1, 2, 3, undefined, undefined, undefined]</span><br><span class="line">arr.length = 2;</span><br><span class="line">arr; // arr变为[1, 2]</span><br><span class="line"></span><br><span class="line">// 访问数组越界也会导致数组的大小改变</span><br><span class="line">var arr = [1, 2, 3];</span><br><span class="line">arr[5] = &apos;x&apos;;</span><br><span class="line">arr; // arr变为[1, 2, 3, undefined, undefined, &apos;x&apos;]</span><br></pre></td></tr></table></figure></p>
+<h4 id="数组操作"><a href="#数组操作" class="headerlink" title="数组操作"></a>数组操作</h4><ul>
+<li>push、pop实现数组尾部的增删操作，push支持一次性操作多个元素；</li>
+<li>unshift、shift实现数组头部元素的增删操作，unshift支持多个元素的操作；</li>
+<li>slice对应了字符串中的subString操作，直接调用slice()函数可以方便的复制整个数组；</li>
+<li><p>splice可以直接对数据某个位置上的元素进行增删；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var arr = [&apos;Microsoft&apos;, &apos;Apple&apos;, &apos;Yahoo&apos;, &apos;AOL&apos;, &apos;Excite&apos;, &apos;Oracle&apos;];</span><br><span class="line">// 从索引2开始删除3个元素,然后再添加两个元素:</span><br><span class="line">arr.splice(2, 3, &apos;Google&apos;, &apos;Facebook&apos;); // 返回删除的元素 [&apos;Yahoo&apos;, &apos;AOL&apos;, &apos;Excite&apos;]</span><br><span class="line">arr; // [&apos;Microsoft&apos;, &apos;Apple&apos;, &apos;Google&apos;, &apos;Facebook&apos;, &apos;Oracle&apos;]</span><br><span class="line">// 只删除,不添加:</span><br><span class="line">arr.splice(2, 2); // [&apos;Google&apos;, &apos;Facebook&apos;]</span><br><span class="line">arr; // [&apos;Microsoft&apos;, &apos;Apple&apos;, &apos;Oracle&apos;]</span><br><span class="line">// 只添加,不删除:</span><br><span class="line">arr.splice(2, 0, &apos;Google&apos;, &apos;Facebook&apos;); // 返回[],因为没有删除任何元素</span><br><span class="line">arr; // [&apos;Microsoft&apos;, &apos;Apple&apos;, &apos;Google&apos;, &apos;Facebook&apos;, &apos;Oracle&apos;]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>join()能够用制定的连接符将数组中的所有元素连接起来；</p>
+</li>
+</ul>
+<h4 id="Map、Set集合"><a href="#Map、Set集合" class="headerlink" title="Map、Set集合"></a>Map、Set集合</h4><blockquote>
+<p>ES6新增了Map和Set集合结果；</p>
+</blockquote>
+<ul>
+<li>Map</li>
+</ul>
+<p>Map如果直接初始化，需要使用一个二维数组进行初始化：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var m = new Map([[&apos;Michael&apos;, 95], [&apos;Bob&apos;, 75], [&apos;Tracy&apos;, 85]]);</span><br><span class="line">m.get(&apos;Michael&apos;); // 95</span><br></pre></td></tr></table></figure></p>
+<p>直接设置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var m = new Map(); // 空Map</span><br><span class="line">m.set(&apos;Adam&apos;, 67); // 添加新的key-value</span><br><span class="line">m.set(&apos;Bob&apos;, 59);</span><br><span class="line">m.has(&apos;Adam&apos;); // 是否存在key &apos;Adam&apos;: true</span><br><span class="line">m.get(&apos;Adam&apos;); // 67</span><br><span class="line">m.delete(&apos;Adam&apos;); // 删除key &apos;Adam&apos;</span><br><span class="line">m.get(&apos;Adam&apos;); // undefined</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>Set可以理解为没有重复元素的数组</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">s.add(4);</span><br><span class="line">s; // Set &#123;1, 2, 3, 4&#125;</span><br><span class="line">s.add(4);</span><br><span class="line">s; // 仍然是 Set &#123;1, 2, 3, 4&#125;</span><br><span class="line"></span><br><span class="line">s; // Set &#123;1, 2, 3&#125;</span><br><span class="line">s.delete(3);</span><br><span class="line">s; // Set &#123;1, 2&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>for..of</li>
+</ul>
+<p>for..of是ES6引进来的遍历Array、Map和Set类型集合的循环，不同于for..in,for..of只遍历原始集合中数据，而对于动态添加的数据不进行遍历：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// for .. in 原先是用来遍历对象的所有属性名的，而Array可以认为是一个只有属性名，没有属性值的对象</span><br><span class="line">// 也可以向其中动态添加属性键值对；</span><br><span class="line">var a = [&apos;A&apos;, &apos;B&apos;, &apos;C&apos;];</span><br><span class="line">a.name = &apos;Hello&apos;;</span><br><span class="line">for (var x in a) &#123;</span><br><span class="line">    console.log(x); // &apos;0&apos;, &apos;1&apos;, &apos;2&apos;, &apos;name&apos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var a = [&apos;A&apos;, &apos;B&apos;, &apos;C&apos;];</span><br><span class="line">a.name = &apos;Hello&apos;;</span><br><span class="line">for (var x of a) &#123;</span><br><span class="line">    console.log(x); // &apos;A&apos;, &apos;B&apos;, &apos;C&apos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h4><p>JavaScript的对象是由一组键-值组成的无序集合(类似于Python中的字典)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">var person = &#123;</span><br><span class="line">    name: &apos;Bob&apos;,</span><br><span class="line">    age: 20,</span><br><span class="line">    tags: [&apos;js&apos;, &apos;web&apos;, &apos;mobile&apos;],</span><br><span class="line">    city: &apos;Beijing&apos;,</span><br><span class="line">    hasCar: true,</span><br><span class="line">    zipcode: null</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>其中的键值对的键又称为对象的属性，都是字符串类型，值则可以是任意类型；</p>
+<ul>
+<li><p>对象直接直接添加或删除属性</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">var xiaoming = &#123;</span><br><span class="line">    name: &apos;小明&apos;</span><br><span class="line">&#125;;</span><br><span class="line">xiaoming.age; // undefined</span><br><span class="line">xiaoming.age = 18; // 新增一个age属性</span><br><span class="line">xiaoming.age; // 18</span><br><span class="line">delete xiaoming.age; // 删除age属性</span><br><span class="line">xiaoming.age; // undefined</span><br><span class="line">delete xiaoming[&apos;name&apos;]; // 删除name属性</span><br><span class="line">xiaoming.name; // undefined</span><br><span class="line">delete xiaoming.school; // 删除一个不存在的school属性也不会报错</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>判断是否拥有某属性</p>
+</li>
+</ul>
+<p>in可以用来判断对象是否拥有某属性，包含了继承的属性：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var xiaoming = &#123;</span><br><span class="line">    name: &apos;小明&apos;,</span><br><span class="line">    birth: 1990,</span><br><span class="line">    school: &apos;No.1 Middle School&apos;,</span><br><span class="line">    height: 1.70,</span><br><span class="line">    weight: 65,</span><br><span class="line">    score: null</span><br><span class="line">&#125;;</span><br><span class="line">&apos;name&apos; in xiaoming; // true</span><br><span class="line">&apos;grade&apos; in xiaoming; // false</span><br></pre></td></tr></table></figure></p>
+<p>hasOwnProperty用来判断某对象是否自带某属性，不包含继承的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var xiaoming = &#123;</span><br><span class="line">    name: &apos;小明&apos;</span><br><span class="line">&#125;;</span><br><span class="line">xiaoming.hasOwnProperty(&apos;name&apos;); // true</span><br><span class="line">xiaoming.hasOwnProperty(&apos;toString&apos;); // false</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>for..in遍历对象或数组属性<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">var o = &#123;</span><br><span class="line">    name: &apos;Jack&apos;,</span><br><span class="line">    age: 20,</span><br><span class="line">    city: &apos;Beijing&apos;</span><br><span class="line">&#125;;</span><br><span class="line">for (var key in o) &#123;</span><br><span class="line">    console.log(key); // &apos;name&apos;, &apos;age&apos;, &apos;city&apos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var a = [&apos;A&apos;, &apos;B&apos;, &apos;C&apos;];</span><br><span class="line">for (var i in a) &#123;</span><br><span class="line">    console.log(i); // &apos;0&apos;, &apos;1&apos;, &apos;2&apos;</span><br><span class="line">    console.log(a[i]); // &apos;A&apos;, &apos;B&apos;, &apos;C&apos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h4><h4 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h4><ul>
+<li><p>arguments是函数内部的关键字，可以用来获取传给函数的所有参数，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function foo(x) &#123;</span><br><span class="line">    console.log(&apos;x = &apos; + x); // 10</span><br><span class="line">    for (var i=0; i&lt;arguments.length; i++) &#123;</span><br><span class="line">        console.log(&apos;arg &apos; + i + &apos; = &apos; + arguments[i]); // 10, 20, 30</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">foo(10, 20, 30);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>rest参数<br>传递给函数的参数并不需要完全参照函数定义个参数个数来确定，我们可以传递任意个数的参数给函数；</p>
+</li>
+</ul>
+<p>对于额外传递给函数的参数，我们可以通过rest参数来获取(ES6引入)；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">function foo(a, b, ...rest) &#123;</span><br><span class="line">    console.log(&apos;a = &apos; + a);</span><br><span class="line">    console.log(&apos;b = &apos; + b);</span><br><span class="line">    console.log(rest);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">foo(1, 2, 3, 4, 5);</span><br><span class="line">// 结果:</span><br><span class="line">// a = 1</span><br><span class="line">// b = 2</span><br><span class="line">// Array [ 3, 4, 5 ]</span><br><span class="line"></span><br><span class="line">foo(1);</span><br><span class="line">// 结果:</span><br><span class="line">// a = 1</span><br><span class="line">// b = undefined</span><br><span class="line">// Array []</span><br></pre></td></tr></table></figure>
+<h4 id="命名空间"><a href="#命名空间" class="headerlink" title="命名空间"></a>命名空间</h4><ul>
+<li>在JavaScript中，凡是没有定义在函数中的变量或者函数，都是全局变量；</li>
+<li><p>全局变量缔属于window对象，所有的全局变量或者函数都可以使用window对象来调起；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&apos;use strict&apos;;</span><br><span class="line"></span><br><span class="line">function foo() &#123;</span><br><span class="line">    alert(&apos;foo&apos;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">foo(); // 直接调用foo()</span><br><span class="line">window.foo(); // 通过window.foo()调用</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>因为不同的JavaScript文件可能定义了相同名字的全局变量或者函数，这将导致冲突，为了解决冲突，我们可以为每一个JavaScript文件定义一个命名空间；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// 唯一的全局变量MYAPP:</span><br><span class="line">var MYAPP = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">// 其他变量:</span><br><span class="line">MYAPP.name = &apos;myapp&apos;;</span><br><span class="line">MYAPP.version = 1.0;</span><br><span class="line"></span><br><span class="line">// 其他函数:</span><br><span class="line">MYAPP.foo = function () &#123;</span><br><span class="line">    return &apos;foo&apos;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="局部作用域"><a href="#局部作用域" class="headerlink" title="局部作用域"></a>局部作用域</h4><p>在JavaScript中，局部作用域一般是只有函数内部的局部作用，而不像Java等，存在块级的作用域：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&apos;use strict&apos;;</span><br><span class="line"></span><br><span class="line">function foo() &#123;</span><br><span class="line">    for (var i=0; i&lt;100; i++) &#123;</span><br><span class="line">        //</span><br><span class="line">    &#125;</span><br><span class="line">    i += 100; // 仍然可以引用变量i</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>ES6引入新的let关键字，用来替代var，可以用来声明一个块级的作用域(代码块！)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&apos;use strict&apos;;</span><br><span class="line"></span><br><span class="line">function foo() &#123;</span><br><span class="line">    var sum = 0;</span><br><span class="line">    for (let i=0; i&lt;100; i++) &#123;</span><br><span class="line">        sum += i;</span><br><span class="line">    &#125;</span><br><span class="line">    // SyntaxError:</span><br><span class="line">    i += 1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="strict模式与全局变量"><a href="#strict模式与全局变量" class="headerlink" title="strict模式与全局变量"></a>strict模式与全局变量</h4><p>在JavaScript中，变量不同过var修饰，则为全局变量；</p>
+<p>如果多个JavaScript文件中存在同名的全局变量，那么将会带来不可预知的错误；</p>
+<p>解决方案是使用strict模式：只需要在JavaScript代码的第一行添加：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&apos;use strict&apos;;</span><br></pre></td></tr></table></figure></p>
+<p>那么支持strict模式的浏览器将强制用var声明变量，否则将报ReferenceError错误；</p>
+<h4 id="字符串操作"><a href="#字符串操作" class="headerlink" title="字符串操作"></a>字符串操作</h4><blockquote>
+<p>JavaScript中字符串是一个常量，对其任何操作都不会改变其原内容，而是返回一个新的字符串结果。 </p>
+</blockquote>
+<blockquote>
+<p>字符串可以认为是一串字符数组；</p>
+</blockquote>
+<ul>
+<li>多行字符串</li>
+</ul>
+<p>新的ES6标准允许我们直接使用回车作为换行符：使用反引号<code>...</code>进行括起；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">`这是一个</span><br><span class="line">多行</span><br><span class="line">字符串`;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>字符串连接</li>
+</ul>
+<p>在JavaScript中，多个字符串要连接成一个字符串，可以使用“+”进行连接；</p>
+<p>在ES6中，支持我们使用字符串模板的形式进行连接(<strong>必须使用反引号来括起内容</strong>)：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var name = &apos;小明&apos;;</span><br><span class="line">var age = 20;</span><br><span class="line">var message = `你好, $&#123;name&#125;, 你今年$&#123;age&#125;岁了!`;</span><br><span class="line">alert(message);</span><br></pre></td></tr></table></figure></p>
+<h4 id="ES6新特性"><a href="#ES6新特性" class="headerlink" title="ES6新特性"></a>ES6新特性</h4><ul>
+<li><p>常量：可以使用const来声明一个常量；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&apos;use strict&apos;;</span><br><span class="line"></span><br><span class="line">const PI = 3.14;</span><br><span class="line">PI = 3; // 某些浏览器不报错，但是无效果！</span><br><span class="line">PI; // 3.14</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解构赋值：将数组的元素同时赋给多个变量；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 如果浏览器支持解构赋值就不会报错:</span><br><span class="line">var [x, y, z] = [&apos;hello&apos;, &apos;JavaScript&apos;, &apos;ES6&apos;];</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>解构赋值可以进行灵活的运用，比如对二维数组进行解构：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">let [x, [y, z]] = [&apos;hello&apos;, [&apos;JavaScript&apos;, &apos;ES6&apos;]];</span><br><span class="line">x; // &apos;hello&apos;</span><br><span class="line">y; // &apos;JavaScript&apos;</span><br><span class="line">z; // &apos;ES6&apos;</span><br></pre></td></tr></table></figure>
+<p>忽略部分元素，只解构出一部分元素：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">let [, , z] = [&apos;hello&apos;, &apos;JavaScript&apos;, &apos;ES6&apos;]; // 忽略前两个元素，只对z赋值第三个元素</span><br><span class="line">z; // &apos;ES6&apos;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>解构对象：解构对象需要使用对应的属性名，并且用大括号括起来；<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&apos;use strict&apos;;</span><br><span class="line"></span><br><span class="line">var person = &#123;</span><br><span class="line">    name: &apos;小明&apos;,</span><br><span class="line">    age: 20,</span><br><span class="line">    gender: &apos;male&apos;,</span><br><span class="line">    passport: &apos;G-12345678&apos;,</span><br><span class="line">    school: &apos;No.4 middle school&apos;</span><br><span class="line">&#125;;</span><br><span class="line">var &#123;name, age, passport&#125; = person;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>同样，对于嵌套的对象，也可以解构出其嵌套值；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">var person = &#123;</span><br><span class="line">    name: &apos;小明&apos;,</span><br><span class="line">    age: 20,</span><br><span class="line">    gender: &apos;male&apos;,</span><br><span class="line">    passport: &apos;G-12345678&apos;,</span><br><span class="line">    school: &apos;No.4 middle school&apos;,</span><br><span class="line">    address: &#123;</span><br><span class="line">        city: &apos;Beijing&apos;,</span><br><span class="line">        street: &apos;No.1 Road&apos;,</span><br><span class="line">        zipcode: &apos;100001&apos;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">var &#123;name, address: &#123;city, zip&#125;&#125; = person;</span><br><span class="line">name; // &apos;小明&apos;</span><br><span class="line">city; // &apos;Beijing&apos;</span><br><span class="line">zip; // undefined, 因为属性名是zipcode而不是zip</span><br><span class="line">// 注意: address不是变量，而是为了让city和zip获得嵌套的address对象的属性:</span><br><span class="line">address; // Uncaught ReferenceError: address is not defined</span><br></pre></td></tr></table></figure>
+<p>解构对象时，并不一定要于对象的的属性名一致，可以另外指定其他变量来接收解构的属性：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">var person = &#123;</span><br><span class="line">    name: &apos;小明&apos;,</span><br><span class="line">    age: 20,</span><br><span class="line">    gender: &apos;male&apos;,</span><br><span class="line">    passport: &apos;G-12345678&apos;,</span><br><span class="line">    school: &apos;No.4 middle school&apos;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 把passport属性赋值给变量id:</span><br><span class="line">let &#123;name, passport:id&#125; = person;</span><br><span class="line">name; // &apos;小明&apos;</span><br><span class="line">id; // &apos;G-12345678&apos;</span><br><span class="line">// 注意: passport不是变量，而是为了让变量id获得passport属性:</span><br><span class="line">passport; // Uncaught ReferenceError: passport is not defined</span><br></pre></td></tr></table></figure>
+<p>可以给要获取解构的属性的变量设置默认值：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">var person = &#123;</span><br><span class="line">    name: &apos;小明&apos;,</span><br><span class="line">    age: 20,</span><br><span class="line">    gender: &apos;male&apos;,</span><br><span class="line">    passport: &apos;G-12345678&apos;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 如果person对象没有single属性，默认赋值为true:</span><br><span class="line">var &#123;name, single=true&#125; = person;</span><br><span class="line">name; // &apos;小明&apos;</span><br><span class="line">single; // true</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>解构对象时注意点</li>
+</ul>
+<p>对于已经声明的变量，用它们来接收解构属性时，需要用括号括起，表示是一个运行语句，而不是代码块：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 声明变量:</span><br><span class="line">var x, y;</span><br><span class="line">// 解构赋值:</span><br><span class="line">&#123;x, y&#125; = &#123; name: &apos;小明&apos;, x: 100, y: 200&#125;;</span><br><span class="line">// 语法错误: Uncaught SyntaxError: Unexpected token =</span><br></pre></td></tr></table></figure>
+<p>因为JavaScript引擎把{开头的语句当作了块处理，于是=不再合法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">正确写法：</span><br><span class="line">(&#123;x, y&#125; = &#123; name: &apos;小明&apos;, x: 100, y: 200&#125;);</span><br></pre></td></tr></table></figure></p>
+<h4 id="解构赋值使用场景"><a href="#解构赋值使用场景" class="headerlink" title="解构赋值使用场景"></a>解构赋值使用场景</h4><ul>
+<li>方便交换变量内容</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var x=1, y=2;</span><br><span class="line">[x, y] = [y, x]</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>解构对象内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var &#123;hostname:domain, pathname:path&#125; = location;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解构作为函数参数的参数，实现具名参数和默认参数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 解构时可以设置默认值</span><br><span class="line">function buildDate(&#123;year, month, day, hour=0, minute=0, second=0&#125;) &#123;</span><br><span class="line">    return new Date(year + &apos;-&apos; + month + &apos;-&apos; + day + &apos; &apos; + hour + &apos;:&apos; + minute + &apos;:&apos; + second);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 传递的对象的属性顺序并不要求是固定的</span><br><span class="line">buildDate(&#123; year: 2017, month: 1, day: 1 &#125;);</span><br><span class="line">// Sun Jan 01 2017 00:00:00 GMT+0800 (CST)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/28/js/函数/高阶函数/" rel="next" title="高阶函数">
+                <i class="fa fa-chevron-left"></i> 高阶函数
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">黄声焕</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#比较运算符"><span class="nav-number">1.</span> <span class="nav-text">比较运算符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NaN"><span class="nav-number">2.</span> <span class="nav-text">NaN</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#null、undefined"><span class="nav-number">3.</span> <span class="nav-text">null、undefined</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数组"><span class="nav-number">4.</span> <span class="nav-text">数组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数组操作"><span class="nav-number">5.</span> <span class="nav-text">数组操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Map、Set集合"><span class="nav-number">6.</span> <span class="nav-text">Map、Set集合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对象"><span class="nav-number">7.</span> <span class="nav-text">对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方法"><span class="nav-number">8.</span> <span class="nav-text">方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#函数"><span class="nav-number">9.</span> <span class="nav-text">函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命名空间"><span class="nav-number">10.</span> <span class="nav-text">命名空间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#局部作用域"><span class="nav-number">11.</span> <span class="nav-text">局部作用域</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#strict模式与全局变量"><span class="nav-number">12.</span> <span class="nav-text">strict模式与全局变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#字符串操作"><span class="nav-number">13.</span> <span class="nav-text">字符串操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ES6新特性"><span class="nav-number">14.</span> <span class="nav-text">ES6新特性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解构赋值使用场景"><span class="nav-number">15.</span> <span class="nav-text">解构赋值使用场景</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄声焕</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Gemini</a> v6.3.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="Total Visitors">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="Total Views">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
