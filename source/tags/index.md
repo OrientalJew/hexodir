@@ -1,4 +1,6 @@
 ---
 title: tags
-date: 2018-07-27 16:06:28
+date: 2018-07-28
+type: "tags"
+comments: false
 ---

@@ -79,4 +79,4 @@ theme: next
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/HuangShengHuan/HuangShengHuan.github.io.git
+  repo: git@github.com:OrientalJew/OrientalJew.github.io
