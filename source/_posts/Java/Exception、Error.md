@@ -1,5 +1,5 @@
 ---
-title: 标准对象
+title: Java异常、错误
 date: 2018-07-30
 tags:
 - Exception
