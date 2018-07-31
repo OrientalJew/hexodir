@@ -1,7 +1,7 @@
 ---
 title: git笔记
 date: 2018-07-27 14:24:10
-tags: 
+tags:
 - git
 categories:
 - git
@@ -10,7 +10,7 @@ categories:
 <!-- toc -->
 
 #### 安装
- 
+
 ```
 sudo apt-get install git
 ```
@@ -21,7 +21,7 @@ sudo apt-get install git
 $ git config --global user.name "Your Name"
 $ git config --global user.email "email@example.com"
 ```
-<!--more--> 
+<!--more-->
 #### 创建Git空仓库
 
 cd到特定目录下：
@@ -45,7 +45,7 @@ $ git commit -m "第一次条readme文件"
 
 git status能够告诉我们当前**本地仓库**所处的状态，哪些文件被添加、删除、修改等。
 ```
-$ git status 
+$ git status
 ```
 
 如果需要查看详细的修改信息可以通过：
@@ -228,6 +228,11 @@ $ git merge dev
 ```
 $ git branch -d dev
 ```
+- 删除远程分支
+```
+$ git push origin --delete dev
+```
+
 - 未合并导致删除分支失败
 
 如果在当前分支要删除一个没有合并内容到当前分支的分支，此时git将会报删除失败：
@@ -274,7 +279,7 @@ Creating a new branch is quick AND simple.
 直接修改冲突文件，并提交即可解决冲突：
 
 ```
-$ git add readme.txt 
+$ git add readme.txt
 $ git commit -m "conflict fixed"
 [master cf810e4] conflict fixed
 ```
@@ -577,4 +582,3 @@ https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b
 #### git怎么查看两个版本具体的不同信息呢？
 
 通过git diff只能查看当前修改与最新版本的不同信息；
-
