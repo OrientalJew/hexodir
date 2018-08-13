@@ -194,7 +194,7 @@ Observable进行绑定，这时，订阅流程才算真正走完，Observable开
 _虽然调用onSubscribe时传递的参数实质上还是一个Observer，而不是Observable，此处认为调用该方法
 是将Observable交给Observer绑定的原因是，Observer在该Observable中进行了包装(通过内部类)，
 其实质让Observer与该Observable产生了关联，让Observer带有该Observable的"属性"，通过onSubscribe传递回给Observer的目的，是让Observer能够有操作该Observable的能力，即dispose
-掉，然Observable不再能发送数据；_
+掉，让Observable不再能发送数据；_
 
 也就是说，onSubscribe方法并没有参与到Observable向Observer发送数据的Rx流程中，所以不受线程切换
 的影响，始终执行在订阅时的线程中；
@@ -494,7 +494,3 @@ subscribeActual方法；
 对应操作符的变换，直到最后最底层Observer，也就是我们订阅时传递进来的Observer的onNext被调用；
 
 ![image](/images/数据发送流程.png)
-
-为什么onSubscribe没有执行两次，线程切换时？
-- RxJava完成Observable和Observer绑定时，必会执行的两个方法onSubscribe和subscribe，让双
-方都持有对方的引用；
