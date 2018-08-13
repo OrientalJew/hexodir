@@ -473,17 +473,17 @@ Observable.create<Int> {
     }
 })
 ```
-![image](images/rx多操作符操作.png)
+![image](/images/rx多操作符操作.png)
 
 > 订阅流程：
 
 订阅流程是一个链式回调的过程，在经过每一层操作符时，都要调对应Observable的subscribe和
 subscribeActual方法；
-![image](images/订阅流程.png)
+![image](/images/订阅流程.png)
 
 走完上面的流程，create操作符最终拿到的Observer是初始订阅的Observer经过多重包装后CreateEmitter；
 
-![image](images/订阅流程2.png)
+![image](/images/订阅流程2.png)
 
 > 数据发送流程：
 
@@ -493,7 +493,7 @@ subscribeActual方法；
 行操作符对应的变换，然后又调用下一层Observer的onNext，层层相扣，每一层的onNext都是该Observer
 对应操作符的变换，直到最后最底层Observer，也就是我们订阅时传递进来的Observer的onNext被调用；
 
-![image](images/数据发送流程.png)
+![image](/images/数据发送流程.png)
 
 为什么onSubscribe没有执行两次，线程切换时？
 - RxJava完成Observable和Observer绑定时，必会执行的两个方法onSubscribe和subscribe，让双
