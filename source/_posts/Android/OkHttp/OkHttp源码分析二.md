@@ -14,6 +14,7 @@ categories:
 每一个Call请求都需要经过一些列的拦截器处理，Ok通过这些拦截器实现了对Call请求的重试、重定向、缓存
 、设置请求头、压缩，甚至是最终对服务端的请求和接收返回数据也都是在拦截器中进行的；
 
+<!-- more -->
 RealCall.getResponseWithInterceptorChain
 ```
 Response getResponseWithInterceptorChain() throws IOException {
@@ -1830,3 +1831,106 @@ StreamAllocation)，通过StreamAllocation创建新的数据流，获取可用�
 RealConnection可以对应(保存)多个StreamAllocation。一个连接中将会同时有多个StreamAllocation
 在进行数据通信(实际上，虽然实现了连接复用，但多个数据流并不是在通道中并发传输的，而是需要排队
 顺序通过连接通道，到达服务端后，根据序号再各自组成完整数据请求)；
+
+#### CallServerInterceptor
+
+到此拦截器，我们已经与服务端建立了连接，接下来在CallServerInterceptor中进行了Stream数据流的
+沟通；
+
+##### intercept
+
+```
+@Override public Response intercept(Chain chain) throws IOException {
+  RealInterceptorChain realChain = (RealInterceptorChain) chain;
+  HttpCodec httpCodec = realChain.httpStream();
+  StreamAllocation streamAllocation = realChain.streamAllocation();
+  RealConnection connection = (RealConnection) realChain.connection();
+  Request request = realChain.request();
+
+  long sentRequestMillis = System.currentTimeMillis();
+  // 向服务端写入请求头数据
+  httpCodec.writeRequestHeaders(request);
+
+  Response.Builder responseBuilder = null;
+  // 如果请求中带有请求体，并且请求方式是允许带有请求体的
+  if (HttpMethod.permitsRequestBody(request.method()) && request.body() != null) {
+    // 如果客户端需要向服务端上传大数据(比如上传文件)，则会在请求头中写入"Expect: 100-continue"
+    // 如果服务端能够处理该请求，则响应100，否则响应4xx。
+    // 如果服务端在timeout时间内始终没有响应，则客户端会立即进行上传，服务端在收到上传的数据
+    // 后，并且是能够处理的，则会省去响应100的步骤
+    // If there's a "Expect: 100-continue" header on the request, wait for a "HTTP/1.1 100
+    // Continue" response before transmitting the request body. If we don't get that, return what
+    // we did get (such as a 4xx response) without ever transmitting the request body.
+    if ("100-continue".equalsIgnoreCase(request.header("Expect"))) {
+      httpCodec.flushRequest();
+      // 读取服务端的响应response，如果服务端响应100，表明请求还在继续，后续要向服务端写请求体，此处返回null
+      // 否则本次请求结束。注意，请求结束并不意味着数据流传输结束，只是不能再创建新的数据流(http2)
+      responseBuilder = httpCodec.readResponseHeaders(true);
+    }
+
+    if (responseBuilder == null) {
+      // 开始向服务端写入请求体
+      // Write the request body if the "Expect: 100-continue" expectation was met.
+      Sink requestBodyOut = httpCodec.createRequestBody(request, request.body().contentLength());
+      BufferedSink bufferedRequestBody = Okio.buffer(requestBodyOut);
+      request.body().writeTo(bufferedRequestBody);
+      bufferedRequestBody.close();
+    } else if (!connection.isMultiplexed()) {
+      // 如果不是HTTP2协议的连接，需要防止该连接上被创建新的数据流(即连接被重用)，此时可能正
+      // 处于数据流传输的过程。
+      // If the "Expect: 100-continue" expectation wasn't met, prevent the HTTP/1 connection from
+      // being reused. Otherwise we're still obligated to transmit the request body to leave the
+      // connection in a consistent state.
+      streamAllocation.noNewStreams();
+    }
+  }
+  // 请求结束
+  httpCodec.finishRequest();
+
+  // 读取响应头
+  if (responseBuilder == null) {
+    responseBuilder = httpCodec.readResponseHeaders(false);
+  }
+
+  // 构造完整的响应头，方便后续的拦截器处理
+  Response response = responseBuilder
+      .request(request)
+      .handshake(streamAllocation.connection().handshake())
+      .sentRequestAtMillis(sentRequestMillis)
+      .receivedResponseAtMillis(System.currentTimeMillis())
+      .build();
+
+  int code = response.code();
+  // 基于WebSocket协议连接，或者服务端希望客户端切换新的请求协议，再请求，则构建一个空的响应体
+  // 给后续的拦截器
+  if (forWebSocket && code == 101) {
+    // Connection is upgrading, but we need to ensure interceptors see a non-null response body.
+    response = response.newBuilder()
+        .body(Util.EMPTY_RESPONSE)
+        .build();
+  } else {
+    // 读取响应体
+    response = response.newBuilder()
+        .body(httpCodec.openResponseBody(response))
+        .build();
+  }
+
+  // 客户端或服务端希望关闭连接
+  if ("close".equalsIgnoreCase(response.request().header("Connection"))
+      || "close".equalsIgnoreCase(response.header("Connection"))) {
+    streamAllocation.noNewStreams();
+  }
+
+  // 204/205表示服务端成功处理了请求，并且不返回任何响应
+  // 如果带有响应体，则抛出协议异常
+  if ((code == 204 || code == 205) && response.body().contentLength() > 0) {
+    throw new ProtocolException(
+        "HTTP " + code + " had non-zero Content-Length: " + response.body().contentLength());
+  }
+
+  return response;
+}
+```
+
+HttpCodec可以认为是http请求中的解码器，在与服务的那成功建立连接后，利用其向服务端写入请求和读
+取响应数据，其根据HTTP协议的不同，分别采用HttpCodec1(HTTP1.x)和HttpCodec2(HTTP2)来进行处理；

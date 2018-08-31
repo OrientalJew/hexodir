@@ -14,7 +14,7 @@ categories:
 > Call 在OKHttp中代表着一个已经准备好可以执行的Http请求；<br>
 > Call请求是能够被取消的；<br>
 > Cal代表着一个独立的request和response的Stream流，并且是不能够被执行两次的；
-
+<!-- more -->
 ```
 // 同步
 OkHttpClient().newCall(Request.Builder().url("").build()).execute()
