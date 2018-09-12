@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-center-simple.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="RxJava1、RxJava中的操作符，照目前的理解，大体可以分为两类：一类是由static修饰的类操作符，这类操作符代表有create、just等，它们用来引起一个Rx数据流；另一类则是实例操作符，这一类操作符必须得有Observable实例才能够调用，代表有map、flatMap等，它们一般作用于数据流的中间环节，起到操作数据流的作用； 2、我们把Rx操作认为是一个数据流，并分为上游和下游，">
+<meta name="keywords" content="RxJava">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RxJava源码分析(一)">
+<meta property="og:url" content="http://yoursite.com/2018/08/11/Android/RxJava/RxJava源码分析/index.html">
+<meta property="og:site_name" content="HSH&#39;s Blogs">
+<meta property="og:description" content="RxJava1、RxJava中的操作符，照目前的理解，大体可以分为两类：一类是由static修饰的类操作符，这类操作符代表有create、just等，它们用来引起一个Rx数据流；另一类则是实例操作符，这一类操作符必须得有Observable实例才能够调用，代表有map、flatMap等，它们一般作用于数据流的中间环节，起到操作数据流的作用； 2、我们把Rx操作认为是一个数据流，并分为上游和下游，">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/images/操作符调用流程.png">
+<meta property="og:image" content="http://yoursite.com/images/rx多操作符操作.png">
+<meta property="og:image" content="http://yoursite.com/images/订阅流程.png">
+<meta property="og:image" content="http://yoursite.com/images/订阅流程2.png">
+<meta property="og:image" content="http://yoursite.com/images/数据发送流程.png">
+<meta property="og:updated_time" content="2018-08-30T09:22:01.691Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RxJava源码分析(一)">
+<meta name="twitter:description" content="RxJava1、RxJava中的操作符，照目前的理解，大体可以分为两类：一类是由static修饰的类操作符，这类操作符代表有create、just等，它们用来引起一个Rx数据流；另一类则是实例操作符，这一类操作符必须得有Observable实例才能够调用，代表有map、flatMap等，它们一般作用于数据流的中间环节，起到操作数据流的作用； 2、我们把Rx操作认为是一个数据流，并分为上游和下游，">
+<meta name="twitter:image" content="http://yoursite.com/images/操作符调用流程.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/08/11/Android/RxJava/RxJava源码分析/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>RxJava源码分析(一) | HSH's Blogs</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">HSH's Blogs</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/OrientalJew" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/11/Android/RxJava/RxJava源码分析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄声焕">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HSH's Blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">RxJava源码分析(一)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-08-11 00:00:00" itemprop="dateCreated datePublished" datetime="2018-08-11T00:00:00+08:00">2018-08-11</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-08-30 17:22:01" itemprop="dateModified" datetime="2018-08-30T17:22:01+08:00">2018-08-30</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/框架源码/" itemprop="url" rel="index"><span itemprop="name">框架源码</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             Views:  
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <!-- toc -->
+<h4 id="RxJava"><a href="#RxJava" class="headerlink" title="RxJava"></a>RxJava</h4><p>1、RxJava中的操作符，照目前的理解，大体可以分为两类：一类是由static修饰的类操作符，这类操作符代<br>表有create、just等，它们用来引起一个Rx数据流；另一类则是实例操作符，这一类操作符必须得有Observable<br>实例才能够调用，代表有map、flatMap等，它们一般作用于数据流的中间环节，起到操作数据流的作用；</p>
+<p>2、我们把Rx操作认为是一个数据流，并分为上游和下游，最上游即我们开始Rx操作的地方，一般以<br>Observable.create、Observable.create等类操作符开始，而最下游则是我们调用subscribe,并为<br>其传递一个Observer为终点；可以这样认为，除了最上游，每一个操作符都有自己的上游操作符，除了最下游，<br>每一个操作符都有自己的下游操作符；<br><a id="more"></a><br>3、RxJava中除了我们订阅时调用的subscribe()方法，其他的每次调用都是生成一个对应的Observable，<br>包括了操作符和切换线程的subscribeOn、observeOn方法，并且这些Observable都有一个内部类，用来<br>包装从上游传递过来的Observer；</p>
+<p>4、RxJava的整个流程由两组链式回调(<strong>貌似是基于责任链模式</strong>)组成，分别是订阅期的Observable回调，<br>还有数据发送期的Observer回调；</p>
+<p>6、订阅期由我们执行subscribe，进行订阅时引起，可以认为是最下游往最上游走的一个过程；</p>
+<ul>
+<li><p>在下游往上游走的过程，实际上是每一个Observable的subscribe和subscribeActual交替执行的<br>过程；</p>
+</li>
+<li><p>当我们执行subscribe方法时，我们传递的Observer会不断的往上游传递，每经过一个操作符(包括<br>subscribeOn和observeOn)，Observer就会被相应的Observable的Observer包装类包装上一层；</p>
+</li>
+<li><p>subscribeOn这个方法是作用在订阅期的，因为其线程切换是设置在订阅上游的操作中，所以下游每次<br>调用subscribeOn,上游的订阅流程就会切换到对应的线程中。当最上游的subscribeOn被调用时，此时<br>最终线程被确定下来(我们先主线程切到线程1，再切到线程2，最终线程就是线程2，前面切换的线程都被<br>屏蔽了！)；因为是作用在订阅期的，只有最后确定下来的线程才会作用到数据发送期，这也是为什么，我们<br>多次调用subscribeOn，只有第一次有效；</p>
+</li>
+</ul>
+<p>7、数据发送期在订阅期之后，但并不一定是在这之后马上开始(比如我们在create操作符中进行耗时操作，<br>数据在订阅后，需要等一会才开始发送)；</p>
+<p>8、数据发送期，可以认为是Rx流程从上游往下游走的过程：</p>
+<ul>
+<li><p>在数据发送期，数据从第一个操作符中生成，借助Observer包装类发送，然后往下游走，经过多重操作符加<br>工，最终到达我们订阅时设置的Observer中；</p>
+</li>
+<li><p>数据发送的过程，实际是外层的Observer包装类，调用内层Observer的相应的onXXX方法的连续过程，<br>而这个包装类最内层的核心就是我们订阅时设置的Observer；</p>
+</li>
+<li><p>observeOn这个方法是作用在数据发送期，其切换线程的地方是在Observer包装类调用下游Observer<br>的onXXX方法中，这对于数据发送的作用是实时的，所以我们每次调用observeOn，都能够将下游的操作切换<br>到对应的线程中；</p>
+</li>
+</ul>
+<!-- more -->
+<h4 id="create操作符最基本的流程"><a href="#create操作符最基本的流程" class="headerlink" title="create操作符最基本的流程"></a>create操作符最基本的流程</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">Observable.create(new ObservableOnSubscribe&lt;String&gt;() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void subscribe(ObservableEmitter&lt;String&gt; e) throws Exception &#123;</span><br><span class="line">                e.onNext(&quot;1&quot;);</span><br><span class="line">                e.onComplete();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).subscribe(new Observer&lt;String&gt;() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void onSubscribe(Disposable d) &#123;</span><br><span class="line">                Log.d(TAG, &quot;onSubscribe() called with: d = [&quot; + d + &quot;]&quot;);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void onNext(String value) &#123;</span><br><span class="line">                Log.d(TAG, &quot;onNext() called with: value = [&quot; + value + &quot;]&quot;);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void onError(Throwable e) &#123;</span><br><span class="line">                Log.d(TAG, &quot;onError() called with: e = [&quot; + e + &quot;]&quot;);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override</span><br><span class="line">            public void onComplete() &#123;</span><br><span class="line">                Log.d(TAG, &quot;onComplete() called&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>map操作符和create、just操作符在调用上的区别：为什么map不能一开始就调用，而create和just可<br>以呢？</p>
+</blockquote>
+<p>首先因为create、just、merge等是类操作符(static)，可以直接通过类名.操作符 来调用，而map是实<br>例操作符，必须通过类实例来调用；</p>
+<p><em>在Java中允许使用类实例调用静态方法(不建议这么做)，但在RxJava中是禁止的，比如map之后不能再调用<br>create或just，至于如何做到禁止，暂时找不到实现方式(怀疑是通过注解CheckReturnValue来实现)。</em></p>
+<h5 id="create操作符创建流程"><a href="#create操作符创建流程" class="headerlink" title="create操作符创建流程"></a>create操作符创建流程</h5><p>1、Observable.create</p>
+<blockquote>
+<p>create操作符允许我们创建一个发射数据的cold Observable；</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@CheckReturnValue</span><br><span class="line">@SchedulerSupport(SchedulerSupport.NONE)</span><br><span class="line">public static &lt;T&gt; Observable&lt;T&gt; create(ObservableOnSubscribe&lt;T&gt; source) &#123;</span><br><span class="line">    // 工具类，用来判断空值问题</span><br><span class="line">    ObjectHelper.requireNonNull(source, &quot;source is null&quot;);</span><br><span class="line">    // 提供RxJava中的异常处理、线程池实例以及对Observable runtime hook的操作</span><br><span class="line">    // ObservableCreate对我们实现的source进行包装，在ObservableCreate中会创建一个</span><br><span class="line">    // CreateEmitter(ObservableEmitter的实现类)，这个Emitter包装了我们在订阅Observable</span><br><span class="line">    // 时，传递的Observer，在source执行subscribe方法时，作为参数，传递给它；</span><br><span class="line">    return RxJavaPlugins.onAssembly(new ObservableCreate&lt;T&gt;(source));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>create方法的参数是一个ObservableOnSubscribe接口，提供给调用者进行实现的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public interface ObservableOnSubscribe&lt;T&gt; &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Called for each Observer that subscribes.</span><br><span class="line">     * @param e the safe emitter instance, never null</span><br><span class="line">     * @throws Exception on error</span><br><span class="line">     */</span><br><span class="line">    // create调用者需要实现subscribe方法，并用ObservableEmitter实现数据发射</span><br><span class="line">    void subscribe(@NonNull ObservableEmitter&lt;T&gt; e) throws Exception;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>ObservableOnSubscribe接口中subscribe方法的ObservableEmitter参数用来包装我们在subscribe<br>(订阅Observable，我们在Rx流程中最终的操作)时传递的Observer，我们通过ObservableEmitter发射<br>数据，实际上间接的调用Observer中对应的方法。</p>
+<p>2、ObservableCreate</p>
+<blockquote>
+<p>ObservableCreate包装了我们实现的ObservableOnSubscribe接口，并创建一个CreateEmitter用来<br>包装Observer，在我们进行订阅操作(subscribe)时，将CreateEmitter传递给我们实现ObservableOnSubscribe<br>接口时的subscribe方法作为参数；</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">public final class ObservableCreate&lt;T&gt; extends Observable&lt;T&gt; &#123;</span><br><span class="line">    final ObservableOnSubscribe&lt;T&gt; source;</span><br><span class="line"></span><br><span class="line">    public ObservableCreate(ObservableOnSubscribe&lt;T&gt; source) &#123;</span><br><span class="line">        this.source = source;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 当我们对Observable进行订阅(调用subscribe)时，最终就是调用该方法，</span><br><span class="line">    // 在该方法中，将订阅者Observer与被订阅者Observable进行绑定；</span><br><span class="line">    @Override</span><br><span class="line">    protected void subscribeActual(Observer&lt;? super T&gt; observer) &#123;</span><br><span class="line">        // 实现了ObservableEmitter、Disposable，用来包装Observer</span><br><span class="line">        CreateEmitter&lt;T&gt; parent = new CreateEmitter&lt;T&gt;(observer);</span><br><span class="line"></span><br><span class="line">        // 在Observable开始发射数据之前调用，将CreateEmitter传递给Observer</span><br><span class="line">        // 这样我们可以在订阅操作之后的任何时候，取消订阅(CreateEmitter实现了Disposable，</span><br><span class="line">        // 我们可以调用dispose方法进行取消)</span><br><span class="line">        // 所有的类操作符在最后对Observer与Observable进行绑定，准备开始Observable行为之前，</span><br><span class="line">        // 都会调用该方法，将Observable交给Observer，可以认为这是一种双向绑定，Observer和</span><br><span class="line">        // Observable互相持有对方的引用</span><br><span class="line"></span><br><span class="line">        // 注意，此时订阅流程还没结束，此时还在我们订阅时的线程中</span><br><span class="line">        observer.onSubscribe(parent);</span><br><span class="line"></span><br><span class="line">        try &#123;</span><br><span class="line">            // 让Observer和Observable实现关联</span><br><span class="line">            // 执行这句，订阅流程结束，接下来开始Observable向Observer发送数据的流程(各种操</span><br><span class="line">            // 作符切换、线程切换...)</span><br><span class="line">            source.subscribe(parent);</span><br><span class="line">        &#125; catch (Throwable ex) &#123;</span><br><span class="line">            Exceptions.throwIfFatal(ex);</span><br><span class="line">            parent.onError(ex);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在我们对Observable进行订阅(subscribe)时，触发了订阅者与被订阅者进行绑定，在Observable发送<br>数据时，实际上是通过ObservableEmitter间接操作Observer；</p>
+<blockquote>
+<p>为什么observer.onSubscribe是在订阅时的线程中执行的？(没有线程切换情况下的解释)</p>
+</blockquote>
+<p>onSubscribe是在执行订阅(subscribe)操作结束前被执行的，在订阅时，经过多重链式回调，最后到达第一个<br>操作符(一般是类操作符create、just等)，此时先执行onSubscribe,将Observable绑定给Observer，<br>而此时所在的线程还是订阅时的线程，订阅流程还没走完；然后调用source.subscribe，将Observer交给<br>Observable进行绑定，这时，订阅流程才算真正走完，Observable开始发送数据给Observer(开始各种线程<br>切换操作了)；</p>
+<p><em>虽然调用onSubscribe时传递的参数实质上还是一个Observer，而不是Observable，此处认为调用该方法<br>是将Observable交给Observer绑定的原因是，Observer在该Observable中进行了包装(通过内部类)，<br>其实质让Observer与该Observable产生了关联，让Observer带有该Observable的”属性”，通过onSubscribe传递回给Observer的目的，是让Observer能够有操作该Observable的能力，即dispose<br>掉，让Observable不再能发送数据；</em></p>
+<p>也就是说，onSubscribe方法并没有参与到Observable向Observer发送数据的Rx流程中，所以不受线程切换<br>的影响，始终执行在订阅时的线程中；</p>
+<p>3、RxJavaPlugins.onAssembly<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@SuppressWarnings(&#123; &quot;rawtypes&quot;, &quot;unchecked&quot; &#125;)</span><br><span class="line">@NonNull</span><br><span class="line">public static &lt;T&gt; Observable&lt;T&gt; onAssembly(@NonNull Observable&lt;T&gt; source) &#123;</span><br><span class="line">    // 对Observable的Runtime hook，我们通过实现onObservableAssembly可以实现hook</span><br><span class="line">    // 默认是没实现的</span><br><span class="line">    Function&lt;? super Observable, ? extends Observable&gt; f = onObservableAssembly;</span><br><span class="line">    if (f != null) &#123;</span><br><span class="line">        return apply(f, source);</span><br><span class="line">    &#125;</span><br><span class="line">    // 不管有没有hook，最终都是返回原来的Observable</span><br><span class="line">    return source;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="订阅Observable流程"><a href="#订阅Observable流程" class="headerlink" title="订阅Observable流程"></a>订阅Observable流程</h5><blockquote>
+<p>订阅操作可以认为是触发订阅者Observer与被订阅者Observable进行绑定的时机，以create操作符为例，<br>订阅操作调用的subscribe，就是间接执行我们实现的ObservableOnSubscribe接口的subscribe方法；</p>
+</blockquote>
+<p>1、Observable.subscribe<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">@SchedulerSupport(SchedulerSupport.NONE)</span><br><span class="line">@Override</span><br><span class="line">public final void subscribe(Observer&lt;? super T&gt; observer) &#123;</span><br><span class="line">    ObjectHelper.requireNonNull(observer, &quot;observer is null&quot;);</span><br><span class="line">    try &#123;</span><br><span class="line">        // 通过RxJavaPlugins进行hook操作</span><br><span class="line">        observer = RxJavaPlugins.onSubscribe(this, observer);</span><br><span class="line"></span><br><span class="line">        ObjectHelper.requireNonNull(observer, &quot;Plugin returned null Observer&quot;);</span><br><span class="line">        // 开始执行真正的订阅操作，实际上每一个操作符都有自己对应的Observable(比如create</span><br><span class="line">        // 对应ObservableCreate，map对应ObservableMap等)，这些Observable都会保存上一层</span><br><span class="line">        // 操作符的Observable(当执行一个操作符时，实际就是创建操作符对应的Observable，并把</span><br><span class="line">        // 当前Observable作为参数传递作为source成员变量)，当在此处执行subscribeActual时，</span><br><span class="line">        // 则开启了一个连续的链式调用，当前操作符的Observable执行subscribeActual方法时，</span><br><span class="line">        // 会调用其保存的上一层操作符(source变量)的subscribe方法，也就是当前这个Observable</span><br><span class="line">        // 的subscribe方法(每个Observable都默认实现了subscribe)，一层一层的往上调用，直到</span><br><span class="line">        // 第一个操作符的subscribe也被调用.</span><br><span class="line">        // 此处的Observer是最原始的Observer，在往上回调的过程中，每一层操作符都会对Observer</span><br><span class="line">        // 进行一层包装，比如create会包装一层CreateEmitter，map会包装一层MapObserver等；</span><br><span class="line">        subscribeActual(observer);</span><br><span class="line">    &#125; catch (NullPointerException e) &#123; // NOPMD</span><br><span class="line">        throw e;</span><br><span class="line">    &#125; catch (Throwable e) &#123;</span><br><span class="line">        Exceptions.throwIfFatal(e);</span><br><span class="line">        // can&apos;t call onError because no way to know if a Disposable has been set or not</span><br><span class="line">        // can&apos;t call onSubscribe because the call might have set a Subscription already</span><br><span class="line">        RxJavaPlugins.onError(e);</span><br><span class="line"></span><br><span class="line">        NullPointerException npe = new NullPointerException(&quot;Actually not, but can&apos;t throw other exceptions due to RS&quot;);</span><br><span class="line">        npe.initCause(e);</span><br><span class="line">        throw npe;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>2、RxJavaPlugins.onSubscribe<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@SuppressWarnings(&#123; &quot;rawtypes&quot;, &quot;unchecked&quot; &#125;)</span><br><span class="line">@NonNull</span><br><span class="line">public static &lt;T&gt; Observer&lt;? super T&gt; onSubscribe(@NonNull Observable&lt;T&gt; source, @NonNull Observer&lt;? super T&gt; observer) &#123;</span><br><span class="line">    // rutime hook Observer</span><br><span class="line">    BiFunction&lt;? super Observable, ? super Observer, ? extends Observer&gt; f = onObservableSubscribe;</span><br><span class="line">    if (f != null) &#123;</span><br><span class="line">        return apply(f, source, observer);</span><br><span class="line">    &#125;</span><br><span class="line">    // 返回原来的Observer</span><br><span class="line">    return observer;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>3、ObservableCreate.subscribeActual</p>
+<blockquote>
+<p>因为此处只有一个create操作符，所以最终触发的是ObservableCreate的subscribeActual方法；</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">protected void subscribeActual(Observer&lt;? super T&gt; observer) &#123;</span><br><span class="line">    // 包装Observer为一个ObservableEmitter，这样才能传递给create操作符的subscribe方法</span><br><span class="line">    CreateEmitter&lt;T&gt; parent = new CreateEmitter&lt;T&gt;(observer);</span><br><span class="line">    // 回调Observer的onSubscribe方法</span><br><span class="line">    observer.onSubscribe(parent);</span><br><span class="line"></span><br><span class="line">    try &#123;</span><br><span class="line">        // 将ObservableEmitter传递给create操作符的subscribe方法</span><br><span class="line">        // 一共有两种有subscribe方法的接口，一种是create操作符所独有的:ObservableOnSubscribe</span><br><span class="line">        // ，接收一个Observer包装类——ObservableEmitter，另一个一般是实例操作符中使用的：</span><br><span class="line">        // ObservableSource，其subscribe方法接收的是前一个操作符包装后传递过来的Observer</span><br><span class="line">        source.subscribe(parent);</span><br><span class="line">    &#125; catch (Throwable ex) &#123;</span><br><span class="line">        Exceptions.throwIfFatal(ex);</span><br><span class="line">        parent.onError(ex);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/操作符调用流程.png" alt="image"></p>
+<p>可以看到订阅时，我们调用的最外层操作符subscribe方法，接着就开始了subscribe和subscribeActual<br>的链式回调，每一层回调，在subscribeActual方法中都会对Observer进行一层包装，然后再传递给上一层<br>操作符，一直到最内层的操作符，也就是我们第一个调用的操作符，比如create或just等；</p>
+<p>在链式回调的过程中，RxJavaPlugins在每一层都会尝试对Observer进行hook操作(对Observable的<br>  hook在调用操作符时进行)；</p>
+<h4 id="ObservableCreate-CreateEmitter"><a href="#ObservableCreate-CreateEmitter" class="headerlink" title="ObservableCreate.CreateEmitter"></a>ObservableCreate.CreateEmitter</h4><blockquote>
+<p>CreateEmitter是ObservableCreate的内部类，实现了ObservableEmitter，其实就是对Observer的包装，用来检查和校验Observer<br>的操作；</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line">static final class CreateEmitter&lt;T&gt;</span><br><span class="line">extends AtomicReference&lt;Disposable&gt;</span><br><span class="line">implements ObservableEmitter&lt;T&gt;, Disposable &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    private static final long serialVersionUID = -3434801548987643227L;</span><br><span class="line"></span><br><span class="line">    final Observer&lt;? super T&gt; observer;</span><br><span class="line"></span><br><span class="line">    CreateEmitter(Observer&lt;? super T&gt; observer) &#123;</span><br><span class="line">        this.observer = observer;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onNext(T t) &#123;</span><br><span class="line">        if (t == null) &#123;</span><br><span class="line">            onError(new NullPointerException(&quot;onNext called with null. Null values are generally not allowed in 2.x operators and sources.&quot;));</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        // 每一步操作前都必须检查是否已经注销</span><br><span class="line">        if (!isDisposed()) &#123;</span><br><span class="line">            observer.onNext(t);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onError(Throwable t) &#123;</span><br><span class="line">        // 如果之前已经调用了onComplete，则onError失败，异常会被抛出</span><br><span class="line">        if (!tryOnError(t)) &#123;</span><br><span class="line">            // 将异常交给当前线程异常处理器处理</span><br><span class="line">            RxJavaPlugins.onError(t);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public boolean tryOnError(Throwable t) &#123;</span><br><span class="line">        if (t == null) &#123;</span><br><span class="line">            t = new NullPointerException(&quot;onError called with null. Null values are generally not allowed in 2.x operators and sources.&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        // 无论是onError还是onComplete，在执行之后都会主动调用dispose进行注销</span><br><span class="line">        if (!isDisposed()) &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                observer.onError(t);</span><br><span class="line">            &#125; finally &#123;</span><br><span class="line">                dispose();</span><br><span class="line">            &#125;</span><br><span class="line">            return true;</span><br><span class="line">        &#125;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onComplete() &#123;</span><br><span class="line">        // 无论是onError还是onComplete，在执行之后都会主动调用dispose进行注销</span><br><span class="line">        if (!isDisposed()) &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                observer.onComplete();</span><br><span class="line">            &#125; finally &#123;</span><br><span class="line">                dispose();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 为ObservableEmitter设置一个Disposable，这个Disposable在Observable被执行dispose</span><br><span class="line">    // 进行注销时，其对应的dispose方法也会被执行，我们可以在其中做一些额外的操作</span><br><span class="line">    @Override</span><br><span class="line">    public void setDisposable(Disposable d) &#123;</span><br><span class="line">        // 这里最终调用的是AtomicReference的compareAndSet操作，将Disposable设置给AtomicReference</span><br><span class="line">        // 的value(也就是当前CreateEmitter，因为其继承自AtomicReference)，这样在dispose时，</span><br><span class="line">        // get操作不再是null</span><br><span class="line">        DisposableHelper.set(this, d);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 如果多次为ObservableEmitter设置Disposable，则前一个设置的Disposable的dispose方法</span><br><span class="line">    // 会立即被调用</span><br><span class="line">    @Override</span><br><span class="line">    public void setCancellable(Cancellable c) &#123;</span><br><span class="line">        setDisposable(new CancellableDisposable(c));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public ObservableEmitter&lt;T&gt; serialize() &#123;</span><br><span class="line">        return new SerializedEmitter&lt;T&gt;(this);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void dispose() &#123;</span><br><span class="line">        DisposableHelper.dispose(this);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public boolean isDisposed() &#123;</span><br><span class="line">        return DisposableHelper.isDisposed(get());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="dispose流程"><a href="#dispose流程" class="headerlink" title="dispose流程"></a>dispose流程</h4><p>create操作符开启的Rx流程，在调用dispose进行注销时，最终调用的是CreateEmitter的dispose方法：</p>
+<p>1、CreateEmitter.dispose<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public void dispose() &#123;</span><br><span class="line">    DisposableHelper.dispose(this);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>2、DisposableHelper.dispose<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">public static boolean dispose(AtomicReference&lt;Disposable&gt; field) &#123;</span><br><span class="line">    // CreateEmitter继承自AtomicReference，用来确保注销操作的原子性</span><br><span class="line">    // 默认情况下，没有调用AtomicReference的set方法，所以get获取到的是null</span><br><span class="line">    Disposable current = field.get();</span><br><span class="line">    // 获取注销状态</span><br><span class="line">    Disposable d = DISPOSED;</span><br><span class="line">    // 如果没有注销过，或者之前通过ObservableEmitter的setDisposable或者setCancellable方法</span><br><span class="line">    // 设置Disposable，则此处会为true</span><br><span class="line">    if (current != d) &#123;</span><br><span class="line">        // getAndSet是AtomicReference的原子设置值操作，它先设置上新值(DISPOSED,用来标记已经</span><br><span class="line">        // 注销)，再将旧值(null)返回</span><br><span class="line">        current = field.getAndSet(d);</span><br><span class="line">        // 如果我们之前调用ObservableEmitter的setDisposable或者setCancellable方法设置了</span><br><span class="line">        // 一个Disposable给ObservableEmitter，则此处判断为true</span><br><span class="line">        if (current != d) &#123;</span><br><span class="line">            if (current != null) &#123;</span><br><span class="line">                current.dispose();</span><br><span class="line">            &#125;</span><br><span class="line">            return true;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们可以在create操作符中，为ObservableEmitter设置一个Disposable，这样在Observable被<br>dispose时，就会调用这个Disposable的dispose，我们可以在这其中做一些额外的检测或释放操作；</p>
+<h4 id="多个操作符操作流程"><a href="#多个操作符操作流程" class="headerlink" title="多个操作符操作流程"></a>多个操作符操作流程</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">Observable.create&lt;Int&gt; &#123;</span><br><span class="line">    it.onNext(1)</span><br><span class="line">    it.onNext(2)</span><br><span class="line">    it.onNext(3)</span><br><span class="line">    it.onComplete()</span><br><span class="line">&#125;.map &#123;</span><br><span class="line">    it.toString()</span><br><span class="line">&#125;.flatMap &#123;</span><br><span class="line">    Observable.just(it)</span><br><span class="line">&#125;.subscribe(object :Observer&lt;String&gt;&#123;</span><br><span class="line">    override fun onComplete() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    override fun onSubscribe(d: Disposable) &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    override fun onNext(t: String) &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    override fun onError(e: Throwable) &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/rx多操作符操作.png" alt="image"></p>
+<blockquote>
+<p>订阅流程：</p>
+</blockquote>
+<p>订阅流程是一个链式回调的过程，在经过每一层操作符时，都要调对应Observable的subscribe和<br>subscribeActual方法；<br><img src="/images/订阅流程.png" alt="image"></p>
+<p>走完上面的流程，create操作符最终拿到的Observer是初始订阅的Observer经过多重包装后CreateEmitter；</p>
+<p><img src="/images/订阅流程2.png" alt="image"></p>
+<blockquote>
+<p>数据发送流程：</p>
+</blockquote>
+<p>数据的发送流程也是一个链式回调的过程，只不过这个过程的方向是相反的。</p>
+<p>在create操作符中，每次通过onNext发送数据，实际是调用第一层Observer的onNext，在该层中对数据进<br>行操作符对应的变换，然后又调用下一层Observer的onNext，层层相扣，每一层的onNext都是该Observer<br>对应操作符的变换，直到最后最底层Observer，也就是我们订阅时传递进来的Observer的onNext被调用；</p>
+<p><img src="/images/数据发送流程.png" alt="image"></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RxJava/" rel="tag"># RxJava</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/08/Android/RxJava/Map与FlatMap/" rel="next" title="RxJava操作符">
+                <i class="fa fa-chevron-left"></i> RxJava操作符
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/11/Android/RxJava/RxJava源码分析2/" rel="prev" title="RxJava源码分析(二)">
+                RxJava源码分析(二) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">黄声焕</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">44</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#RxJava"><span class="nav-number">1.</span> <span class="nav-text">RxJava</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#create操作符最基本的流程"><span class="nav-number">2.</span> <span class="nav-text">create操作符最基本的流程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#create操作符创建流程"><span class="nav-number">2.1.</span> <span class="nav-text">create操作符创建流程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#订阅Observable流程"><span class="nav-number">2.2.</span> <span class="nav-text">订阅Observable流程</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ObservableCreate-CreateEmitter"><span class="nav-number">3.</span> <span class="nav-text">ObservableCreate.CreateEmitter</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#dispose流程"><span class="nav-number">4.</span> <span class="nav-text">dispose流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多个操作符操作流程"><span class="nav-number">5.</span> <span class="nav-text">多个操作符操作流程</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄声焕</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Gemini</a> v6.3.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="Total Visitors">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="Total Views">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

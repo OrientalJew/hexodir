@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-center-simple.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="JNI读取Java成员变量类型对应的签名C访问Java中对应的成员变量，需要根据变量名和变量签名来定位变量；">
+<meta name="keywords" content="jni">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C访问Java">
+<meta property="og:url" content="http://yoursite.com/2018/07/29/NDK/C/C访问Java/index.html">
+<meta property="og:site_name" content="HSH&#39;s Blogs">
+<meta property="og:description" content="JNI读取Java成员变量类型对应的签名C访问Java中对应的成员变量，需要根据变量名和变量签名来定位变量；">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/images/Java数据类型签名列表.png">
+<meta property="og:updated_time" content="2018-09-12T02:11:35.531Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="C访问Java">
+<meta name="twitter:description" content="JNI读取Java成员变量类型对应的签名C访问Java中对应的成员变量，需要根据变量名和变量签名来定位变量；">
+<meta name="twitter:image" content="http://yoursite.com/images/Java数据类型签名列表.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/07/29/NDK/C/C访问Java/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>C访问Java | HSH's Blogs</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">HSH's Blogs</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/OrientalJew" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/29/NDK/C/C访问Java/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄声焕">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HSH's Blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">C访问Java
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-07-29 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-29T00:00:00+08:00">2018-07-29</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-09-12 10:11:35" itemprop="dateModified" datetime="2018-09-12T10:11:35+08:00">2018-09-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             Views:  
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <!-- toc -->
+<h4 id="JNI读取Java成员变量类型对应的签名"><a href="#JNI读取Java成员变量类型对应的签名" class="headerlink" title="JNI读取Java成员变量类型对应的签名"></a>JNI读取Java成员变量类型对应的签名</h4><p>C访问Java中对应的成员变量，需要根据变量名和变量签名来定位变量；<br><img src="\images\Java数据类型签名列表.png" alt="image"></p>
+<a id="more"></a>
+<p>对应的Java类：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">public class JniTest &#123;</span><br><span class="line"></span><br><span class="line">	public String key = &quot;hsh&quot;;</span><br><span class="line"></span><br><span class="line">	private native static String getStringFromC();</span><br><span class="line"></span><br><span class="line">	// 访问Java中的属性，需要为C提供访问入口</span><br><span class="line">	public native String accessField();</span><br><span class="line"></span><br><span class="line">	public static int count = 0;</span><br><span class="line"></span><br><span class="line">	// 访问Java中的属性，需要为C提供访问入口</span><br><span class="line">	public native void accessStaticField();</span><br><span class="line"></span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">//		String result = getStringFromC();</span><br><span class="line">//		System.out.println(result);</span><br><span class="line"></span><br><span class="line">		JniTest test = new JniTest();</span><br><span class="line"></span><br><span class="line">//		System.out.println(&quot;before modify:&quot;+test.key);</span><br><span class="line">//		test.accessField();</span><br><span class="line">//		System.out.println(&quot;after modify:&quot;+test.key);</span><br><span class="line"></span><br><span class="line">//		System.out.println(&quot;count = &quot;+count);</span><br><span class="line">//		test.accessStaticField();</span><br><span class="line">//		System.out.println(&quot;count = &quot;+count);</span><br><span class="line"></span><br><span class="line">//		test.accessMethod();</span><br><span class="line">		test.accessStaticMethod();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	// 访问Java中的方法，需要为C提供访问入口</span><br><span class="line">	public native void accessMethod();</span><br><span class="line"></span><br><span class="line">	public int randomInt() &#123;</span><br><span class="line">		return new Random().nextInt();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	public native void accessStaticMethod();</span><br><span class="line"></span><br><span class="line">	public static String uuid() &#123;</span><br><span class="line">		return UUID.randomUUID().toString();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	static &#123;</span><br><span class="line">		System.out.println( System.getProperty(&quot;java.library.path&quot;));</span><br><span class="line">		System.loadLibrary(&quot;jni/jni_03&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="访问修改Java类成员变量"><a href="#访问修改Java类成员变量" class="headerlink" title="访问修改Java类成员变量"></a>访问修改Java类成员变量</h4><p><strong>C可以无视Java的权限修饰符，直接访问不公开权限的成员变量和方法；</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line">	访问Java中的属性，修改其key属性的值</span><br><span class="line">*/</span><br><span class="line">JNIEXPORT jstring JNICALL Java_com_my_jnitest_JniTest_accessField</span><br><span class="line">(JNIEnv * env, jobject obj)&#123;</span><br><span class="line">	// 1、获取类</span><br><span class="line">	jclass class = (*env)-&gt;GetObjectClass(env, obj);</span><br><span class="line"></span><br><span class="line">	// 获取Java中对应属性</span><br><span class="line">	// 根据属性名和Java类型的签名进行定位</span><br><span class="line">	jfieldID fid = (*env)-&gt;GetFieldID(env, class, &quot;key&quot;, &quot;Ljava/lang/String;&quot;);</span><br><span class="line"></span><br><span class="line">	// 获取对应的属性</span><br><span class="line">	jstring jstr = (*env)-&gt;GetObjectField(env, obj, fid);</span><br><span class="line"></span><br><span class="line">	// 将jni字符串类型转为对应的C字符串</span><br><span class="line">	// 参数3指定是否以拷贝的方式进行转换，false表示在原来的内存上进行修改</span><br><span class="line">	// 参数3为true时，会因为无法成功复制而导致失败，所以默认使用false或者null</span><br><span class="line">	char *c_str = (*env)-&gt;GetStringUTFChars(env, jstr, NULL);</span><br><span class="line"></span><br><span class="line">	// 使用C的方式进行修改</span><br><span class="line">	char result[20] = &quot;hello&quot;;</span><br><span class="line">	strcat(result, c_str);</span><br><span class="line"></span><br><span class="line">	//// C 字符串转为 Jni字符串</span><br><span class="line">	jstring new_str = (*env)-&gt;NewStringUTF(env, result);</span><br><span class="line"></span><br><span class="line">	// 将新值设置给Java</span><br><span class="line">	(*env)-&gt;SetObjectField(env, obj, fid, new_str);</span><br><span class="line">	return jstr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="访问修改Java静态成员变量"><a href="#访问修改Java静态成员变量" class="headerlink" title="访问修改Java静态成员变量"></a>访问修改Java静态成员变量</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">JNIEXPORT void JNICALL Java_com_my_jnitest_JniTest_accessStaticField</span><br><span class="line">(JNIEnv * env, jobject jobj)&#123;</span><br><span class="line">  // 访问静态成员变量，通过class定位对应的类</span><br><span class="line">	jclass cls = (*env)-&gt;GetObjectClass(env, jobj);</span><br><span class="line">  // 定位静态变量</span><br><span class="line">	jfieldID fid = (*env)-&gt;GetStaticFieldID(env, cls, &quot;count&quot;, &quot;I&quot;);</span><br><span class="line"></span><br><span class="line">	jint count = (*env)-&gt;GetStaticIntField(env, cls, fid);</span><br><span class="line"></span><br><span class="line">	count++;</span><br><span class="line"></span><br><span class="line">	(*env)-&gt;SetStaticIntField(env, cls, fid, count);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="C中访问Java中的成员方法"><a href="#C中访问Java中的成员方法" class="headerlink" title="C中访问Java中的成员方法"></a>C中访问Java中的成员方法</h4><p>C访问Java中对应的方法，需要根据方法名和方法签名来定位方法；</p>
+<p>获取对应的方法签名，可以cd到项目的bin目录下，通过：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">javap -s -p com.xxx.xxx.className</span><br></pre></td></tr></table></figure></p>
+<p>来获取对应的方法签名；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">JNIEXPORT void JNICALL Java_com_my_jnitest_JniTest_accessMethod</span><br><span class="line">(JNIEnv * env, jobject jobj)&#123;</span><br><span class="line">	jclass cls = (*env)-&gt;GetObjectClass(env, jobj);</span><br><span class="line">  // 根据方法名和签名定位方法</span><br><span class="line">	jmethodID mid = (*env)-&gt;GetMethodID(env, cls, &quot;randomInt&quot;, &quot;()I&quot;);</span><br><span class="line"></span><br><span class="line">	// 根据Java中方法的返回值调用对应类型的方法</span><br><span class="line">	jint result = (*env)-&gt;CallIntMethod(env, jobj, mid);</span><br><span class="line"></span><br><span class="line">	printf(&quot;result : %ld&quot;, result);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="C中访问Java中的静态方法"><a href="#C中访问Java中的静态方法" class="headerlink" title="C中访问Java中的静态方法"></a>C中访问Java中的静态方法</h4><p>有些情况下，在C中想实现某个功能是非常麻烦的，比如此处生成的UUID，我们可以通过调用Java<br>中现成的实现方法，来方便的达到目的；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">JNIEXPORT jstring JNICALL Java_com_my_jnitest_JniTest_accessStaticMethod</span><br><span class="line">(JNIEnv * env, jobject jobj)&#123;</span><br><span class="line">	jclass cls = (*env)-&gt;GetObjectClass(env, jobj);</span><br><span class="line"></span><br><span class="line">	jmethodID mid = (*env)-&gt;GetStaticMethodID(env, cls, &quot;uuid&quot;, &quot;()Ljava/lang/String;&quot;);</span><br><span class="line">  // 调用Java对应的方法，获取uuid</span><br><span class="line">	jstring m = (*env)-&gt;CallStaticObjectMethod(env, cls, mid);</span><br><span class="line">  // jstring转为char*</span><br><span class="line">	char* uuid = (*env)-&gt;GetStringUTFChars(env, m, NULL);</span><br><span class="line"></span><br><span class="line">  // 根据字符串模板构建字符串</span><br><span class="line">	char* name = &quot;&quot;;</span><br><span class="line">	sprintf(name, &quot;%s.txt&quot;, uuid);</span><br><span class="line"></span><br><span class="line">	FILE* file = fopen(name, &quot;w&quot;);</span><br><span class="line">	fputs(&quot;hello world&quot;, file);</span><br><span class="line">	fclose(file);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="访问Java构造方法"><a href="#访问Java构造方法" class="headerlink" title="访问Java构造方法"></a>访问Java构造方法</h4><p>通过访问Java类的构造方法，可以在C中创建任意类的对象；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line">	访问Java中的Date，获取当前系统时间戳</span><br><span class="line">*/</span><br><span class="line">JNIEXPORT jobject JNICALL Java_com_my_jnitest_JniTest_accessConstructor</span><br><span class="line">(JNIEnv * env, jobject jobj)&#123;</span><br><span class="line">	// 找到指定的类</span><br><span class="line">	jclass cls = (*env)-&gt;FindClass(env, &quot;java/util/Date&quot;);</span><br><span class="line"></span><br><span class="line">	// 获取类构造方法(对于构造方法，其方法名固定为:&lt;init&gt;)</span><br><span class="line">	jmethodID con_mid = (*env)-&gt;GetMethodID(env, cls, &quot;&lt;init&gt;&quot;, &quot;()V&quot;);</span><br><span class="line"></span><br><span class="line">	// 实例化构造方法，创建类实例</span><br><span class="line">	jobject date = (*env)-&gt;NewObject(env, cls, con_mid);</span><br><span class="line"></span><br><span class="line">	// 根据类实例调用对应的实例方法</span><br><span class="line">	jmethodID getTime_mid = (*env)-&gt;GetMethodID(env, cls, &quot;getTime&quot;, &quot;()J&quot;);</span><br><span class="line"></span><br><span class="line">	jlong time = (*env)-&gt;CallLongMethod(env, date, getTime_mid);</span><br><span class="line"></span><br><span class="line">	printf(&quot;当前时间戳:%lld&quot;, time);</span><br><span class="line"></span><br><span class="line">	return date;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="绕过Java子类方法重写"><a href="#绕过Java子类方法重写" class="headerlink" title="绕过Java子类方法重写"></a>绕过Java子类方法重写</h4><p>在C++中，如果要重写父类的方法，需要使用virtual修饰方法，在jni中，可以利用这个特点，绕过<br>子类对父类相同方法的重写；</p>
+<p>java类：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">public class Human &#123;</span><br><span class="line"></span><br><span class="line">	public void sayHi() &#123;</span><br><span class="line">		System.out.println(&quot;human hi&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Man extends Human &#123;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public void sayHi() &#123;</span><br><span class="line">		System.out.println(&quot;man call sayhi&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">当我们在java中使用：</span><br><span class="line">	private Human human = new Man();</span><br><span class="line"></span><br><span class="line">虽然调用的是human的方法，但实际上是重新指向了Man类重写的方法；</span><br></pre></td></tr></table></figure></p>
+<p>C:</p>
+<p>在JNI中，会根据调用CallNonvirtualVoidMethod方法时，传递的jclass类型，调用对应类的方<br>法，而不会理会Java子类的重写；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line">	绕过Java的子类方法重写，调用父类的方法</span><br><span class="line">*/</span><br><span class="line">JNIEXPORT void JNICALL Java_com_my_jnitest_JniTest_callSuperMethod</span><br><span class="line">(JNIEnv * env, jobject jobj)&#123;</span><br><span class="line">	// 找到指定的类</span><br><span class="line">	jclass cls = (*env)-&gt;GetObjectClass(env, jobj);</span><br><span class="line"></span><br><span class="line">	// 在Java中，human变量被赋予了Human子类man的实例，默认情况下，调用sayHi方法</span><br><span class="line">	// 会调用子类的覆盖的方法</span><br><span class="line">	jfieldID fid = (*env)-&gt;GetFieldID(env, cls, &quot;human&quot;, &quot;Lcom/my/jnitest/Human;&quot;);</span><br><span class="line"></span><br><span class="line">	jobject human = (*env)-&gt;GetObjectField(env, jobj, fid);</span><br><span class="line">	jclass mClass = (*env)-&gt;FindClass(env, &quot;com/my/jnitest/Human&quot;);</span><br><span class="line">	jmethodID m_mid = (*env)-&gt;GetMethodID(env, mClass, &quot;sayHi&quot;, &quot;()V&quot;);</span><br><span class="line"></span><br><span class="line">	// 受到Java中重写的影响，调用的是Man类的sayHi方法</span><br><span class="line">	//(*env)-&gt;CallVoidMethod(env, human, m_mid);</span><br><span class="line"></span><br><span class="line">	// 调用指定父类Human的方法</span><br><span class="line">	// 如果获取到的是Man的jclass，则仍然调用的是Man的sayHi方法</span><br><span class="line">	(*env)-&gt;CallNonvirtualVoidMethod(env, human, mClass, m_mid);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="解决Java、C字符串互传的乱码问题"><a href="#解决Java、C字符串互传的乱码问题" class="headerlink" title="解决Java、C字符串互传的乱码问题"></a>解决Java、C字符串互传的乱码问题</h4><p>在Java中，字符串一般是UTF-8编码，而在jni中，创建的字符串则是UTF-16编码，所以由C传递<br>给Java时，会出现乱码问题；</p>
+<p>在C中处理字符乱码问题，过程是非常繁琐的，但是采用Java则只需要几行代码即可完成，所以，<br>我们可以调用Java的api来解决乱码问题；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">JNIEXPORT jstring JNICALL Java_com_my_jnitest_JniTest_charSetProblem</span><br><span class="line">(JNIEnv * env, jobject jobj, jstring str)&#123;</span><br><span class="line">	// Java 传递过来的字符能够正常识别编码</span><br><span class="line">	char* c_str = (*env)-&gt;GetStringUTFChars(env, str, JNI_FALSE);</span><br><span class="line">	printf(&quot;%s\n&quot;, c_str);</span><br><span class="line"></span><br><span class="line">	char* java_str = &quot;不会算结构&quot;;</span><br><span class="line">	// 默认情况下,使用的是UTF-16编码，会出现乱码</span><br><span class="line">	//jstring j_str = (*env)-&gt;NewStringUTF(env, java_str);</span><br><span class="line"></span><br><span class="line">	// 由于C中处理编码问题非常繁琐，所以可以采用Java的String类来进行处理</span><br><span class="line">	jclass cls = (*env)-&gt;FindClass(env, &quot;java/lang/String&quot;);</span><br><span class="line">	// 调用String类的构造方法：String(byte[], charset)</span><br><span class="line">	jmethodID mid = (*env)-&gt;GetMethodID(env, cls, &quot;&lt;init&gt;&quot;, &quot;([BLjava/lang/String;)V&quot;);</span><br><span class="line"></span><br><span class="line">	// C中，char对应着Java中的byte</span><br><span class="line">	jbyteArray ba = (*env)-&gt;NewByteArray(env, strlen(java_str));</span><br><span class="line"></span><br><span class="line">	// 转化成的字符编码</span><br><span class="line">	char* result_charset = &quot;GB2312&quot;;</span><br><span class="line">	jstring charset = (*env)-&gt;NewStringUTF(env,result_charset);</span><br><span class="line"></span><br><span class="line">	// jni的jbyte对应C的 signed char 类型，所以可以直接将char* 赋给jbyteArray</span><br><span class="line">	(*env)-&gt;SetByteArrayRegion(env, ba, 0, strlen(java_str), java_str);</span><br><span class="line"></span><br><span class="line">	// 调用String对应的构造方法，构造出正确编码的字符串</span><br><span class="line">	jstring result = (*env)-&gt;NewObject(env, cls, mid, ba, charset);</span><br><span class="line">	return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/jni/" rel="tag"># jni</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/28/js/ES6新特性/ES6新特性/" rel="next" title="ES6新特性">
+                <i class="fa fa-chevron-left"></i> ES6新特性
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/29/NDK/C/动态内存分配/" rel="prev" title="动态内存分配">
+                动态内存分配 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">黄声焕</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">44</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#JNI读取Java成员变量类型对应的签名"><span class="nav-number">1.</span> <span class="nav-text">JNI读取Java成员变量类型对应的签名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#访问修改Java类成员变量"><span class="nav-number">2.</span> <span class="nav-text">访问修改Java类成员变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#访问修改Java静态成员变量"><span class="nav-number">3.</span> <span class="nav-text">访问修改Java静态成员变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#C中访问Java中的成员方法"><span class="nav-number">4.</span> <span class="nav-text">C中访问Java中的成员方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#C中访问Java中的静态方法"><span class="nav-number">5.</span> <span class="nav-text">C中访问Java中的静态方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#访问Java构造方法"><span class="nav-number">6.</span> <span class="nav-text">访问Java构造方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#绕过Java子类方法重写"><span class="nav-number">7.</span> <span class="nav-text">绕过Java子类方法重写</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解决Java、C字符串互传的乱码问题"><span class="nav-number">8.</span> <span class="nav-text">解决Java、C字符串互传的乱码问题</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄声焕</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Gemini</a> v6.3.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="Total Visitors">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="Total Views">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -311,7 +311,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/27/git笔记/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/08/Android/RxJava/Map与FlatMap/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄声焕">
@@ -330,8 +330,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/07/27/git笔记/" itemprop="url">
-                  git笔记
+                <a class="post-title-link" href="/2018/08/08/Android/RxJava/Map与FlatMap/" itemprop="url">
+                  RxJava操作符
                 </a>
               
             
@@ -357,12 +357,24 @@
                 
               
 
-              <time title="Created: 2018-07-27 14:24:10 / Modified: 17:39:27" itemprop="dateCreated datePublished" datetime="2018-07-27T14:24:10+08:00">2018-07-27</time>
+              <time title="Created: 2018-08-08 00:00:00" itemprop="dateCreated datePublished" datetime="2018-08-08T00:00:00+08:00">2018-08-08</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-08-30 17:22:01" itemprop="dateModified" datetime="2018-08-30T17:22:01+08:00">2018-08-30</time>
               
             
           </span>
@@ -379,7 +391,184 @@
                 <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/git/" itemprop="url" rel="index"><span itemprop="name">git</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/操作符/" itemprop="url" rel="index"><span itemprop="name">操作符</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <!-- toc -->
+<h4 id="map于flatMap的区别"><a href="#map于flatMap的区别" class="headerlink" title="map于flatMap的区别"></a>map于flatMap的区别</h4><p>map和flatMap可以说是Rx操作符中使用频率最高的操作符，它们的区别：</p>
+<p>1、对于map，执行过程中，只有一个事件流，我们操作的是流中的内容，可以理解为操作Observable<t><br>中的T，将其装换为另一种类型O,即Observable<t> ——&gt; Observable<o></o></t></t></p>
+<p>2、对于flatMap，其作用就是把原先一个事件流转化为多个事件流，比如有一个集合，原先一个事件流，集合<br>中的元素是线性的，一个一个被发送，而通过flatMap，将集合中的每个元素又转化为一个新的事件流，所有<br>事件流同时发送结合中的每个元素，这些元素被接收时是无序的；</p>
+<blockquote>
+<p>查看ObservableFlatMap源码可以发现，每一个flatMap操作符生成的Observable都开启新的、独立<br>的订阅流程，这些订阅流程的Observer都持有了当前ObservableFlatMap的Observer，他们发送的数据<br>(onNext)最终都汇聚到了ObservableFlatMap的Observer中，通过该Observer在往下一个操作符发送<br>(onNext);</p>
+</blockquote>
+<p><em>在将一种数据类型的Observable转换为另一种数据类型的Observable时，如果整个流程只有发送一个数据，<br>那么使用map进行转换即可，完全没有必要通过flatMap来转换</em></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/05/NDK/C/字符串函数/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄声焕">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HSH's Blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/05/NDK/C/字符串函数/" itemprop="url">
+                  字符串操作
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-08-05 00:00:00" itemprop="dateCreated datePublished" datetime="2018-08-05T00:00:00+08:00">2018-08-05</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-09-12 10:09:18" itemprop="dateModified" datetime="2018-09-12T10:09:18+08:00">2018-09-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C</span></a></span>
 
                 
                 
@@ -415,11 +604,11 @@
       
         
           <!-- toc -->
-<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install git</span><br></pre></td></tr></table></figure>
-<h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name &quot;Your Name&quot;</span><br><span class="line">$ git config --global user.email &quot;email@example.com&quot;</span><br></pre></td></tr></table></figure>
+<h4 id="字符串操作函数"><a href="#字符串操作函数" class="headerlink" title="字符串操作函数"></a>字符串操作函数</h4><blockquote>
+<p>参考网站：<a href="http://www.kuqin.com/clib/string/strcmp.html" target="_blank" rel="noopener">http://www.kuqin.com/clib/string/strcmp.html</a><br>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/07/27/git笔记/#more" rel="contents">
+            <a class="btn" href="/2018/08/05/NDK/C/字符串函数/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -475,7 +664,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/27/基础 (1)/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/03/Android/注解/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄声焕">
@@ -494,8 +683,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/07/27/基础 (1)/" itemprop="url">
-                  正则表达式
+                <a class="post-title-link" href="/2018/08/03/Android/注解/" itemprop="url">
+                  注解
                 </a>
               
             
@@ -521,191 +710,24 @@
                 
               
 
-              <time title="Created: 2018-07-27 00:00:00 / Modified: 18:05:50" itemprop="dateCreated datePublished" datetime="2018-07-27T00:00:00+08:00">2018-07-27</time>
+              <time title="Created: 2018-08-03 00:00:00" itemprop="dateCreated datePublished" datetime="2018-08-03T00:00:00+08:00">2018-08-03</time>
             
 
             
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <!-- toc -->
-<h4 id="匹配字符"><a href="#匹配字符" class="headerlink" title="匹配字符"></a>匹配字符</h4><blockquote>
-<p>1、”.”匹配\n之外的任意一个字符；</p>
-</blockquote>
-<blockquote>
-<p>2、\d匹配数字，即0-9；</p>
-</blockquote>
-<blockquote>
-<p>3、\D匹配非数字；</p>
-</blockquote>
-<blockquote>
-<p>4、\s 匹配空白字符，即空格、tab键和回车；</p>
-</blockquote>
-<blockquote>
-<p>5、\S匹配非空白字符；</p>
-</blockquote>
-<blockquote>
-<p>6、\w匹配单词字符，即a-z，A-Z，0-9、下划线_<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/07/27/基础 (1)/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/27/Glide获取指定图片的缓存/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="黄声焕">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="HSH's Blogs">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/27/Glide获取指定图片的缓存/" itemprop="url">
-                  获取Glide缓存图片
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
               
 
               
                 
-              
+                <span class="post-meta-divider">|</span>
+                
 
-              <time title="Created: 2018-07-27 00:00:00 / Modified: 18:02:06" itemprop="dateCreated datePublished" datetime="2018-07-27T00:00:00+08:00">2018-07-27</time>
-            
-
-            
-              
-
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-08-30 17:22:01" itemprop="dateModified" datetime="2018-08-30T17:22:01+08:00">2018-08-30</time>
               
             
           </span>
@@ -758,12 +780,13 @@
       
         
           <!-- toc -->
-<p>用Glide这么久了，我一直有个疑问，Glide该如何获取到指定的缓存图片？</p>
-<p>原生Glide是没有提供任何Api用来获取缓存图片的，至少我是没找到。</p>
-<p>翻看Glide源码（3.7），发现其中一个叫：EngineKey的类，Glide通过该类来查找对应的缓存文件。<br>该类构造方法参数多达10个，并且不是开放出来的，也就是说，通过自己构造EngineKey这条路是走不通的。<br>
+<h4 id="元数据-metadata"><a href="#元数据-metadata" class="headerlink" title="元数据(metadata)"></a>元数据(metadata)</h4><p>元数据就是描述数据的数据，对数据及信息资源的描述性信息.比如说一个文本文件,有创建时间,创建人,文件大小等数据,这都可以理解为是元数据.</p>
+<blockquote>
+<p>在java中,元数据以标签的形式存在java代码中,它的存在并不影响程序代码的编译和执行，通常它被用来生成其它的文件或运行时知道被运行代码的描述信息。java当中的javadoc和注解都属于元数据.</p>
+</blockquote>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/07/27/Glide获取指定图片的缓存/#more" rel="contents">
+            <a class="btn" href="/2018/08/03/Android/注解/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -819,7 +842,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/27/ViewPager + Fragment组合实现局部刷新Fragment/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/03/Android/EventBus/基础/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄声焕">
@@ -838,8 +861,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/07/27/ViewPager + Fragment组合实现局部刷新Fragment/" itemprop="url">
-                  ViewPager局部刷新
+                <a class="post-title-link" href="/2018/08/03/Android/EventBus/基础/" itemprop="url">
+                  EventBus源码分析
                 </a>
               
             
@@ -865,12 +888,202 @@
                 
               
 
-              <time title="Created: 2018-07-27 00:00:00 / Modified: 18:10:58" itemprop="dateCreated datePublished" datetime="2018-07-27T00:00:00+08:00">2018-07-27</time>
+              <time title="Created: 2018-08-03 00:00:00" itemprop="dateCreated datePublished" datetime="2018-08-03T00:00:00+08:00">2018-08-03</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-08-30 17:22:01" itemprop="dateModified" datetime="2018-08-30T17:22:01+08:00">2018-08-30</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/框架源码/" itemprop="url" rel="index"><span itemprop="name">框架源码</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <!-- toc -->
+<h4 id="什么是EventBus"><a href="#什么是EventBus" class="headerlink" title="什么是EventBus"></a>什么是EventBus</h4><p><strong>EventBus是一个使用”观察者模式”的、松耦合的开源框架，能够帮助我们简化代码、松依赖、加速开发。</strong></p>
+<p>EventBus基于观察者模式中的发布-订阅(Publish-Subscribe)模式(事件总线)，与传统的观察者模式<br>不同，在传统的观察者模式下，我们更多是处于订阅者的身份，数据的发布大多数情况下我们是不可控的，我<br>们一般只能触发数据开始发送，而EventBus则将发布(post)和订阅的能力都交由我们自己处理；<br>当然，EventBus同样拥有观察者模式的优点，就是发布者和订阅者是解耦的。</p>
+<blockquote>
+<p>1、订阅者注册时，会用两个HashMap来保存其信息，分别是根据事件类型(key)保存订阅信息<br>(订阅者 - 订阅方法)的subscriptionsByEventType和根据订阅者(key)保存其对应的所有订阅事件的<br>typesBySubscriber；<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/08/03/Android/EventBus/基础/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/03/Android/Utils/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄声焕">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HSH's Blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/03/Android/Utils/" itemprop="url">
+                  Utils
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-08-03 00:00:00" itemprop="dateCreated datePublished" datetime="2018-08-03T00:00:00+08:00">2018-08-03</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-08-30 17:22:01" itemprop="dateModified" datetime="2018-08-30T17:22:01+08:00">2018-08-30</time>
               
             
           </span>
@@ -922,12 +1135,372 @@
 
       
         
-          <!-- toc -->
+          
+            <!-- toc -->
+<h4 id="校验重复方法签名"><a href="#校验重复方法签名" class="headerlink" title="校验重复方法签名"></a>校验重复方法签名</h4><p>该方法取自EventBus3.0，原理是通过HashMap的put方法，在相同key的情况下，会返回旧的数据；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">private boolean checkAddWithMethodSignature(Method method, Class&lt;?&gt; eventType) &#123;</span><br><span class="line">    // 构造方法签名</span><br><span class="line">    methodKeyBuilder.setLength(0);</span><br><span class="line">    methodKeyBuilder.append(method.getName());</span><br><span class="line">    methodKeyBuilder.append(&apos;&gt;&apos;).append(eventType.getName());</span><br><span class="line"></span><br><span class="line">    String methodKey = methodKeyBuilder.toString();</span><br><span class="line">    Class&lt;?&gt; methodClass = method.getDeclaringClass();</span><br><span class="line">    // 放进HashMap查看是否有重复</span><br><span class="line">    Class&lt;?&gt; methodClassOld = subscriberClassByMethodKey.put(methodKey, methodClass);</span><br><span class="line">    // 如果方法签名重复，并且两个方法是在同一个类或者存在父子或接口继承关系</span><br><span class="line">    if (methodClassOld == null || methodClassOld.isAssignableFrom(methodClass)) &#123;</span><br><span class="line">        // Only add if not already found in a sub class</span><br><span class="line">        return true;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        // Revert the put, old class is further down the class hierarchy</span><br><span class="line">        subscriberClassByMethodKey.put(methodKey, methodClassOld);</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/31/Kotlin/接口/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄声焕">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HSH's Blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/31/Kotlin/接口/" itemprop="url">
+                  接口
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-07-31 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-31T00:00:00+08:00">2018-07-31</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-08-05 16:22:14" itemprop="dateModified" datetime="2018-08-05T16:22:14+08:00">2018-08-05</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Kotlin/" itemprop="url" rel="index"><span itemprop="name">Kotlin</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <!-- toc -->
+<h4 id="定义变量和方法"><a href="#定义变量和方法" class="headerlink" title="定义变量和方法"></a>定义变量和方法</h4><p>Kotlin中的接口是可以定义变量和方法体，但变量不可以初始化，也就是不能有状态，只能有定义（<strong>Java<br>中的变量可以被初始化</strong>），在被继承时必须初始化接口变量，赋予状态，而方法表示的是实现过程，本身就没<br>有状态（<strong>Java8开始，也支持定义static和default类型的方法，这些方法是可以有方法体的</strong>）。</p>
 <blockquote>
-<p>在开发过程中，经常会用到ViewPager与Fragment实现多页面切换效果，有时，我们想要局部刷新某些Fragment，而其他Fragment保持状态不变，该如何做到呢？<br>
+<p>为什么接口中的变量不能被初始化？</p>
+</blockquote>
+<p>因为接口中的变量没有backing field，也就无法存储变量，所以只能做为一种声明；</p>
+<p>backing field(类中定义的变量自带，用来存储变量内容，可以理解为堆栈) + get、set 方法 等价于<br>Kotlin类中的属性Property，这也是Kotlin中独有的；</p>
+<p>在Kotlin中只需声明一个变量，就相当于属性，backing field + get、set 方法由Kotlin自动生成；<br>在Java中，这些都必须自己手动声明；</p>
+<h4 id="解决多接口方法冲突"><a href="#解决多接口方法冲突" class="headerlink" title="解决多接口方法冲突"></a>解决多接口方法冲突</h4><p>当一个类继承了多个接口，这些接口出现了两个完全一致的方法声明，必须通过super进行显式指定调用方；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">interface n1&#123;</span><br><span class="line">    fun nn(): Int = 1</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">interface n2&#123;</span><br><span class="line">    fun nn(): Int = 2</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">abstract class n3&#123;</span><br><span class="line">    open fun nn(): Int = 3</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class n0 : n1, n2, n3() &#123;</span><br><span class="line">    val i = 0</span><br><span class="line">    override fun nn(): Int &#123;</span><br><span class="line">        if (i &gt; 0) &#123;</span><br><span class="line">            return super&lt;n2&gt;.nn()</span><br><span class="line">        &#125;else if (i &lt; 0) &#123;</span><br><span class="line">            return super&lt;n3&gt;.nn()</span><br><span class="line">        &#125;</span><br><span class="line">        return super&lt;n1&gt;.nn()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="SAM接口"><a href="#SAM接口" class="headerlink" title="SAM接口"></a>SAM接口</h4><p>SAM接口又称为函数式接口(Single Abstract Method interfaces)，这种接口可以简单的理解为：只有<br>一个抽象方法的接口，这种接口可以通过lambda实现简化，在Java8和Kotlin中都有应用到。</p>
+<blockquote>
+<p>比如View的OnclickListener接口就是一个典型的SAM接口，Kotlin中的函数类型也可以理解为SAM接口<br>的另一种形式(Kotlin不需要定义SAM接口，有函数类型就够了，对SAM接口的简化只是为了兼容Java)。</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/31/Kotlin/基础/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄声焕">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HSH's Blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/31/Kotlin/基础/" itemprop="url">
+                  Kotlin基础
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-07-31 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-31T00:00:00+08:00">2018-07-31</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-08-05 16:22:14" itemprop="dateModified" datetime="2018-08-05T16:22:14+08:00">2018-08-05</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Kotlin/" itemprop="url" rel="index"><span itemprop="name">Kotlin</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <!-- toc -->
+<h4 id="常识"><a href="#常识" class="headerlink" title="常识"></a>常识</h4><ul>
+<li><p>Kotlin没有8进制，只有2进制和16进制，十进制；</p>
+</li>
+<li><p>as? 可以进行安全的类型转换，当转换失败时，会被自动赋为null：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">val s String =&quot;aaa&quot;;</span><br><span class="line">val a Int? = s as? Int</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/07/27/ViewPager + Fragment组合实现局部刷新Fragment/#more" rel="contents">
+            <a class="btn" href="/2018/07/31/Kotlin/基础/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -983,7 +1556,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/27/python正则：re/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/31/Java/Java基础/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄声焕">
@@ -1002,8 +1575,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/07/27/python正则：re/" itemprop="url">
-                  Python正则使用
+                <a class="post-title-link" href="/2018/07/31/Java/Java基础/" itemprop="url">
+                  Java基础
                 </a>
               
             
@@ -1029,12 +1602,24 @@
                 
               
 
-              <time title="Created: 2018-07-27 00:00:00 / Modified: 18:19:29" itemprop="dateCreated datePublished" datetime="2018-07-27T00:00:00+08:00">2018-07-27</time>
+              <time title="Created: 2018-07-31 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-31T00:00:00+08:00">2018-07-31</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-08-05 16:22:14" itemprop="dateModified" datetime="2018-08-05T16:22:14+08:00">2018-08-05</time>
               
             
           </span>
@@ -1051,7 +1636,7 @@
                 <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
 
                 
                 
@@ -1086,16 +1671,417 @@
 
       
         
-          <!-- toc -->
-<h4 id="导入正则：re"><a href="#导入正则：re" class="headerlink" title="导入正则：re"></a>导入正则：re</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import re</span><br></pre></td></tr></table></figure>
-<h4 id="match"><a href="#match" class="headerlink" title="match"></a>match</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#match匹配的过程是从左第一个字符向右逐一匹配的，当匹配的过程出现不符合字符时，即停止</span><br><span class="line">匹配过程，相当于匹配表达式中设置了&quot;^&quot;</span><br><span class="line"></span><br><span class="line">re.match(pattern,str)</span><br><span class="line"></span><br><span class="line">In [34]: re.match(r&quot;aa(\d+?)ddd&quot;,&quot;aa1234ddd&quot;).group(1)</span><br><span class="line">Out[34]: &apos;1234&apos;</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/07/27/python正则：re/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <!-- toc -->
+<h4 id="变量的存储位置"><a href="#变量的存储位置" class="headerlink" title="变量的存储位置"></a>变量的存储位置</h4><p>1.寄存器：最快的存储区, 由编译器根据需求进行分配,我们在程序中无法控制。</p>
+<ol start="2">
+<li><p>栈：存放基本类型的变量数据和对象的引用，但对象本身不存放在栈中，而是存放在堆（new 出来的对象）<br>或者常量池中（字符串常量对象存放在常量池中）。</p>
+</li>
+<li><p>堆：存放所有new出来的对象。</p>
+</li>
+<li><p>静态域：存放静态成员（static定义的）。</p>
+</li>
+<li><p>常量池：存放字符串常量和基本类型常量（public static final）。</p>
+</li>
+<li><p>非RAM存储：硬盘等永久存储空间。</p>
+</li>
+</ol>
+<hr>
+<blockquote>
+<p>堆栈：</p>
+<ul>
+<li>对于栈和常量池中的对象可以共享，对于堆中的对象不可以共享;</li>
+<li>栈中的数据大小和生命周期是可以确定的，当没有引用指向数据时，这个数据就会消失。堆中的对象的由垃<br>圾回收器负责回收，因此大小和生命周期不需要确定，具有很大的灵活性;</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>字符串：</p>
+<ul>
+<li>对于字符串：其对象的引用都是存储在栈中的，如果是编译期已经创建好(直接用双引号定义的)的就存储在<br>常量池中，如果是运行期（new出来的）才能确定的就存储在堆中。对于equals相等的字符串，在常量池中永<br>远只有一份，在堆中有多份；</li>
+<li>对于通过new产生一个字符串（假设为”china”）时，会先去常量池中查找是否已经有了”china”对象，如<br>果没有则在常量池中创建一个此字符串对象，然后堆中再创建一个常量池中此”china”对象的拷贝对象。这也<br>就是有道面试题：String s = new String(“xyz”);产生几个对象？一个或两个，如果常量池中原来没有<br>”xyz”,就是两个。</li>
+</ul>
+</blockquote>
+<h4 id="进程与线程的区别"><a href="#进程与线程的区别" class="headerlink" title="进程与线程的区别"></a>进程与线程的区别</h4><ul>
+<li>一个程序至少有一个进程(通过为Activity设置android:process可以让其运行在单独的进程中)，一个<br>进程至少有一个线程；</li>
+<li>进程可以单独存在，而线程不能独立存在，必须依赖于一个进程；</li>
+<li>进程是系统资源分配的最小单位，线程是程序执行的最小单位；</li>
+<li>进程有自己独立的内存地址空间，进程之间无法直接通讯，只能通过IPC进行通讯；</li>
+<li>线程间共享进程的地址空间和内存资源，多个线程共享全局变量和静态变量，所以线程之间的通讯更加方便；</li>
+<li>进程之间是相互独立的，一个进程死掉，不会影响到其他进程，而在多线程的环境下，一个线程死掉，其所<br>在的整个进程也会死掉；</li>
+</ul>
+<h4 id="内部类的优点"><a href="#内部类的优点" class="headerlink" title="内部类的优点"></a>内部类的优点</h4><p>Java不支持多继承 ，只支持多实现。但是，很多时候，只是实现一些接口很难解决问题，此时，我们就可以<br>使用内部类来解决问题。内部类即可与外部类关联(非静态内部类)，也可以独立于外部类(静态内部类)，并且，<br>内部类的环境是不受到外部类的影响的，通过它们来继承我们需要的类的能力，能让我们更灵活的解决问题；</p>
+<p>可以说，接口只是帮我们解决了部分问题，而内部类赋予类多重继承的能力，使解决问题的方案更加的完整；</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/30/Java/Exception、Error/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄声焕">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HSH's Blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/30/Java/Exception、Error/" itemprop="url">
+                  Java异常、错误
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-07-30 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-30T00:00:00+08:00">2018-07-30</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-08-05 16:22:14" itemprop="dateModified" datetime="2018-08-05T16:22:14+08:00">2018-08-05</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="/images/exception.jpg" alt="image"></p>
+<p>java中Exception、Error都是Throwable的子类！</p>
+<ul>
+<li>Exception即异常，是程序本身可以处理的；</li>
+<li>Error即错误，是程序本身无法处理的，通常是系统出现故障，或者虚拟机自身发出的错误，一般不需要主动<br>进行处理，比如OutOfMemoryError、StackOverflowError等等；</li>
+</ul>
+<p>根据异常的发生方式，可以分为检查异常和非检查异常；</p>
+<ul>
+<li><p>检查异常，要求编译器必须即时处理，Java编译器会在语法中对该类型的异常进行检查，并强制要求我们<br>通过try-catch语句进行主动捕获，或者用throws语句在方法声明后抛出该异常，否则无法编译通过，除了<br>Error、RuntimeException和其子类之外的异常都是检查异常；</p>
+</li>
+<li><p>非检查异常，这类异常编译器不要求我们主动捕获或抛出，发生在程序运行期间，通常能够导致程序崩溃。<br>其包括了RuntimeException及其子类(nullPointException、ArrayIndexOutOfBoundException等<br>)和Error；</p>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/30/Android/MVX/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄声焕">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HSH's Blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/30/Android/MVX/" itemprop="url">
+                  MVX
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-07-30 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-30T00:00:00+08:00">2018-07-30</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-08-05 16:22:14" itemprop="dateModified" datetime="2018-08-05T16:22:14+08:00">2018-08-05</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <!-- toc -->
+<h4 id="三层架构与MVX模式"><a href="#三层架构与MVX模式" class="headerlink" title="三层架构与MVX模式"></a>三层架构与MVX模式</h4><ul>
+<li>MVX是一种设计模式，而三层架构则是一种架构思想，或者说是一种编写代码的纲领；</li>
+<li>MVX可以认为是在三层架构下的一种具体的表现；</li>
+<li>三层架构分为：表现层，业务逻辑层，数据访问层；其中的数据访问层即Model概念区别于MVX模式的Model；</li>
+<li>三层架构中的Model表示对数据的访问的总代理，涉及了数据的增删改查操作，数据可以来自本地或者网络；</li>
+<li>MVX模式下的Model就是一种纯粹的数据类，是一个数据实体的表现；</li>
+</ul>
+<h4 id="MVC、MVP"><a href="#MVC、MVP" class="headerlink" title="MVC、MVP"></a>MVC、MVP</h4><blockquote>
+<p>MVC和MVP最主要的区别在于M层和V层的沟通方式，MVC模式下，M、V两层能够直接进行沟通，而MVP模式下，<br>M、V两层只能通过P层进行沟通；</p>
+</blockquote>
+<p>MVC：</p>
+<p>传统的MVC模式下，V层通过C从M层中获取到数据，然后展示在V层上；</p>
+<p>但是，大多数情况下，在拿到数据后我们需要对数据进行加工，此时不得不将逻辑编写在V层上，久而久之，V层就会变得臃肿；</p>
+<p>还有一种情况，当我们操作了V层，通过C修改了M层，当M层在修改后，为了通知V层，M层不得不持有V层引用，因为C是单向的，M层无法通过C通知V层；</p>
+<p>MVP：</p>
+<p>MVP中的Presenter即能够解决V层业务代码臃肿问题，因为P中持有了V层的引用，直接在P中操作业务逻辑，然后将结果通知给V层(<strong>被动P模式，View元素操作完全由P进行。另一种主动P模式，在V层的数据操作还是在V层中进行，P层更多是起到沟通M层和V层数据的作用，这种模式下，V的臃肿并没有解决！</strong>);</p>
+<p>MVP中的Presenter也解决了M层和V层数据沟通的问题，它双向持有了两层的引用，能直接操作两层数据进行交换和传输；</p>
+
+          
         
       
     </div>
@@ -1136,7 +2122,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1179,7 +2165,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-count">44</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -1200,7 +2186,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">4</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
                 </div>
@@ -1241,7 +2237,23 @@
                     
                       
                     
-                    <span class="site-state-item-count">14</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">22</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>

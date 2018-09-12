@@ -129,7 +129,7 @@
 <meta property="og:image" content="http://yoursite.com/images/git/4.png">
 <meta property="og:image" content="http://yoursite.com/images/git/5.png">
 <meta property="og:image" content="http://yoursite.com/images/git/6.png">
-<meta property="og:updated_time" content="2018-07-27T09:39:27.356Z">
+<meta property="og:updated_time" content="2018-07-31T07:07:28.494Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="git笔记">
 <meta name="twitter:description" content="安装1sudo apt-get install git 配置12$ git config --global user.name &amp;quot;Your Name&amp;quot;$ git config --global user.email &amp;quot;email@example.com&amp;quot;">
@@ -364,12 +364,24 @@
                 
               
 
-              <time title="Created: 2018-07-27 14:24:10 / Modified: 17:39:27" itemprop="dateCreated datePublished" datetime="2018-07-27T14:24:10+08:00">2018-07-27</time>
+              <time title="Created: 2018-07-27 14:24:10" itemprop="dateCreated datePublished" datetime="2018-07-27T14:24:10+08:00">2018-07-27</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-07-31 15:07:28" itemprop="dateModified" datetime="2018-07-31T15:07:28+08:00">2018-07-31</time>
               
             
           </span>
@@ -431,7 +443,7 @@
         <!-- toc -->
 <h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install git</span><br></pre></td></tr></table></figure>
 <h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name &quot;Your Name&quot;</span><br><span class="line">$ git config --global user.email &quot;email@example.com&quot;</span><br></pre></td></tr></table></figure>
-<a id="more"></a> 
+<a id="more"></a>
 <h4 id="创建Git空仓库"><a href="#创建Git空仓库" class="headerlink" title="创建Git空仓库"></a>创建Git空仓库</h4><p>cd到特定目录下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git init</span><br></pre></td></tr></table></figure>
 <h4 id="提交文件"><a href="#提交文件" class="headerlink" title="提交文件"></a>提交文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ git add readme1.txt</span><br><span class="line">$ git add readme2.txt</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"># -m 后面跟提交的信息说明</span><br><span class="line">$ git commit -m &quot;第一次条readme文件&quot;</span><br></pre></td></tr></table></figure>
@@ -513,6 +525,9 @@
 <li><p>删除分支</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git branch -d dev</span><br></pre></td></tr></table></figure>
 </li>
+<li><p>删除远程分支</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git push origin --delete dev</span><br></pre></td></tr></table></figure>
+</li>
 <li><p>未合并导致删除分支失败</p>
 </li>
 </ul>
@@ -535,7 +550,7 @@
 <p>‘&gt;&gt;&gt;&gt;&gt;&gt;&gt;’ feature1：表示合并分支与当前分支冲突的内容。</p>
 </blockquote>
 <p>直接修改冲突文件，并提交即可解决冲突：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git add readme.txt </span><br><span class="line">$ git commit -m &quot;conflict fixed&quot;</span><br><span class="line">[master cf810e4] conflict fixed</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git add readme.txt</span><br><span class="line">$ git commit -m &quot;conflict fixed&quot;</span><br><span class="line">[master cf810e4] conflict fixed</span><br></pre></td></tr></table></figure>
 <ul>
 <li>查看分支合并情况：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git log --graph</span><br><span class="line">或</span><br><span class="line">$ git log --graph --pretty=oneline --abbrev-commit</span><br></pre></td></tr></table></figure>
 </li>
@@ -689,8 +704,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/07/28/js/ES6新特性/使用场景/" rel="prev" title="使用场景">
-                使用场景 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/07/28/js/基础 (1)/" rel="prev" title="基础">
+                基础 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -765,7 +780,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-count">44</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -786,7 +801,17 @@
                     
                       
                     
-                    <span class="site-state-item-count">4</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
                 </div>
@@ -827,7 +852,23 @@
                     
                       
                     
-                    <span class="site-state-item-count">14</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">22</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>

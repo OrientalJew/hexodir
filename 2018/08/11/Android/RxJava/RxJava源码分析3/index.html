@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-center-simple.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="observeOnobserveOn用来切换事件流下游所在的线程；123456789101112131415161718192021222324Observable.create&amp;lt;Int&amp;gt; &amp;#123;    it.onNext(1)    it.onNext(2)    it.onNext(3)    it.onComplete()&amp;#125;.map &amp;#123;    it.t">
+<meta name="keywords" content="RxJava">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RxJava源码分析(三)">
+<meta property="og:url" content="http://yoursite.com/2018/08/11/Android/RxJava/RxJava源码分析3/index.html">
+<meta property="og:site_name" content="HSH&#39;s Blogs">
+<meta property="og:description" content="observeOnobserveOn用来切换事件流下游所在的线程；123456789101112131415161718192021222324Observable.create&amp;lt;Int&amp;gt; &amp;#123;    it.onNext(1)    it.onNext(2)    it.onNext(3)    it.onComplete()&amp;#125;.map &amp;#123;    it.t">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-08-30T09:22:01.691Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RxJava源码分析(三)">
+<meta name="twitter:description" content="observeOnobserveOn用来切换事件流下游所在的线程；123456789101112131415161718192021222324Observable.create&amp;lt;Int&amp;gt; &amp;#123;    it.onNext(1)    it.onNext(2)    it.onNext(3)    it.onComplete()&amp;#125;.map &amp;#123;    it.t">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/08/11/Android/RxJava/RxJava源码分析3/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>RxJava源码分析(三) | HSH's Blogs</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">HSH's Blogs</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+    
+      
+    
+    <a href="https://github.com/OrientalJew" class="github-corner" target="_blank" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#222; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg>
+    
+      </a>
+    
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/11/Android/RxJava/RxJava源码分析3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄声焕">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HSH's Blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">RxJava源码分析(三)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-08-11 00:00:00" itemprop="dateCreated datePublished" datetime="2018-08-11T00:00:00+08:00">2018-08-11</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-08-30 17:22:01" itemprop="dateModified" datetime="2018-08-30T17:22:01+08:00">2018-08-30</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/框架源码/" itemprop="url" rel="index"><span itemprop="name">框架源码</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             Views:  
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <!-- toc -->
+<h5 id="observeOn"><a href="#observeOn" class="headerlink" title="observeOn"></a>observeOn</h5><p>observeOn用来切换事件流下游所在的线程；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">Observable.create&lt;Int&gt; &#123;</span><br><span class="line">    it.onNext(1)</span><br><span class="line">    it.onNext(2)</span><br><span class="line">    it.onNext(3)</span><br><span class="line">    it.onComplete()</span><br><span class="line">&#125;.map &#123;</span><br><span class="line">    it.toString()</span><br><span class="line">&#125;.flatMap &#123;</span><br><span class="line">    Observable.just(it)</span><br><span class="line">&#125;.subscribeOn(Schedulers.io())</span><br><span class="line"> .observeOn(AndroidSchedulers.mainThread())</span><br><span class="line"> .subscribe(object :Observer&lt;String&gt;&#123;</span><br><span class="line">    override fun onComplete() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    override fun onSubscribe(d: Disposable) &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    override fun onNext(t: String) &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    override fun onError(e: Throwable) &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<h5 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">@CheckReturnValue</span><br><span class="line">@SchedulerSupport(SchedulerSupport.CUSTOM)</span><br><span class="line">public final Observable&lt;T&gt; observeOn(Scheduler scheduler) &#123;</span><br><span class="line">    // bufferSize默认128</span><br><span class="line">    return observeOn(scheduler, false, bufferSize());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@CheckReturnValue</span><br><span class="line">@SchedulerSupport(SchedulerSupport.CUSTOM)</span><br><span class="line">public final Observable&lt;T&gt; observeOn(Scheduler scheduler, boolean delayError, int bufferSize) &#123;</span><br><span class="line">    ObjectHelper.requireNonNull(scheduler, &quot;scheduler is null&quot;);</span><br><span class="line">    ObjectHelper.verifyPositive(bufferSize, &quot;bufferSize&quot;);</span><br><span class="line">    // 创建ObservableObserveOn，然后就是hook</span><br><span class="line">    return RxJavaPlugins.onAssembly(new ObservableObserveOn&lt;T&gt;(this, scheduler, delayError, bufferSize));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>与其他的操作符一样的套路，关键逻辑在ObservableObserveOn中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">public final class ObservableObserveOn&lt;T&gt; extends AbstractObservableWithUpstream&lt;T, T&gt; &#123;</span><br><span class="line">    final Scheduler scheduler;</span><br><span class="line">    final boolean delayError;</span><br><span class="line">    final int bufferSize;</span><br><span class="line">    public ObservableObserveOn(ObservableSource&lt;T&gt; source, Scheduler scheduler, boolean delayError, int bufferSize) &#123;</span><br><span class="line">        super(source);</span><br><span class="line">        this.scheduler = scheduler;</span><br><span class="line">        this.delayError = delayError;</span><br><span class="line">        this.bufferSize = bufferSize;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void subscribeActual(Observer&lt;? super T&gt; observer) &#123;</span><br><span class="line">        // TrampolineScheduler表示还是在当前线程中工作，只是先把任务放到队列中，然后等待</span><br><span class="line">        // 当前线程的任务完成后，才从队列中取出来执行(就是直接顺序执行)；</span><br><span class="line">        if (scheduler instanceof TrampolineScheduler) &#123;</span><br><span class="line">            source.subscribe(observer);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            // 创建一个我们指定线程的Worker</span><br><span class="line">            Scheduler.Worker w = scheduler.createWorker();</span><br><span class="line">            // 类似于普通操作符，创建一个下游传递上来的Observer的包装类</span><br><span class="line">            // 但实际上，ObserveOn切换线程的核心操作都在该Observer包装类中进行</span><br><span class="line">            source.subscribe(new ObserveOnObserver&lt;T&gt;(observer, w, delayError, bufferSize));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在subscribeActual方法中，主要是创建一个我们在observeOn时指定线程的worker，然后调用上游操作<br>符Observable的subscribe方法，看上去和普通操作符订阅流程没什么区别，这是因为observeOn指定的<br>线程是作用在数据发送流程中的，和订阅流程没任何关系；</p>
+<p>要让线程作用在数据发送流程，关键要靠ObserveOnObserver；</p>
+<h5 id="ObserveOnObserver"><a href="#ObserveOnObserver" class="headerlink" title="ObserveOnObserver"></a>ObserveOnObserver</h5><p>包装了Observer，并在指定的线程中回调下游Observer的onXXX，让数据在指定的线程中发送；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br></pre></td><td class="code"><pre><span class="line">static final class ObserveOnObserver&lt;T&gt; extends BasicIntQueueDisposable&lt;T&gt;</span><br><span class="line">implements Observer&lt;T&gt;, Runnable &#123;</span><br><span class="line"></span><br><span class="line">    private static final long serialVersionUID = 6576896619930983584L;</span><br><span class="line">    final Observer&lt;? super T&gt; actual;</span><br><span class="line">    final Scheduler.Worker worker;</span><br><span class="line">    final boolean delayError;</span><br><span class="line">    final int bufferSize;  // 默认128</span><br><span class="line"></span><br><span class="line">    SimpleQueue&lt;T&gt; queue; // 缓存上游onNext发送过来的数据</span><br><span class="line"></span><br><span class="line">    Disposable s;</span><br><span class="line"></span><br><span class="line">    Throwable error;</span><br><span class="line">    volatile boolean done;</span><br><span class="line"></span><br><span class="line">    volatile boolean cancelled;</span><br><span class="line"></span><br><span class="line">    int sourceMode;</span><br><span class="line"></span><br><span class="line">    boolean outputFused;</span><br><span class="line"></span><br><span class="line">    ObserveOnObserver(Observer&lt;? super T&gt; actual, Scheduler.Worker worker, boolean delayError, int bufferSize) &#123;</span><br><span class="line">        this.actual = actual;</span><br><span class="line">        this.worker = worker;</span><br><span class="line">        this.delayError = delayError;</span><br><span class="line">        this.bufferSize = bufferSize;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onSubscribe(Disposable s) &#123;</span><br><span class="line">        // 判断当前保存的Disposable是否为null(默认为null)</span><br><span class="line">        // 判断上游调用onSubscribe传递过来的Disposable是否不为null</span><br><span class="line">        if (DisposableHelper.validate(this.s, s)) &#123;</span><br><span class="line">            // this.s为null，s不为null，将s赋给this.s保存在本地</span><br><span class="line">            this.s = s;</span><br><span class="line">            // 如果上游有通过observeOn切换过线程(ObserveOnObserver本身实现了该接口)或者</span><br><span class="line">            // 是Range操作符，则此处为true，这里操作大概是为了</span><br><span class="line">            // 同步上一个QueueDisposable设置的输出模式(sourceMode)</span><br><span class="line">            if (s instanceof QueueDisposable) &#123;</span><br><span class="line">                @SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="line">                QueueDisposable&lt;T&gt; qd = (QueueDisposable&lt;T&gt;) s;</span><br><span class="line"></span><br><span class="line">                int m = qd.requestFusion(QueueDisposable.ANY | QueueDisposable.BOUNDARY);</span><br><span class="line"></span><br><span class="line">                if (m == QueueDisposable.SYNC) &#123;</span><br><span class="line">                    sourceMode = m;</span><br><span class="line">                    queue = qd;</span><br><span class="line">                    done = true;</span><br><span class="line">                    actual.onSubscribe(this);</span><br><span class="line">                    schedule();</span><br><span class="line">                    return;</span><br><span class="line">                &#125;</span><br><span class="line">                if (m == QueueDisposable.ASYNC) &#123;</span><br><span class="line">                    sourceMode = m;</span><br><span class="line">                    queue = qd;</span><br><span class="line">                    actual.onSubscribe(this);</span><br><span class="line">                    return;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            // 创建一个队列</span><br><span class="line">            queue = new SpscLinkedArrayQueue&lt;T&gt;(bufferSize);</span><br><span class="line">            // 此处并不是把上游传过来Disposable直接传给下游，而是把自身传递给下游的Observer</span><br><span class="line">            // 上游的Disposable由ObserveOnObserver进行管理</span><br><span class="line">            actual.onSubscribe(this);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onNext(T t) &#123;</span><br><span class="line">        // 如果done为true，表示数据发送结束，不用再往下走了</span><br><span class="line">        if (done) &#123;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // 上游不是异步发送数据，则上游发送过来的数据被入队</span><br><span class="line">        // 注意：这里了如果是异步的，则上游发过来的数据直接被抛弃了</span><br><span class="line">        if (sourceMode != QueueDisposable.ASYNC) &#123;</span><br><span class="line">            queue.offer(t);</span><br><span class="line">        &#125;</span><br><span class="line">        // schedule方法中会使用worker，在observeOn指定的线程中调用onNext，也就是说</span><br><span class="line">        // 下游的发送数据流程在此处被切到别的线程中</span><br><span class="line">        schedule();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onError(Throwable t) &#123;</span><br><span class="line">        if (done) &#123;</span><br><span class="line">            RxJavaPlugins.onError(t);</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        // 将Error保存到变量中，将在Worker线程中发送出去</span><br><span class="line">        error = t;</span><br><span class="line">        done = true;</span><br><span class="line">        schedule();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void onComplete() &#123;</span><br><span class="line">        if (done) &#123;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        // done状态，将在Worker线程被识别，发送</span><br><span class="line">        done = true;</span><br><span class="line">        schedule();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // ObserveOnObserver的dispose与其他的Observer包装类不同，因为它是继承自AtomicInteger，</span><br><span class="line">    // 不想其他的继承自AtomicReference&lt;Disposable&gt;的包装类一样，提供了原子的get和set</span><br><span class="line">    // Disposable的操作，所以ObserveOnObserver采用一个volatile修饰的cancelled变量来</span><br><span class="line">    // 做当前Disposable是否被dispose的判断</span><br><span class="line">    @Override</span><br><span class="line">    public void dispose() &#123;</span><br><span class="line">        // cancelled标记是否已经dispose</span><br><span class="line">        if (!cancelled) &#123;</span><br><span class="line">            cancelled = true;</span><br><span class="line">            // 上游托管的Disposable先dispose掉</span><br><span class="line">            s.dispose();</span><br><span class="line">            // 将work注销掉(关闭线程)</span><br><span class="line">            worker.dispose();</span><br><span class="line">            // 利用AtomicInteger的getAndIncrement方法来判断当前是否有数据是位于队列中</span><br><span class="line">            // 处于待发送状态，0表示队列为空</span><br><span class="line">            if (getAndIncrement() == 0) &#123;</span><br><span class="line">                queue.clear();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public boolean isDisposed() &#123;</span><br><span class="line">        return cancelled;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    void schedule() &#123;</span><br><span class="line">        // getAndIncrement方法的作用是让AtomicInteger保存的value加1，并返回旧值</span><br><span class="line">        // 如果等于0，表明队列中有一个待发送的数据</span><br><span class="line">        // 在异步的情况下，因为AtomicInteger是基于CAS的，所以异步线程并不会被挂起，而是</span><br><span class="line">        // 卡在这里一直等待</span><br><span class="line">        if (getAndIncrement() == 0) &#123;</span><br><span class="line">            // 通过work在指定线程中向下游发送数据</span><br><span class="line">            worker.schedule(this);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 默认同步的情况下，通过SimpleQueue不断出队来发送数据</span><br><span class="line">    void drainNormal() &#123;</span><br><span class="line">        int missed = 1;</span><br><span class="line"></span><br><span class="line">        final SimpleQueue&lt;T&gt; q = queue;</span><br><span class="line">        final Observer&lt;? super T&gt; a = actual;</span><br><span class="line"></span><br><span class="line">        for (;;) &#123;</span><br><span class="line">            // 检查发送数据是否已经被终止</span><br><span class="line">            if (checkTerminated(done, q.isEmpty(), a)) &#123;</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            for (;;) &#123;</span><br><span class="line">                boolean d = done;</span><br><span class="line">                T v;</span><br><span class="line"></span><br><span class="line">                try &#123;</span><br><span class="line">                    // 从队列中取出值</span><br><span class="line">                    v = q.poll();</span><br><span class="line">                &#125; catch (Throwable ex) &#123;</span><br><span class="line">                    Exceptions.throwIfFatal(ex);</span><br><span class="line">                    s.dispose();</span><br><span class="line">                    q.clear();</span><br><span class="line">                    a.onError(ex);</span><br><span class="line">                    worker.dispose();</span><br><span class="line">                    return;</span><br><span class="line">                &#125;</span><br><span class="line">                boolean empty = v == null;</span><br><span class="line"></span><br><span class="line">                // 再检查一遍是否终止</span><br><span class="line">                if (checkTerminated(d, empty, a)) &#123;</span><br><span class="line">                    return;</span><br><span class="line">                &#125;</span><br><span class="line">                // 不循序发送的数据为null</span><br><span class="line">                if (empty) &#123;</span><br><span class="line">                    break;</span><br><span class="line">                &#125;</span><br><span class="line">                // 向下游的Observer发送数据，注意此时已经是切换了线程的</span><br><span class="line">                a.onNext(v);</span><br><span class="line">            &#125;</span><br><span class="line">            // 上面这个missed的值为1，即调用addAndGet并传入-1，</span><br><span class="line">            // addAndGet是AtomicInteger的原子操作，其作用是对AtomicInteger的value增加</span><br><span class="line">            // -1，即减1，然后将增加后的结果返回</span><br><span class="line">            // 这里实际是起到同步的作用；</span><br><span class="line">            missed = addAndGet(-missed);</span><br><span class="line">            if (missed == 0) &#123;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 调用了requestFusion方法，将fusion mode设置为异步的ASYNC，</span><br><span class="line">    // 则不通过队列来发送，而是直接发送</span><br><span class="line">    void drainFused() &#123;</span><br><span class="line">        int missed = 1;</span><br><span class="line"></span><br><span class="line">        for (;;) &#123;</span><br><span class="line">            // 已经被dispose了，则不再往下走</span><br><span class="line">            if (cancelled) &#123;</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            boolean d = done;</span><br><span class="line">            Throwable ex = error;</span><br><span class="line"></span><br><span class="line">            if (!delayError &amp;&amp; d &amp;&amp; ex != null) &#123;</span><br><span class="line">                actual.onError(error);</span><br><span class="line">                worker.dispose();</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line">            // 在异步的情况下，上游发过来的数据是被直接抛弃掉的，所以这里</span><br><span class="line">            // 往下游发送的数据是null</span><br><span class="line">            actual.onNext(null);</span><br><span class="line"></span><br><span class="line">            if (d) &#123;</span><br><span class="line">                ex = error;</span><br><span class="line">                if (ex != null) &#123;</span><br><span class="line">                    actual.onError(ex);</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    actual.onComplete();</span><br><span class="line">                &#125;</span><br><span class="line">                worker.dispose();</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            // 同步AtomicInteger的状态</span><br><span class="line">            missed = addAndGet(-missed);</span><br><span class="line">            if (missed == 0) &#123;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // worker在指定线程调用该方法，进行数据发送</span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        if (outputFused) &#123;</span><br><span class="line">            // 调用了requestFusion方法，将fusion mode设置为异步的ASYNC</span><br><span class="line">            drainFused();</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            // 同步发送</span><br><span class="line">            drainNormal();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 在同步的情况下，每次发送都需要检查当前数据发送已终止</span><br><span class="line">    // d即done变量的值，表示是否已经complete或error了</span><br><span class="line">    // empty表示队列是否为空，或者发送的值是否为null</span><br><span class="line">    boolean checkTerminated(boolean d, boolean empty, Observer&lt;? super T&gt; a) &#123;</span><br><span class="line">        // 已经被dispose了，那么可定是终止的</span><br><span class="line">        if (cancelled) &#123;</span><br><span class="line">            queue.clear();</span><br><span class="line">            return true;</span><br><span class="line">        &#125;</span><br><span class="line">        if (d) &#123;</span><br><span class="line">            Throwable e = error;</span><br><span class="line">            if (delayError) &#123;</span><br><span class="line">                if (empty) &#123;</span><br><span class="line">                    if (e != null) &#123;</span><br><span class="line">                        a.onError(e);</span><br><span class="line">                    &#125; else &#123;</span><br><span class="line">                        a.onComplete();</span><br><span class="line">                    &#125;</span><br><span class="line">                    worker.dispose();</span><br><span class="line">                    return true;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                if (e != null) &#123;</span><br><span class="line">                    queue.clear();</span><br><span class="line">                    a.onError(e);</span><br><span class="line">                    worker.dispose();</span><br><span class="line">                    return true;</span><br><span class="line">                &#125; else</span><br><span class="line">                if (empty) &#123;</span><br><span class="line">                    a.onComplete();</span><br><span class="line">                    worker.dispose();</span><br><span class="line">                    return true;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 用来设置ObserveOnObserver是否要采用异步的方式发送数据，默认是同步</span><br><span class="line">    @Override</span><br><span class="line">    public int requestFusion(int mode) &#123;</span><br><span class="line">        if ((mode &amp; ASYNC) != 0) &#123;</span><br><span class="line">            outputFused = true;</span><br><span class="line">            return ASYNC;</span><br><span class="line">        &#125;</span><br><span class="line">        return NONE;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Nullable</span><br><span class="line">    @Override</span><br><span class="line">    public T poll() throws Exception &#123;</span><br><span class="line">        return queue.poll();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void clear() &#123;</span><br><span class="line">        queue.clear();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public boolean isEmpty() &#123;</span><br><span class="line">        return queue.isEmpty();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>ObserveOnObserver是如何实现线程的切换的？</p>
+</blockquote>
+<p>在数据发送的过程中，上游的Observer回调了ObserveOnObserver的onNext方法，将发送数据传递给它，<br>此时在ObserveOnObserver的onNext方法中会通过worker(由我们调用observeOn方法传递的Scheduler<br>进行创建)，在指定的线程中回调下游的onNext方法，这样就实现了下游的线程切换；</p>
+<p><em>因为observeOn是作用在数据的发送流程上，所以每次调用立即生效，并且都能让后面发送流程切换到对应<br>的线程中(实际就是让下游的onNext切换到对应线程中回调)，所以每次调用observeOn都是有效的！</em></p>
+<blockquote>
+<p>ObserveOnObserver的onSubscribe的处理方式？</p>
+</blockquote>
+<p>ObserveOnObserver也实现了onSubscribe方法，在这个方法中，将上游传递过来的Disposable拦截下<br>来，并保存为成员变量，并将自身作为新的Disposable传递给下游的Observer。</p>
+<p>实际上，大部分实例操作符的Observer包装类都是这么做的！</p>
+<blockquote>
+<p>ObserveOnObserver实现数据发送状态同步的原理？</p>
+</blockquote>
+<p>ObserveOnObserver继承了AtomicInteger，该类提供原子的get和set操作，同步模式下，实现状态同<br>步流程如下：</p>
+<p>1、当上游通过onNext发送数据过来时，先将数据入队，然后调用schedule方法，检测是否开启线程发送数<br>据；</p>
+<p>2、每次执行schedule方法时，都会调用AtomicInteger的getAndIncrement方法，让AtomicInteger<br>的value加1，然后返回旧值，如果旧值是0，说明之前队列为空，并且没有处于发送数据的状态，可以开始<br>发送数据。否则说明正处于发送数据状态中，因为数据已经入队了，所以不需要管，数据会自动被出队发送；</p>
+<p>3、每次发送一个数据，都会调用AtomicInteger的addAndGet方法，这个方法同样是原子操作，每次调用<br>让AtomicInteger的value加-1，表示队列已经取出并发送了一个数据，当value为0时，表示队列数据发<br>送完毕，此时再调用schedule方法中的getAndIncrement方法，返回的就是0；</p>
+<p>总结：ObserveOnObserver通过原子操作AtomicInteger的value，来实现数据发送状态的同步，当value<br>大于0时，说明当前正处于数据发送状态，只需要将数据入队即可，worker开启的线程会不断的从队列中取出<br>数据，发送出去；否则value等于0，表明没有处于数据发送状态，则会通过worker schedule一个线程出<br>来，从队列中取出数据进行发送；</p>
+<p><em>需要注意的是，这种方式同样适用于异步的模式。因为异步模式下，并没有真正发送数据，而是发送null！<br>在异步模式下，只需要循环检测AtomicInteger的value是否为0，如果为0，则退出发送数据，否则一直<br>循环发送null。</em></p>
+<blockquote>
+<p>ObserveOnObserver的两种数据发送模式？异步模式下对数据的处理方式？</p>
+</blockquote>
+<p>ObserveOnObserver实现了QueueDisposable接口，该接口提供两种数据发送模式：SYNC(同步模式)，<br>ASYNC(异步模式)；<br>默认情况下，ObserveOnObserver是同步的，并且是通过队列来实现同步。但是，我们可以通过设置方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public int requestFusion(int mode) &#123;</span><br><span class="line">    if ((mode &amp; ASYNC) != 0) &#123;</span><br><span class="line">        outputFused = true;</span><br><span class="line">        return ASYNC;</span><br><span class="line">    &#125;</span><br><span class="line">    return NONE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>传入ASYNC参数，让ObserveOnObserver进行异步的数据发送；</p>
+<p>在异步的情况下，Worker线程会执行run方法，并调用drainFused()，进行数据的异步发送，而在异步情况<br>下，ObserveOnObserver并没有发送上游传递过来的数据，而是发送空数据null！</p>
+<p>并且当上游也是处于异步模式的情况下，传递数据过来时，ObserveOnObserver根本就没有接收数据，而是<br>直接抛弃了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public void onNext(T t) &#123;</span><br><span class="line">    if (done) &#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    // sourceMode在onSubscribe方法执行时，会记录上游的fusion mode</span><br><span class="line">    // 在fusion mode是非异步模式才将数据入队，否则直接忽略</span><br><span class="line">    if (sourceMode != QueueDisposable.ASYNC) &#123;</span><br><span class="line">        queue.offer(t);</span><br><span class="line">    &#125;</span><br><span class="line">    schedule();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><em>个人猜测，异步模式下，ObserveOnObserver主要目的已经不是发送数据，而是发送信号通知。</em></p>
+<blockquote>
+<p>ObserveOnObserver dispose时的特点？</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public void dispose() &#123;</span><br><span class="line">    if (!cancelled) &#123;</span><br><span class="line">        cancelled = true;</span><br><span class="line">        s.dispose();</span><br><span class="line">        worker.dispose();</span><br><span class="line">        if (getAndIncrement() == 0) &#123;</span><br><span class="line">            queue.clear();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>ObserveOnObserver继承自AtomicInteger，不像其他继承自AtomicReference<disposable>的Observer<br>包装类，ObserveOnObserver无法原子的set和get自身，所在dispose自身时，不是通过为自身设置一个<br>DISPOSED常量来表示，而是通过设置cancelled，这个volatile修饰的变量来表示自身的状态；</disposable></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RxJava/" rel="tag"># RxJava</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/11/Android/RxJava/RxJava源码分析2/" rel="next" title="RxJava源码分析(二)">
+                <i class="fa fa-chevron-left"></i> RxJava源码分析(二)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/11/Java/捕获全局异常/" rel="prev" title="捕获全局异常">
+                捕获全局异常 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">黄声焕</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">44</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#observeOn"><span class="nav-number">1.</span> <span class="nav-text">observeOn</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#流程"><span class="nav-number">2.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ObserveOnObserver"><span class="nav-number">3.</span> <span class="nav-text">ObserveOnObserver</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄声焕</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Gemini</a> v6.3.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="Total Visitors">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="Total Views">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
