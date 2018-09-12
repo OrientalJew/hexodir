@@ -311,6 +311,180 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/30/Android/Android基础/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄声焕">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HSH's Blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/30/Android/Android基础/" itemprop="url">
+                  Android 基础
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-07-30 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-30T00:00:00+08:00">2018-07-30</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-08-30 17:22:01" itemprop="dateModified" datetime="2018-08-30T17:22:01+08:00">2018-08-30</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <!-- toc -->
+<h4 id="Android-的数据存储方式"><a href="#Android-的数据存储方式" class="headerlink" title="Android 的数据存储方式"></a>Android 的数据存储方式</h4><h4 id="在Activity启动时何时能够拿到View宽高"><a href="#在Activity启动时何时能够拿到View宽高" class="headerlink" title="在Activity启动时何时能够拿到View宽高"></a>在Activity启动时何时能够拿到View宽高</h4><p>从Activity启动声明周期来看，即使是在onPostResume时也是拿不到宽高的！</p>
+<p>因为和Activity中View的布局、测量、绘制相关的类ViewRootImpl在onPostResume时还没有创建，只有<br>在之后DecorView被addView到WindowManagerImpl中，此时才会创建ViewRootImpl实例，用来管理View<br>的测量绘制工作；</p>
+<p>在ViewRootImpl的performTraversals被执行时，采取真正的测量、布局和绘制View；</p>
+<p>performTraversals会被执行两遍，并且在开始测量、布局和绘制之前，会将post进View中的Runnable<br>取出执行，利用这个特点，我们可以进行双重post，在第二重post中我们就能够最新测量出来的宽高；</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/30/Android/Fragment/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -494,7 +668,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/30/Android/Android基础/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/30/Android/MVX/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄声焕">
@@ -513,182 +687,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/07/30/Android/Android基础/" itemprop="url">
-                  Android 基础
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-07-30 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-30T00:00:00+08:00">2018-07-30</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2018-08-30 17:22:01" itemprop="dateModified" datetime="2018-08-30T17:22:01+08:00">2018-08-30</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <!-- toc -->
-<h4 id="Android-的数据存储方式"><a href="#Android-的数据存储方式" class="headerlink" title="Android 的数据存储方式"></a>Android 的数据存储方式</h4><h4 id="在Activity启动时何时能够拿到View宽高"><a href="#在Activity启动时何时能够拿到View宽高" class="headerlink" title="在Activity启动时何时能够拿到View宽高"></a>在Activity启动时何时能够拿到View宽高</h4><p>从Activity启动声明周期来看，即使是在onPostResume时也是拿不到宽高的！</p>
-<p>因为和Activity中View的布局、测量、绘制相关的类ViewRootImpl在onPostResume时还没有创建，只有<br>在之后DecorView被addView到WindowManagerImpl中，此时才会创建ViewRootImpl实例，用来管理View<br>的测量绘制工作；</p>
-<p>在ViewRootImpl的performTraversals被执行时，采取真正的测量、布局和绘制View；</p>
-<p>performTraversals会被执行两遍，并且在开始测量、布局和绘制之前，会将post进View中的Runnable<br>取出执行，利用这个特点，我们可以进行双重post，在第二重post中我们就能够最新测量出来的宽高；</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/30/Android/Handler/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="黄声焕">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="HSH's Blogs">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/30/Android/Handler/" itemprop="url">
-                  Handler
+                <a class="post-title-link" href="/2018/07/30/Android/MVX/" itemprop="url">
+                  MVX
                 </a>
               
             
@@ -783,23 +783,378 @@
 
       
         
-          <!-- toc -->
-<h4 id="Handler消息机制"><a href="#Handler消息机制" class="headerlink" title="Handler消息机制"></a>Handler消息机制</h4><ul>
-<li><p>Handler在创建时，就会在构造方法中拿到当前线程的Looper，而Looper保存有当前线程的消息队列，也<br>会和Handler绑定到一起；</p>
-</li>
-<li><p>Handler在哪个线程被创建，就会绑定哪个线程中的Looper；</p>
-</li>
-<li><p>主线程默认会创建一个MainLooper，而如果在子线程中创建Handler，就需要我们手动为其创建一个<br>Looper，并绑定到Handler中；</p>
-<blockquote>
-<p>查看ActivityThread类，在main方法中调用了Looper的prepareMainLooper方法来初始化<br>MainLooper，可以获取它来判断当前的操作是否位于主线程。</p>
-</blockquote>
-</li>
-<li><p>使用Looper.prepare()即可为当前线程创建一个Looper，每一个Looper中都自带一个消息队列；</p>
-</li>
+          
+            <!-- toc -->
+<h4 id="三层架构与MVX模式"><a href="#三层架构与MVX模式" class="headerlink" title="三层架构与MVX模式"></a>三层架构与MVX模式</h4><ul>
+<li>MVX是一种设计模式，而三层架构则是一种架构思想，或者说是一种编写代码的纲领；</li>
+<li>MVX可以认为是在三层架构下的一种具体的表现；</li>
+<li>三层架构分为：表现层，业务逻辑层，数据访问层；其中的数据访问层即Model概念区别于MVX模式的Model；</li>
+<li>三层架构中的Model表示对数据的访问的总代理，涉及了数据的增删改查操作，数据可以来自本地或者网络；</li>
+<li>MVX模式下的Model就是一种纯粹的数据类，是一个数据实体的表现；</li>
 </ul>
+<h4 id="MVC、MVP"><a href="#MVC、MVP" class="headerlink" title="MVC、MVP"></a>MVC、MVP</h4><blockquote>
+<p>MVC和MVP最主要的区别在于M层和V层的沟通方式，MVC模式下，M、V两层能够直接进行沟通，而MVP模式下，<br>M、V两层只能通过P层进行沟通；</p>
+</blockquote>
+<p>MVC：</p>
+<p>传统的MVC模式下，V层通过C从M层中获取到数据，然后展示在V层上；</p>
+<p>但是，大多数情况下，在拿到数据后我们需要对数据进行加工，此时不得不将逻辑编写在V层上，久而久之，V层就会变得臃肿；</p>
+<p>还有一种情况，当我们操作了V层，通过C修改了M层，当M层在修改后，为了通知V层，M层不得不持有V层引用，因为C是单向的，M层无法通过C通知V层；</p>
+<p>MVP：</p>
+<p>MVP中的Presenter即能够解决V层业务代码臃肿问题，因为P中持有了V层的引用，直接在P中操作业务逻辑，然后将结果通知给V层(<strong>被动P模式，View元素操作完全由P进行。另一种主动P模式，在V层的数据操作还是在V层中进行，P层更多是起到沟通M层和V层数据的作用，这种模式下，V的臃肿并没有解决！</strong>);</p>
+<p>MVP中的Presenter也解决了M层和V层数据沟通的问题，它双向持有了两层的引用，能直接操作两层数据进行交换和传输；</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/29/NDK/C/动态内存分配/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄声焕">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HSH's Blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/29/NDK/C/动态内存分配/" itemprop="url">
+                  动态内存分配
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-07-29 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-29T00:00:00+08:00">2018-07-29</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-08-05 08:07:56" itemprop="dateModified" datetime="2018-08-05T08:07:56+08:00">2018-08-05</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <!-- toc -->
+<h4 id="C语言内存分配"><a href="#C语言内存分配" class="headerlink" title="C语言内存分配"></a>C语言内存分配</h4><ul>
+<li>栈区(stack):静态内存区，声明的基本数据类型和类的引用保存在该区，栈区的大小是由操作系统动态配置的(自动分配，自动释放)；<br>栈区的较小，一般只有2M(与系统类型有关)；</li>
+<li>堆区(heap)：堆区由程序员分配和释放，最大能够分配操作系统内存的80%；</li>
+<li>全局区或静态区</li>
+<li>字符常量区</li>
+<li>程序代码区
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/07/30/Android/Handler/#more" rel="contents">
+            <a class="btn" href="/2018/07/29/NDK/C/动态内存分配/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/29/NDK/C/基础/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="黄声焕">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="HSH's Blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/29/NDK/C/基础/" itemprop="url">
+                  C基础
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-07-29 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-29T00:00:00+08:00">2018-07-29</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-08-27 10:39:53" itemprop="dateModified" datetime="2018-08-27T10:39:53+08:00">2018-08-27</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <!-- toc -->
+<h4 id="system函数"><a href="#system函数" class="headerlink" title="system函数"></a>system函数</h4><p>位于stdio.h，用于调用系统的函数；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 停止当前函数</span><br><span class="line">system(&quot;pause&quot;); // 等价(等待输入)：getchar();</span><br><span class="line">// 调出windows绘图软件</span><br><span class="line">system(&quot;mspaint&quot;);</span><br></pre></td></tr></table></figure></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/07/29/NDK/C/基础/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1033,7 +1388,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/29/NDK/C/基础/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/29/NDK/C/jni/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="黄声焕">
@@ -1052,8 +1407,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/07/29/NDK/C/基础/" itemprop="url">
-                  C基础
+                <a class="post-title-link" href="/2018/07/29/NDK/C/jni/" itemprop="url">
+                  jni
                 </a>
               
             
@@ -1096,7 +1451,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-08-27 10:39:53" itemprop="dateModified" datetime="2018-08-27T10:39:53+08:00">2018-08-27</time>
+                <time title="Modified: 2018-09-12 10:09:18" itemprop="dateModified" datetime="2018-09-12T10:09:18+08:00">2018-09-12</time>
               
             
           </span>
@@ -1149,10 +1504,13 @@
       
         
           <!-- toc -->
-<h4 id="system函数"><a href="#system函数" class="headerlink" title="system函数"></a>system函数</h4><p>位于stdio.h，用于调用系统的函数；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 停止当前函数</span><br><span class="line">system(&quot;pause&quot;); // 等价(等待输入)：getchar();</span><br><span class="line">// 调出windows绘图软件</span><br><span class="line">system(&quot;mspaint&quot;);</span><br></pre></td></tr></table></figure></p>
+<h4 id="JNI数据类型"><a href="#JNI数据类型" class="headerlink" title="JNI数据类型"></a>JNI数据类型</h4><blockquote>
+<p>JNI基本数据类型是Java基本数据类型和C数据类型之间的桥梁；</p>
+</blockquote>
+<p>Java数据类型   –&gt;  JNI数据类型  –&gt;  C数据类型<br>boolean            jboolean<br>byte               jbyte<br>char               jchar<br>short              jshort<br>int                jint<br>long               jlong<br>float              jfloat<br>double             jdouble<br>void               void</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/07/29/NDK/C/基础/#more" rel="contents">
+            <a class="btn" href="/2018/07/29/NDK/C/jni/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1339,364 +1697,6 @@
 <p>动态库(.dll)能被多个程序共用，打包时不会被打进exe中，而是单独存在；</p>
 
           
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/29/NDK/C/jni/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="黄声焕">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="HSH's Blogs">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/29/NDK/C/jni/" itemprop="url">
-                  jni
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-07-29 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-29T00:00:00+08:00">2018-07-29</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2018-09-12 10:09:18" itemprop="dateModified" datetime="2018-09-12T10:09:18+08:00">2018-09-12</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <!-- toc -->
-<h4 id="JNI数据类型"><a href="#JNI数据类型" class="headerlink" title="JNI数据类型"></a>JNI数据类型</h4><blockquote>
-<p>JNI基本数据类型是Java基本数据类型和C数据类型之间的桥梁；</p>
-</blockquote>
-<p>Java数据类型   –&gt;  JNI数据类型  –&gt;  C数据类型<br>boolean            jboolean<br>byte               jbyte<br>char               jchar<br>short              jshort<br>int                jint<br>long               jlong<br>float              jfloat<br>double             jdouble<br>void               void</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/07/29/NDK/C/jni/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/29/NDK/C/动态内存分配/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="黄声焕">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="HSH's Blogs">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/29/NDK/C/动态内存分配/" itemprop="url">
-                  动态内存分配
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-07-29 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-29T00:00:00+08:00">2018-07-29</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2018-08-05 08:07:56" itemprop="dateModified" datetime="2018-08-05T08:07:56+08:00">2018-08-05</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <!-- toc -->
-<h4 id="C语言内存分配"><a href="#C语言内存分配" class="headerlink" title="C语言内存分配"></a>C语言内存分配</h4><ul>
-<li>栈区(stack):静态内存区，声明的基本数据类型和类的引用保存在该区，栈区的大小是由操作系统动态配置的(自动分配，自动释放)；<br>栈区的较小，一般只有2M(与系统类型有关)；</li>
-<li>堆区(heap)：堆区由程序员分配和释放，最大能够分配操作系统内存的80%；</li>
-<li>全局区或静态区</li>
-<li>字符常量区</li>
-<li>程序代码区
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/07/29/NDK/C/动态内存分配/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
         
       
     </div>
