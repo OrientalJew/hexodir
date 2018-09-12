@@ -13,6 +13,8 @@ categories:
 C访问Java中对应的成员变量，需要根据变量名和变量签名来定位变量；
 ![image](\images\Java数据类型签名列表.png)
 
+<!-- more -->
+
 对应的Java类：
 ```
 public class JniTest {
