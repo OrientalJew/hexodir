@@ -8,6 +8,34 @@ categories:
 ---
 <!-- toc -->
 
+#### JNI数据类型
+> JNI基本数据类型是Java基本数据类型和C数据类型之间的桥梁；
+
+Java数据类型   -->  JNI数据类型  -->  C数据类型
+boolean            jboolean
+byte               jbyte
+char               jchar
+short              jshort
+int                jint
+long               jlong
+float              jfloat
+double             jdouble
+void               void
+
+<!--more-->
+
+> 引用数据类型
+
+String             jstring
+object             jobject
+byte[]             jByteArray
+int[]              jIntArray
+object[]           jobjectArray
+
+#### JNI读取Java数据类型对应的签名
+
+![image](\images\Java数据类型签名列表.png)
+
 #### windows下的jni开发
 
 windows下开发jni流程大致可以为：
@@ -25,6 +53,13 @@ windows下开发jni流程大致可以为：
  6、生成DLL动态库(配置解决方案为x86平台下)
 
  7、将DLL动态库所在位置配置到环境变量中(配置完必须进行重启)
+
+> 也可以直接拷贝到工程目录下，建立一个jni文件夹，直接引入即可：<br>
+static {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.loadLibrary("jni/jni_02");<br>
+}
+
+
 
 1、在Java中编写调用Native方法：
 ```
@@ -86,6 +121,10 @@ JNIEXPORT jstring JNICALL Java_com_my_jnitest_JniTest_getStringFromC
 */
 JNIEXPORT jstring JNICALL Java_com_my_jnitest_JniTest_getStringFromC
 (JNIEnv * env, jclass jclass){
+  // 如果Java中定义的是static方法，则此处是Java，表示Java类
+  // 如果Java中定义的是实例方法，则此处是jobject，表示调用的类实例
+  // jclass 和 jobject其实是相同的，都表示_jobject的指针，jclass是jobject的别名
+
 	// JNIEnv是结构体指针JNINativeInterface_ * 的别名
 	// JNINativeInterface_ 是一个结构体，其定义了一套与Java交互的方法
 
