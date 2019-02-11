@@ -1,5 +1,5 @@
 ---
-title: C访问Java
+title: C与Java互操作
 date: 2018-07-29
 tags:
 - jni
@@ -89,7 +89,7 @@ JNIEXPORT jstring JNICALL Java_com_my_jnitest_JniTest_accessField
 	jstring jstr = (*env)->GetObjectField(env, obj, fid);
 
 	// 将jni字符串类型转为对应的C字符串
-	// 参数3指定是否以拷贝的方式进行转换，false表示在原来的内存上进行修改
+	// 参数3指定是否以拷贝的方式进行转换，false表示在原来的内存上进行修改(实际还是进行了复制)
 	// 参数3为true时，会因为无法成功复制而导致失败，所以默认使用false或者null
 	char *c_str = (*env)->GetStringUTFChars(env, jstr, NULL);
 
@@ -101,10 +101,23 @@ JNIEXPORT jstring JNICALL Java_com_my_jnitest_JniTest_accessField
 	jstring new_str = (*env)->NewStringUTF(env, result);
 
 	// 将新值设置给Java
+	// 同步回Java
 	(*env)->SetObjectField(env, obj, fid, new_str);
 	return jstr;
 }
 ```
+
+> 注意：
+
+```
+(*env)->GetStringUTFChars
+
+```
+类似于这种Getxxx方法，从Java中拷贝对应的对象，其参数3指定是否以拷贝的方式进行转换，
+false表示在原来的内存上进行修改，但实际还是复制了一份到C内存中。参数3为true时，
+会因为无法成功复制而导致失败，所以默认使用false或者null。
+
+在C中操作成功后，需要同步回Java中，所以可以确认，C中是拷贝了一份的。
 
 #### 访问修改Java静态成员变量
 
@@ -298,5 +311,80 @@ JNIEXPORT jstring JNICALL Java_com_my_jnitest_JniTest_charSetProblem
 	// 调用String对应的构造方法，构造出正确编码的字符串
 	jstring result = (*env)->NewObject(env, cls, mid, ba, charset);
 	return result;
+}
+```
+
+#### C与Java数组交互
+
+从Java中拷贝对应的数组到C的内存中，操作后，再同步回Java数组中；
+
+C代码：
+```
+JNIEXPORT jstring JNICALL Java_com_my_jnitest_JniTest_sortArray
+(JNIEnv * env, jobject jobj, jintArray arr){
+	// 获取C的jint数组 (java中的int对应C中long，不能直接用C的int接收)
+	jint* c_arr = (*env)->GetIntArrayElements(env, arr, JNI_FALSE);
+
+	// 获取数组长度
+	int len = (*env)->GetArrayLength(env, arr);
+
+	// 排序
+	qsort(c_arr, len, sizeof(jint), compare);
+
+	// 同步
+	// 0, 同步Java数组，释放C数组
+	// 1, JNI_COMMIT 同步Java数组，不释放C数组(函数执行完成会自动释放)
+	// 2, JNI_ABORT  不同步Java数组，同时释放C数组
+	(*env)->ReleaseIntArrayElements(env, arr, c_arr, 0);
+}
+```
+
+> 注意：
+
+```
+(*env)->GetIntArrayElements
+
+```
+类似于这种Getxxx方法，从Java中拷贝对应的对象，其参数3指定是否以拷贝的方式进行转换，
+false表示在原来的内存上进行修改，但实际还是复制了一份到C内存中。参数3为true时，
+会因为无法成功复制而导致失败，所以默认使用false或者null。
+
+在C中操作成功后，需要同步回Java中，所以可以确认，C中是拷贝了一份的。
+
+Java代码：
+```
+	public native void sortArray(int[] arr);
+
+	int[] arr = new int[]{3,8,1,5,4};
+	// 调用Native方法
+	test.sortArray(arr);
+	for(int a:arr) {
+		System.out.println(a);
+	}
+```
+
+##### 向Java返回数组
+
+jni所代表的数组与C中操作的数组分属两个不同的内存中，所以在C中操作完成之后，结果需要
+同步进jni数组中，才能够影响到Java层；
+
+```
+// 获取C数组
+JNIEXPORT jstring JNICALL Java_com_my_jnitest_JniTest_getCArray
+(JNIEnv * env, jobject jobj, jint len){
+	// 在内存上，jintArray和jint* 两个数组是处于不同的内存中
+	jintArray jint_array = (*env)->NewIntArray(env, len);
+	jint* array = (*env)->GetIntArrayElements(env, jint_array, NULL);
+
+	// 获取数组长度
+	int alen = (*env)->GetArrayLength(env, jint_array);
+
+	for (int i = 0; i < alen; i++){
+		array[i] = i;
+	}
+
+	// 上面只是操作了C所在部分的数组，此处需要同步到jintArray中
+	(*env)->ReleaseIntArrayElements(env, jint_array, array, 0);
+	return jint_array;
 }
 ```
