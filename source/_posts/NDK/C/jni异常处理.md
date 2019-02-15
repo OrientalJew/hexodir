@@ -13,6 +13,9 @@ categories:
 jni层抛出的异常是无法在Java层被捕获到，只能在C层进行清空，如果有必要，需要向Java层主动
 抛出异常进行警告；
 
+/**错误纠正：jni层的异常是可以被Java层捕获到的！！！**/
+// 根据Jni层抛出的异常，可以发现其实Throwable和Error的子类，所以我们可以通过捕获这两者
+// 来达到捕获的目的
 ```
 JNIEXPORT void JNICALL Java_com_my_jnitest_JniTest_catchException
 (JNIEnv * env, jobject jobj){
@@ -46,6 +49,16 @@ try {
   // Jni层次的异常是无法被捕获到的
   test.catchException();
 } catch (Exception e) {
+  // 我们在Jni中主动抛出的异常能够被捕获
+  System.out.println(e.getMessage());
+}
+```
+/**通过捕获Throwable进行达到Jni层的异常捕获**/
+```
+try {
+  // Jni层次的异常是无法被捕获到的
+  test.catchException();
+} catch (Throwable e) {
   // 我们在Jni中主动抛出的异常能够被捕获
   System.out.println(e.getMessage());
 }
