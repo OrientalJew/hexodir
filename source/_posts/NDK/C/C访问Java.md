@@ -13,6 +13,11 @@ categories:
 C访问Java中对应的成员变量，需要根据变量名和变量签名来定位变量；
 ![image](\images\Java数据类型签名列表.png)
 
+Java方法签名：全类名.方法名(形参数据类型列表)返回值数据类型
+
+其中的返回数据类型的签名与变量有区别：
+![image](\images\java方法返回类型签名.jpeg)
+
 <!-- more -->
 
 对应的Java类：
