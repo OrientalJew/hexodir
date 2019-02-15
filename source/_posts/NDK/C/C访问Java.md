@@ -91,6 +91,14 @@ JNIEXPORT jstring JNICALL Java_com_my_jnitest_JniTest_accessField
 	// 将jni字符串类型转为对应的C字符串
 	// 参数3指定是否以拷贝的方式进行转换，false表示在原来的内存上进行修改(实际还是进行了复制)
 	// 参数3为true时，会因为无法成功复制而导致失败，所以默认使用false或者null
+
+	/**错误纠正！！！**/
+	// 此处的参数3传递的是一个jboolean类型的指针，是GetStringUTFChars函数用来
+	// 告诉调用者，是否已经对字符串进行了复制备份，如果isCopy是JNI_TRUE则表示进行
+	// 了复制，JNI_FALSE则表示此时操作的和Java层是同一份。
+	// 也就是说isCopy相当于一个回参，用来告诉调用者，底层的操作情况；
+	// 注意，默认情况下，不要修改Java层的字符串，所以当为JNI_FALSE，不要对字符串进行修改
+	// 如果为JNI_TRUE，则注意，必须自己手动释放内存
 	char *c_str = (*env)->GetStringUTFChars(env, jstr, NULL);
 
 	// 使用C的方式进行修改
@@ -103,6 +111,11 @@ JNIEXPORT jstring JNICALL Java_com_my_jnitest_JniTest_accessField
 	// 将新值设置给Java
 	// 同步回Java
 	(*env)->SetObjectField(env, obj, fid, new_str);
+
+	/**释放字符串！！！**/
+	// 只要存在回参isCopy的函数，都必须我们手动释放内存！！！
+	(*env)->ReleaseStringUTFChars(env, jstr, c_str);
+
 	return jstr;
 }
 ```
@@ -116,6 +129,22 @@ JNIEXPORT jstring JNICALL Java_com_my_jnitest_JniTest_accessField
 类似于这种Getxxx方法，从Java中拷贝对应的对象，其参数3指定是否以拷贝的方式进行转换，
 false表示在原来的内存上进行修改，但实际还是复制了一份到C内存中。参数3为true时，
 会因为无法成功复制而导致失败，所以默认使用false或者null。
+```
+/**错误纠正！！！**/
+// 此处的参数3传递的是一个jboolean类型的指针，是GetStringUTFChars函数用来
+// 告诉调用者，是否已经对字符串进行了复制备份，如果isCopy是JNI_TRUE则表示进行
+// 了复制，JNI_FALSE则表示此时操作的和Java层是同一份。
+// 也就是说isCopy相当于一个回参，用来告诉调用者，底层的操作情况；
+// 注意，默认情况下，不要修改Java层的字符串，所以当为JNI_FALSE，不要对字符串进行修改
+// 如果为JNI_TRUE，则注意，必须自己手动释放内存
+
+jboolean isCopy = NULL;
+char *c_str = (*env)->GetStringUTFChars(env, jstr, &isCopy);
+
+/**释放字符串！！！**/
+// 只要存在回参isCopy的函数，都必须我们手动释放内存！！！
+(*env)->ReleaseStringUTFChars(env, jstr, c_str);
+```
 
 在C中操作成功后，需要同步回Java中，所以可以确认，C中是拷贝了一份的。
 
