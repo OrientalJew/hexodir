@@ -1,10 +1,8 @@
 ---
 title: jni缓存策略
 date: 2019-2-11
-tags:
-- jni
 categories:
-- C
+- C++
 ---
 <!-- toc -->
 

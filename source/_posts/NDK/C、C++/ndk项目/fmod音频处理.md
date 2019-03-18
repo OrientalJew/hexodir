@@ -1,10 +1,8 @@
 ---
 title: fmod音频处理
 date: 2010-0317
-tags:
-- jni
 categories:
-- C/C++
+- C++
 ---
 <!-- toc -->
 

@@ -1,10 +1,8 @@
 ---
 title: dll
 date: 2018-07-29
-tags:
-- dll
 categories:
-- C
+- C++
 ---
 <!-- toc -->
 

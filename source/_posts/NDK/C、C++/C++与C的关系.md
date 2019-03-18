@@ -1,8 +1,6 @@
 ---
 title: C++ 与 C的关系
 date: 2019-02-17
-tags:
-- C++
 categories:
 - C++
 ---

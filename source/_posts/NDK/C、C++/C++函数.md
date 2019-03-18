@@ -1,8 +1,6 @@
 ---
 title: C++ 函数
 date: 2019-02-24
-tags:
-- C++
 categories:
 - C++
 ---

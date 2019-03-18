@@ -1,10 +1,8 @@
 ---
 title: jni中的引用
 date: 2018-10-07
-tags:
-- jni
 categories:
-- C
+- C++
 ---
 <!-- toc -->
 

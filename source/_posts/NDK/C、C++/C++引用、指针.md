@@ -1,8 +1,6 @@
 ---
 title: C++ 引用和指针
 date: 2019-02-20
-tags:
-- C++
 categories:
 - C++
 ---

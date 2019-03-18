@@ -1,10 +1,8 @@
 ---
 title: IO操作
 date: 2018-08-26
-tags:
-- 基础
 categories:
-- C
+- C++
 ---
 <!-- toc -->
 

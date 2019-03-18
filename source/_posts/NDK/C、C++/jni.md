@@ -1,10 +1,8 @@
 ---
 title: jni
 date: 2018-07-29
-tags:
-- jni
 categories:
-- C
+- C++
 ---
 <!-- toc -->
 

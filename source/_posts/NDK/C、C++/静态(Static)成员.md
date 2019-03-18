@@ -1,8 +1,6 @@
 ---
 title: C++ 静态成员
 date: 2019-03-03
-tags:
-- C++
 categories:
 - C++
 ---

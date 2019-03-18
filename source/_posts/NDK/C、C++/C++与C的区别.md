@@ -1,8 +1,7 @@
 ---
 title: C++ 与C 的区别
 date: 2019-02-20
-tags:
-- C++
+
 categories:
 - C++
 ---

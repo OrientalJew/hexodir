@@ -1,10 +1,8 @@
 ---
 title: C与Java互操作
 date: 2018-07-29
-tags:
-- jni
 categories:
-- C
+- C++
 ---
 <!-- toc -->
 

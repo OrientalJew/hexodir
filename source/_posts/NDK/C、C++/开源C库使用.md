@@ -1,10 +1,8 @@
 ---
 title: 开源C/C++库使用
 date: 2019-02-16
-tags:
-- jni
 categories:
-- C
+- C++
 ---
 <!-- toc -->
 

@@ -1,10 +1,8 @@
 ---
 title: jni异常处理
 date: 2018-10-07
-tags:
-- jni
 categories:
-- C
+- C++
 ---
 <!-- toc -->
 

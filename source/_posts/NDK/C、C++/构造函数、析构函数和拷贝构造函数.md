@@ -1,8 +1,6 @@
 ---
 title: C++ 类和结构体
 date: 2019-02-20
-tags:
-- C++
 categories:
 - C++
 ---
