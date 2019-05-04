@@ -64,6 +64,8 @@ void myThrow2(int a, int b) throw (char*, int){
 #### 标准异常、自定义异常
 
 ```
+#include <stdexcept>
+
 // C++标准异常
 void myThrow3(int a, int b){
 	throw out_of_range("超出范围");
